@@ -4,15 +4,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainGui {
     private JFrame frame;
+    private List<JButton> panelButtonList;
+    private List<JButton> buchungsButtonList;
+    public JButton loginBtn;
 
     public MainGui() {
         this.frame = new JFrame();
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setLayout(new BorderLayout());
-
+        String t = "test";
         renderFrame();
     }
 
@@ -34,9 +39,12 @@ public class MainGui {
                 "Buchung löschen", "Info"
         };
 
+        buchungsButtonList = new ArrayList<JButton>();
+
         for (String label : buchungsButtonLabels) {
             JButton button = createIdentifiedButton(label); // Button mit Identifier erstellen
-            button.setPreferredSize(new Dimension(140, 40)); // Button-Größe anpassen
+            button.setEnabled(false);
+            buchungsButtonList.add(button);
             buchungsPanel.add(button);
         }
         contentPanel.add(buchungsPanel, BorderLayout.SOUTH);
@@ -62,17 +70,25 @@ public class MainGui {
         String[] buttonLabels = {
                 "Buchungen", "Freie Plätze", "Neuer Platz",
                 "Platz bearbeiten", "Platz löschen", "Platz Buchen",
-                "Export/Import", "Login"
+                "Export/Import"
         };
+
+        panelButtonList = new ArrayList<JButton>();
 
         for (String label : buttonLabels) {
             JButton button = createIdentifiedButton(label); // Button mit Identifier erstellen
-            button.setPreferredSize(new Dimension(120, 40)); // Button-Größe anpassen
+            button.setEnabled(false);
+            panelButtonList.add(button);
             buttonPanel.add(button);
         }
 
+        loginBtn = createIdentifiedButton("Login"); // Button mit Identifier erstellen
+        buttonPanel.add(loginBtn);
+
+
         return buttonPanel;
     }
+
 
     private ActionListener buttonListener = new ActionListener() {
         @Override
@@ -88,13 +104,24 @@ public class MainGui {
                     // Funktion für "Buchung bearbeiten" ausführen
                     break;
                 case "Login":
-                    new Login();
+
+
                     break;
             }
         }
     };
 
+    public void enable() {
+        for (JButton button : panelButtonList){
+            button.setEnabled(true);
+        }
+
+        for (JButton button : buchungsButtonList){
+            button.setEnabled(true);
+        }
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainGui());
+       SwingUtilities.invokeLater(() -> new MainGui());
     }
 }
