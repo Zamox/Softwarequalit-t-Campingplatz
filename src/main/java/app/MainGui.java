@@ -87,7 +87,9 @@ public class MainGui {
                 case "Buchung bearbeiten":
                     // Funktion für "Buchung bearbeiten" ausführen
                     break;
-                // Füge hier weitere Cases hinzu für die anderen Buttons
+                case "Login":
+                    new Login();
+                    break;
             }
         }
     };
