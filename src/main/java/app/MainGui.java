@@ -12,7 +12,6 @@ public class MainGui {
 
     public MainGui() {
         this.frame = new JFrame();
-        this.frame.setSize(1200, 600);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setLayout(new BorderLayout());
 
@@ -29,6 +28,7 @@ public class MainGui {
         mainPanel.add(middlePanel, BorderLayout.CENTER);
 
         this.frame.add(mainPanel);
+         this.frame.setSize(1800, 1000);
         this.frame.setVisible(true);
     }
 
