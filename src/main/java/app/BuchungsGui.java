@@ -4,14 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class BuchungsGui {
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> createAndShowGUI());
+    public BuchungsGui(MainGui mainGUI) {
+        createAndShowGUI();
     }
 
-    private static void createAndShowGUI() {
-        JFrame frame = new JFrame("Campingplatz Buchung");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
+    JFrame frame = new JFrame("Campingplatz Buchung");
+    private void createAndShowGUI() {
+
+        this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.frame.setSize(1000, 400);
 
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();

@@ -29,6 +29,7 @@ public class MainGui {
         this.frame.setLayout(new BorderLayout());
         String t = "test";
         renderFrame();
+        this.frame.setSize(1400, 600);
     }
 
     private JPanel createTablePanel() {
@@ -171,13 +172,13 @@ public class MainGui {
             // Hier kannst du basierend auf dem Identifier die entsprechende Aktion ausführen
             switch (identifier) {
                 case "Neue Buchung":
-                    // Funktion für "Neue Buchung" ausführen
+                    new BuchungsGui(MainGui.this);
                     break;
                 case "Buchung bearbeiten":
                     // Funktion für "Buchung bearbeiten" ausführen
                     break;
                 case "Login":
-
+                    new Login(MainGui.this);
 
                     break;
             }
