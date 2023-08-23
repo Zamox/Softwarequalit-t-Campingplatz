@@ -2,6 +2,7 @@ package app;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,7 +53,8 @@ public class MainGui {
     }
 
     private JPanel createBottomTablePanel() {
-        JPanel buchungsTablePanel = new JPanel();
+        JPanel buchungsTablePanel = new JPanel(new GridBagLayout());
+
         DefaultTableModel tableModel2 = new DefaultTableModel();
         // Erstelle ein DefaultTableModel für die zweite Tabelle
 
@@ -68,11 +70,21 @@ public class MainGui {
         tableModel2.addColumn("Telefon");
 
         JScrollPane scrollPane2 = new JScrollPane(buchungsTable);
-        buchungsTablePanel.add(buchungsTable, BorderLayout.CENTER);
+
+        // Konfigurieren Sie die GridBagConstraints für die Tabelle
+        GridBagConstraints tableConstraints = new GridBagConstraints();
+        tableConstraints.gridx = 0;
+        tableConstraints.gridy = 0;
+        tableConstraints.gridwidth = 1;
+        tableConstraints.gridheight = 1;
+        tableConstraints.fill = GridBagConstraints.BOTH; // Füllen Sie den verfügbaren Platz
+        tableConstraints.weightx = 1.0;
+        tableConstraints.weighty = 0.2; // Hier den Wert anpassen, um den vertikalen Platzbedarf zu steuern
+
+        buchungsTablePanel.add(scrollPane2, tableConstraints);
 
         return buchungsTablePanel;
     }
-
 
 
 
@@ -90,7 +102,7 @@ public class MainGui {
 
         contentPanel.add(imageLabel, BorderLayout.WEST);
 
-        JPanel buchungsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        JPanel buchungsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 40)); // Erhöhter vertikaler Abstand hier
         String[] buchungsButtonLabels = {
                 "Neue Buchung", "Buchung bearbeiten",
                 "Buchung löschen", "Info"
@@ -111,6 +123,8 @@ public class MainGui {
         mainPanel.add(contentPanel, BorderLayout.WEST); // Hier wird das Bild links von der Tabelle platziert
         contentPanel.add(createTablePanel(), BorderLayout.EAST); // Hier wird die erste Tabelle rechts vom Bild platziert
         mainPanel.add(createBottomTablePanel(), BorderLayout.SOUTH); // Hier wird die zweite Tabelle unterhalb der unteren Buttonreihe platziert
+
+
 
 
 

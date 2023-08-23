@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class BuchungsGui {
-    public BuchungsGui(MainGui mainGUI) {
+    public BuchungsGui(MainGui mainGui) {
         createAndShowGUI();
     }
 
