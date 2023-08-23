@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -16,6 +18,9 @@ public class BuchungsGui {
     JFrame frame = new JFrame("Campingplatz Buchung");
     private JTextField anreiseField;
     private JTextField abreiseField;
+
+    private JPanel leftPanel;
+    private JPanel rightPanel;
 
 
     public BuchungsGui(MainGui mainGui) {
@@ -31,9 +36,8 @@ public class BuchungsGui {
     }
 
 
-
     private JPanel createLeftPanel() {
-        JPanel leftPanel = new JPanel(new GridLayout(9, 2));
+        leftPanel = new JPanel(new GridLayout(9, 2));
 
 
         leftPanel.add(new JLabel("Anreise:"));
@@ -72,8 +76,8 @@ public class BuchungsGui {
         return leftPanel;
     }
 
-    private static JPanel createRightPanel() {
-        JPanel rightPanel = new JPanel(new GridLayout(9, 2));
+    private JPanel createRightPanel() {
+        rightPanel = new JPanel(new GridLayout(9, 2));
 
         rightPanel.add(new JLabel("Name:"));
         rightPanel.add(new JTextField());
@@ -105,17 +109,77 @@ public class BuchungsGui {
         return rightPanel;
     }
 
-    private static JPanel createMainPanel(JPanel leftPanel, JPanel rightPanel) {
+    private JPanel createMainPanel(JPanel leftPanel, JPanel rightPanel) {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(leftPanel, BorderLayout.WEST);
         mainPanel.add(rightPanel, BorderLayout.EAST);
 
         // Schaltfläche zur Bestätigung der Buchung
         JButton buchungsButton = new JButton("Buchung bestätigen");
+        buchungsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bestaetigeBuchung();
+            }
+        });
         mainPanel.add(buchungsButton, BorderLayout.SOUTH);
 
         return mainPanel;
     }
+
+    private void bestaetigeBuchung() {
+        // Überprüfe, ob alle erforderlichen Felder ausgefüllt sind
+        if (anreiseField.getText().isEmpty() || abreiseField.getText().isEmpty() ||
+                ((JTextField) rightPanel.getComponent(1)).getText().isEmpty() || // Name
+                ((JTextField) rightPanel.getComponent(3)).getText().isEmpty() || // Vorname
+                ((JTextField) rightPanel.getComponent(7)).getText().isEmpty() || // Email
+                ((JTextField) rightPanel.getComponent(9)).getText().isEmpty()) { // Telefon
+            JOptionPane.showMessageDialog(frame, "Bitte füllen Sie alle erforderlichen Felder aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+        } else {
+            // Alle erforderlichen Felder sind ausgefüllt, speichere die Daten in der CSV-Datei
+            speichereBuchungsdaten();
+        }
+    }
+
+    // Methode zum Speichern der Buchungsdaten in einer CSV-Datei
+    private void speichereBuchungsdaten() {
+        String name = ((JTextField) rightPanel.getComponent(1)).getText();
+        String vorname = ((JTextField) rightPanel.getComponent(3)).getText();
+        String anreiseDatum = anreiseField.getText();
+        String abreiseDatum = abreiseField.getText();
+        String platznummer = ((JTextField) leftPanel.getComponent(9)).getText();
+        String email = ((JTextField) rightPanel.getComponent(15)).getText();
+        String telefon = ((JTextField) rightPanel.getComponent(13)).getText();
+
+        String dateiPfad = "./BuchungsCSV.csv";
+
+        try {
+            FileWriter csvWriter = new FileWriter(dateiPfad, true);
+            csvWriter.append(name);
+            csvWriter.append(",");
+            csvWriter.append(vorname);
+            csvWriter.append(",");
+            csvWriter.append(anreiseDatum);
+            csvWriter.append(",");
+            csvWriter.append(abreiseDatum);
+            csvWriter.append(",");
+            csvWriter.append(platznummer);
+            csvWriter.append(",");
+            csvWriter.append(email);
+            csvWriter.append(",");
+            csvWriter.append(telefon);
+            csvWriter.append("\n");
+            csvWriter.flush();
+            csvWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Erfolgreiche Buchungsbestätigung
+        JOptionPane.showMessageDialog(frame, "Buchung erfolgreich bestätigt. Die Daten wurden in einer CSV-Datei gespeichert.");
+    }
+
+
 
     // Methode zur Auswahl des Anreise- und Abreisezeitraums
     private void selectZeitraum() {
@@ -147,10 +211,21 @@ public class BuchungsGui {
                     } else {
                         // Andernfalls setze das ausgewählte Datum als Abreisedatum
                         abreiseDatum[0] = selectedDate;
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-                        String formattedDate = selectedDate.format(formatter);
-                        abreiseField.setText(formattedDate);
-                        calendarFrame.dispose();
+
+                        // Überprüfe, ob das Abreisedatum vor dem Anreisedatum liegt
+                        if (abreiseDatum[0].isBefore(anreiseDatum[0])) {
+                            JOptionPane.showMessageDialog(calendarFrame, "Abreisedatum kann nicht vor dem Anreisedatum liegen.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                            // Setze die Textfelder zurück, damit Benutzer beide Daten erneut eingeben können
+                            anreiseField.setText("");
+                            abreiseField.setText("");
+                            anreiseDatum[0] = null; // Setze Anreisedatum zurück
+                            abreiseDatum[0] = null; // Setze Abreisedatum zurück
+                        } else {
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                            String formattedDate = selectedDate.format(formatter);
+                            abreiseField.setText(formattedDate);
+                            calendarFrame.dispose();
+                        }
                     }
                 }
             }
@@ -160,5 +235,7 @@ public class BuchungsGui {
         calendarFrame.pack();
         calendarFrame.setVisible(true);
     }
+
+
 
 }
