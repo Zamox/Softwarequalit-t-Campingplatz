@@ -51,7 +51,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>irgendwie.app.StellplatzSelectorApp</mainClass>
+                            <mainClass>app.MainGui</mainClass>
                         </manifest>
                         <manifestEntries> </manifestEntries>
                     </archive>
@@ -97,7 +97,7 @@
                             <archive>
                                 <manifest>
                                     <addClasspath>true</addClasspath>
-                                    <mainClass>irgendwie.app.StellplatzSelectorApp</mainClass>
+                                    <mainClass>app.MainGui</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>

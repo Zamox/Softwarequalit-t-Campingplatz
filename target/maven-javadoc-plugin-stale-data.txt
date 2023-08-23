@@ -1,0 +1,68 @@
+@options
+@packages
+@argfile
+-classpath
+'C:/Users/flomuell/.m2/repository/de/dhbwka/swe/utils/swe-utils/4.7.5/swe-utils-4.7.5.jar;C:/Users/flomuell/.m2/repository/commons-cli/commons-cli/1.4/commons-cli-1.4.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'17'
+-sourcepath
+'C:/Users/flomuell/IdeaProjects/Eywa/src/main/java;C:/Users/flomuell/IdeaProjects/Eywa/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2023. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/flomuell/IdeaProjects/Eywa/target/apidocs'
+-docencoding
+'UTF-8'
+-Xdoclint:none
+-doctitle
+'Eywa 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'Eywa 1.0-SNAPSHOT API'
+app
+irgendwie.app
+irgendwie.gui
+irgendwie.model
+model
+util
+'C:/Users/flomuell/IdeaProjects/Eywa/src/main/java/app/BuchungsGui.java'
+'C:/Users/flomuell/IdeaProjects/Eywa/src/main/java/app/Login.java'
+'C:/Users/flomuell/IdeaProjects/Eywa/src/main/java/app/main.java'
+'C:/Users/flomuell/IdeaProjects/Eywa/src/main/java/app/MainGui.java'
+'C:/Users/flomuell/IdeaProjects/Eywa/src/main/java/app/Stellplaetze.java'
+'C:/Users/flomuell/IdeaProjects/Eywa/src/main/java/irgendwie/app/StellplatzSelectorApp.java'
+'C:/Users/flomuell/IdeaProjects/Eywa/src/main/java/irgendwie/gui/StellplatzSelector.java'
+'C:/Users/flomuell/IdeaProjects/Eywa/src/main/java/irgendwie/model/Stellplatz.java'
+'C:/Users/flomuell/IdeaProjects/Eywa/src/main/java/model/Stellplatz.java'
+'C:/Users/flomuell/IdeaProjects/Eywa/src/main/java/util/PropertyManager.java'
+C:\Users\flomuell\.m2\repository\de\dhbwka\swe\utils\swe-utils\4.7.5\swe-utils-4.7.5.jar = 1685001909614
+C:\Users\flomuell\.m2\repository\commons-cli\commons-cli\1.4\commons-cli-1.4.jar = 1685001909841
+C:\Users\flomuell\IdeaProjects\Eywa\src\main\java\BuchungsCSV.csv.columns = 1692795141541
+C:\Users\flomuell\IdeaProjects\Eywa\src\main\java = 1692796357801
+C:\Users\flomuell\IdeaProjects\Eywa\target\generated-sources\annotations = 1692186913805
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\allclasses-index.html = 1692799109693
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\allpackages-index.html = 1692799109698
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\constant-values.html = 1692799109516
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\element-list = 1692799109420
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\help-doc.html = 1692799109740
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\index-all.html = 1692799109731
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\index.html = 1692799109675
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\jquery-ui.overrides.css = 1692799109793
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\member-search-index.js = 1692799109707
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\module-search-index.js = 1692799109700
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\overview-summary.html = 1692799109734
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\overview-tree.html = 1692799109668
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\package-search-index.js = 1692799109703
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\script.js = 1692799109745
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\search.js = 1692799109748
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\serialized-form.html = 1692799109530
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\stylesheet.css = 1692799109743
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\tag-search-index.js = 1692799109710
+C:\Users\flomuell\IdeaProjects\Eywa\target\apidocs\type-search-index.js = 1692799109705
