@@ -54,7 +54,7 @@ public class MainGui {
 
     private JPanel createBottomTablePanel() {
         JPanel buchungsTablePanel = new JPanel(new GridBagLayout());
-
+        buchungsTablePanel.setPreferredSize(new Dimension(300, 50));
         DefaultTableModel tableModel2 = new DefaultTableModel();
         // Erstelle ein DefaultTableModel für die zweite Tabelle
 
