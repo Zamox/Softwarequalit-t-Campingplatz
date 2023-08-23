@@ -19,11 +19,6 @@ public class MainGui {
     private List<JButton> buchungsButtonList;
     public JButton loginBtn;
 
-
-
-
-
-
     public MainGui() {
         this.frame = new JFrame();
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

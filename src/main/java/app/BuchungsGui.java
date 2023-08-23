@@ -1,16 +1,24 @@
 package app;
 
+import de.dhbwka.swe.utils.event.GUIEvent;
+import de.dhbwka.swe.utils.event.IGUIEventListener;
+import de.dhbwka.swe.utils.gui.CalendarComponent;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class BuchungsGui {
-    public BuchungsGui(MainGui mainGui) {
-        createAndShowGUI();
-    }
 
     JFrame frame = new JFrame("Campingplatz Buchung");
-    private void createAndShowGUI() {
+    private JTextField anreiseField;
+    private JTextField abreiseField;
 
+
+    public BuchungsGui(MainGui mainGui) {
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setSize(1000, 400);
 
@@ -22,11 +30,21 @@ public class BuchungsGui {
         frame.setVisible(true);
     }
 
-    private static JPanel createLeftPanel() {
-        JPanel leftPanel = new JPanel(new GridLayout(7, 2));
 
-        leftPanel.add(new JLabel("Buchungszeitraum:"));
-        leftPanel.add(new JTextField());
+
+    private JPanel createLeftPanel() {
+        JPanel leftPanel = new JPanel(new GridLayout(9, 2));
+
+
+        leftPanel.add(new JLabel("Anreise:"));
+        anreiseField = new JTextField();
+        anreiseField.setEditable(false);
+        leftPanel.add(anreiseField);
+
+        leftPanel.add(new JLabel("Abreise:"));
+        abreiseField = new JTextField();
+        abreiseField.setEditable(false);
+        leftPanel.add(abreiseField);
 
         leftPanel.add(new JLabel("Anzahl der Personen:"));
         leftPanel.add(new JTextField());
@@ -41,6 +59,15 @@ public class BuchungsGui {
 
         leftPanel.add(new JLabel("Kosten:"));
         leftPanel.add(new JTextField());
+
+        JButton zeitraumButton = new JButton("Zeitraum wählen");
+        zeitraumButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectZeitraum();
+            }
+        });
+        leftPanel.add(zeitraumButton);
 
         return leftPanel;
     }
@@ -89,4 +116,49 @@ public class BuchungsGui {
 
         return mainPanel;
     }
+
+    // Methode zur Auswahl des Anreise- und Abreisezeitraums
+    private void selectZeitraum() {
+        JFrame calendarFrame = new JFrame("Zeitraum wählen");
+
+        // Erstelle die CalendarComponent
+        CalendarComponent calendarComponent = CalendarComponent.builder("Zeitraum")
+                .date(LocalDate.now())
+                .startYear(2023)
+                .endYear(2025)
+                .build();
+
+        // Verfolge die ausgewählten Daten
+        final LocalDate[] anreiseDatum = {null};
+        final LocalDate[] abreiseDatum = {null};
+
+        calendarComponent.addObserver(new IGUIEventListener() {
+            @Override
+            public void processGUIEvent(GUIEvent ge) {
+                if (ge.getCmd().equals(CalendarComponent.Commands.DATE_SELECTED)) {
+                    LocalDate selectedDate = (LocalDate) ge.getData();
+
+                    // Wenn noch kein Anreisedatum ausgewählt wurde, setze das ausgewählte Datum als Anreisedatum
+                    if (anreiseDatum[0] == null) {
+                        anreiseDatum[0] = selectedDate;
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                        String formattedDate = selectedDate.format(formatter);
+                        anreiseField.setText(formattedDate);
+                    } else {
+                        // Andernfalls setze das ausgewählte Datum als Abreisedatum
+                        abreiseDatum[0] = selectedDate;
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                        String formattedDate = selectedDate.format(formatter);
+                        abreiseField.setText(formattedDate);
+                        calendarFrame.dispose();
+                    }
+                }
+            }
+        });
+
+        calendarFrame.add(calendarComponent);
+        calendarFrame.pack();
+        calendarFrame.setVisible(true);
+    }
+
 }

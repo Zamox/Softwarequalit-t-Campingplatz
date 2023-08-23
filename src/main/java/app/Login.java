@@ -52,7 +52,4 @@ public class Login {
         this.frame.setSize(500, 150);
         this.frame.setVisible(true);
     }
-
-
-
 }
