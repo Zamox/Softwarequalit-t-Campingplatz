@@ -81,9 +81,14 @@ public class MainGui {
         return buchungsTablePanel;
     }
 
-
-
     private void renderFrame() {
+        try {
+            // Set Nimbus Look and Feel
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         JPanel buttonPanel = createButtonPanel();
@@ -119,21 +124,6 @@ public class MainGui {
         contentPanel.add(createTablePanel(), BorderLayout.EAST); // Hier wird die erste Tabelle rechts vom Bild platziert
         mainPanel.add(createBottomTablePanel(), BorderLayout.SOUTH); // Hier wird die zweite Tabelle unterhalb der unteren Buttonreihe platziert
 
-
-
-
-
-        // Das Panel für die untere Tabelle im South-Bereich des mainPanel hinzufügen
-
-        /*this.frame.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                // Aktualisiere das Bild, wenn sich die GUI-Größe ändert
-                Image newScaledImage = imageIcon.getImage().getScaledInstance(mainPanel.getWidth(), -1, Image.SCALE_SMOOTH);
-                ImageIcon newScaledIcon = new ImageIcon(newScaledImage);
-                imageLabel.setIcon(newScaledIcon);
-            }
-        });*/
         this.frame.add(mainPanel);
         this.frame.setSize(900, 500); // Größe auf 900x500 festlegen
         this.frame.setVisible(true);
@@ -168,10 +158,8 @@ public class MainGui {
         loginBtn = createIdentifiedButton("Login"); // Button mit Identifier erstellen
         buttonPanel.add(loginBtn);
 
-
         return buttonPanel;
     }
-
 
     private ActionListener buttonListener = new ActionListener() {
         @Override
@@ -188,18 +176,17 @@ public class MainGui {
                     break;
                 case "Login":
                     new Login(MainGui.this);
-
                     break;
             }
         }
     };
 
     public void enable() {
-        for (JButton button : panelButtonList){
+        for (JButton button : panelButtonList) {
             button.setEnabled(true);
         }
 
-        for (JButton button : buchungsButtonList){
+        for (JButton button : buchungsButtonList) {
             button.setEnabled(true);
         }
     }
