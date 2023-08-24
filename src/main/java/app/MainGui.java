@@ -191,15 +191,18 @@ public class MainGui {
             // Hier kannst du basierend auf dem Identifier die entsprechende Aktion ausführen
             switch (identifier) {
                 case "Neue Buchung":
-                    new BuchungsGui(MainGui.this);
+                    new BuchungsGui(MainGui.this, null);
                     break;
                 case "Buchung bearbeiten":
                     selectedRowIndex = buchungsTable.getSelectedRow();
                     if (selectedRowIndex >= 0) {
-                        // Aktiviere die Bearbeitung in der Tabelle
-                        buchungsTable.setEnabled(true);
-                        // Aktiviere den "Speichern"-Button, um die Änderungen zu speichern
-                        buchungsButtonList.get(1).setEnabled(true);
+                        // Laden Sie die Daten aus der ausgewählten Zeile
+                        String[] selectedData = loadSelectedBookingData(selectedRowIndex);
+
+                        // Übergeben Sie die Daten an die BuchungsGui
+                        if (selectedData != null) {
+                            new BuchungsGui(MainGui.this, selectedData);
+                        }
                     }
                     break;
                 case "Login":
@@ -211,6 +214,19 @@ public class MainGui {
             }
         }
     };
+
+    // Neue Methode zum Laden der Daten aus der ausgewählten Zeile der Tabelle
+    private String[] loadSelectedBookingData(int rowIndex) {
+        DefaultTableModel model = (DefaultTableModel) buchungsTable.getModel();
+        if (rowIndex >= 0 && rowIndex < model.getRowCount()) {
+            String[] data = new String[7];
+            for (int i = 0; i < 7; i++) {
+                data[i] = (String) model.getValueAt(rowIndex, i);
+            }
+            return data;
+        }
+        return null;
+    }
 
     // Methode, um alle Buttons zu aktivieren
     private void enableAllButtons() {

@@ -24,11 +24,13 @@ public class BuchungsGui {
     private JPanel rightPanel;
 
     private MainGui mainGui;
+    private String[] selectedBookingData;
 
-    public BuchungsGui(MainGui mainGui) {
+    public BuchungsGui(MainGui mainGui, String[] selectedBookingData) {
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setSize(1000, 400);
         this.mainGui = mainGui;
+        this.selectedBookingData = selectedBookingData;
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
         JPanel mainPanel = createMainPanel(leftPanel, rightPanel);
@@ -108,6 +110,19 @@ public class BuchungsGui {
         rightPanel.add(new JTextField());
 
         return rightPanel;
+    }
+
+    private void fillFieldsWithSelectedData() {
+        if (selectedBookingData != null && selectedBookingData.length == 7) {
+            // Fülle die Felder mit den ausgewählten Daten
+            anreiseField.setText(selectedBookingData[2]);
+            abreiseField.setText(selectedBookingData[3]);
+            platznummerField.setText(selectedBookingData[4]);
+            ((JTextField) rightPanel.getComponent(1)).setText(selectedBookingData[0]); // Name
+            ((JTextField) rightPanel.getComponent(3)).setText(selectedBookingData[1]); // Vorname
+            ((JTextField) rightPanel.getComponent(7)).setText(selectedBookingData[5]); // Email
+            ((JTextField) rightPanel.getComponent(9)).setText(selectedBookingData[6]); // Telefon
+        }
     }
 
     private JPanel createMainPanel(JPanel leftPanel, JPanel rightPanel) {
