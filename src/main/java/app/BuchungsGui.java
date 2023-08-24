@@ -254,7 +254,7 @@ public class BuchungsGui {
                 }
             }
         });
-
+        calendarFrame.setPreferredSize(new Dimension(500, 500));
         calendarFrame.add(calendarComponent);
         calendarFrame.pack();
         calendarFrame.setVisible(true);
