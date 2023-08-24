@@ -17,8 +17,9 @@ public class MainGui {
     private DefaultTableModel tableModel2;
     private List<JButton> panelButtonList;
     private List<JButton> buchungsButtonList;
-    public JButton loginBtn;
-    private JTable buchungsTable;
+    private JButton loginBtn;
+    private static JTable buchungsTable;
+    private int selectedRowIndex = -1;
 
     public MainGui() {
         this.frame = new JFrame();
@@ -193,14 +194,38 @@ public class MainGui {
                     new BuchungsGui(MainGui.this);
                     break;
                 case "Buchung bearbeiten":
-                    // Funktion für "Buchung bearbeiten" ausführen
+                    selectedRowIndex = buchungsTable.getSelectedRow();
+                    if (selectedRowIndex >= 0) {
+                        // Aktiviere die Bearbeitung in der Tabelle
+                        buchungsTable.setEnabled(true);
+                        // Aktiviere den "Speichern"-Button, um die Änderungen zu speichern
+                        buchungsButtonList.get(1).setEnabled(true);
+                    }
                     break;
                 case "Login":
                     new Login(MainGui.this);
                     break;
+                case "Neuer Platz": // Hinzugefügt: Aktion für "Neuer Platz" Button
+                    new PlatzAnlegenGui();
+                    break;
             }
         }
     };
+
+    // Methode, um alle Buttons zu aktivieren
+    private void enableAllButtons() {
+        for (JButton button : buchungsButtonList) {
+            button.setEnabled(true);
+        }
+    }
+
+    private void disableButtonsExcept(int indexToExclude) {
+        for (int i = 0; i < buchungsButtonList.size(); i++) {
+            if (i != indexToExclude) {
+                buchungsButtonList.get(i).setEnabled(false);
+            }
+        }
+    }
 
     public void enable() {
         for (JButton button : panelButtonList) {
@@ -212,7 +237,28 @@ public class MainGui {
         }
     }
 
-    private void loadCSVDataToTable(DefaultTableModel tableModel) {
+    private void saveEditedData() {
+        DefaultTableModel model = (DefaultTableModel) buchungsTable.getModel();
+        if (selectedRowIndex >= 0 && selectedRowIndex < model.getRowCount()) {
+            // Nehmen Sie die Änderungen an den Daten vor
+            String name = (String) model.getValueAt(selectedRowIndex, 0);
+            String vorname = (String) model.getValueAt(selectedRowIndex, 1);
+            String anreise = (String) model.getValueAt(selectedRowIndex, 2);
+            String abreise = (String) model.getValueAt(selectedRowIndex, 3);
+            String platznummer = (String) model.getValueAt(selectedRowIndex, 4);
+            String email = (String) model.getValueAt(selectedRowIndex, 5);
+            String telefon = (String) model.getValueAt(selectedRowIndex, 6);
+
+            // Hier können Sie den Code zum Speichern der Daten in Ihrer CSV-Datei hinzufügen
+            // Verwenden Sie die oben erfassten Daten
+            // ...
+
+            // Nach dem Speichern können Sie eine Erfolgsmeldung anzeigen
+            JOptionPane.showMessageDialog(frame, "Änderungen erfolgreich gespeichert.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private static void loadCSVDataToTable(DefaultTableModel tableModel) {
         // Pfad zur CSV-Datei ändern, falls erforderlich
         String csvFilePath = "./BuchungsCSV.csv";
 
@@ -234,7 +280,7 @@ public class MainGui {
         }
     }
 
-    public void updateTable() {
+    public static void updateTable() {
         // Löschen Sie alle Zeilen aus der Tabelle
         DefaultTableModel model = (DefaultTableModel) buchungsTable.getModel();
         model.setRowCount(0);

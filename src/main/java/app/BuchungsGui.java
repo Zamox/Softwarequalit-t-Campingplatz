@@ -22,11 +22,13 @@ public class BuchungsGui {
     private JPanel leftPanel;
     private JPanel rightPanel;
 
+    private MainGui mainGui;
+
 
     public BuchungsGui(MainGui mainGui) {
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setSize(1000, 400);
-
+        this.mainGui = mainGui;
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
         JPanel mainPanel = createMainPanel(leftPanel, rightPanel);
