@@ -120,6 +120,7 @@ public class BuchungsGui {
             @Override
             public void actionPerformed(ActionEvent e) {
                 bestaetigeBuchung();
+                MainGui.updateTable();
             }
         });
         mainPanel.add(buchungsButton, BorderLayout.SOUTH);

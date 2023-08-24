@@ -2,38 +2,44 @@ package app;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 public class MainGui {
     private JFrame frame;
     private DefaultTableModel infoTableModel;
+    private DefaultTableModel tableModel2;
     private List<JButton> panelButtonList;
     private List<JButton> buchungsButtonList;
     public JButton loginBtn;
+    private JTable buchungsTable;
 
     public MainGui() {
         this.frame = new JFrame();
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setLayout(new BorderLayout());
-        String t = "test";
         renderFrame();
-        this.frame.setSize(1400, 600);
+
     }
 
     private JPanel createTablePanel() {
         JPanel tablePanel = new JPanel(new BorderLayout());
 
-        infoTableModel = new DefaultTableModel(); // Erstelle ein DefaultTableModel
+        infoTableModel = new DefaultTableModel() {
+            // Override the isCellEditable method to make the cells non-editable
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
-        JTable table = new JTable(infoTableModel); // Erstelle die Tabelle mit dem Modell
+        JTable table = new JTable(infoTableModel);
 
         // Füge die Spaltennamen hinzu
         infoTableModel.addColumn("Buchung");
@@ -49,11 +55,16 @@ public class MainGui {
 
     private JPanel createBottomTablePanel() {
         JPanel buchungsTablePanel = new JPanel(new GridBagLayout());
-        buchungsTablePanel.setPreferredSize(new Dimension(300, 50));
-        DefaultTableModel tableModel2 = new DefaultTableModel();
-        // Erstelle ein DefaultTableModel für die zweite Tabelle
+        buchungsTablePanel.setPreferredSize(new Dimension(300, 150));
+        tableModel2 = new DefaultTableModel() {
+            // Override the isCellEditable method to make the cells non-editable
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
-        JTable buchungsTable = new JTable(tableModel2); // Erstelle die zweite Tabelle mit dem Modell
+        buchungsTable = new JTable(tableModel2);
 
         // Füge die Spaltennamen hinzu
         tableModel2.addColumn("Name");
@@ -68,15 +79,18 @@ public class MainGui {
 
         // Konfigurieren Sie die GridBagConstraints für die Tabelle
         GridBagConstraints tableConstraints = new GridBagConstraints();
-        tableConstraints.gridx = 0;
+        tableConstraints.gridx = 2;
         tableConstraints.gridy = 0;
         tableConstraints.gridwidth = 1;
         tableConstraints.gridheight = 1;
         tableConstraints.fill = GridBagConstraints.BOTH; // Füllen Sie den verfügbaren Platz
-        tableConstraints.weightx = 1.0;
-        tableConstraints.weighty = 0.2; // Hier den Wert anpassen, um den vertikalen Platzbedarf zu steuern
+        tableConstraints.weightx = 2.0;
+        tableConstraints.weighty = 0.2;
 
         buchungsTablePanel.add(scrollPane2, tableConstraints);
+
+        // Fügen Sie einen Seitenabstand hinzu (10 Pixel) - Ändern Sie dies nach Bedarf
+        buchungsTablePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
 
         return buchungsTablePanel;
     }
@@ -96,13 +110,16 @@ public class MainGui {
 
         JPanel contentPanel = new JPanel(new BorderLayout());
         JLabel imageLabel = new JLabel();
-        ImageIcon imageIcon = new ImageIcon("./src/main/java/app/Platzplan.png");
+        ImageIcon imageIcon = new ImageIcon("./Platzplan.png");
         Image scaledImage = imageIcon.getImage().getScaledInstance(150, -1, Image.SCALE_SMOOTH);
         imageLabel.setIcon(imageIcon);
 
+        // Fügen Sie einen Seitenabstand für das Bild hinzu (10 Pixel) - Ändern Sie dies nach Bedarf
+        imageLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
+
         contentPanel.add(imageLabel, BorderLayout.WEST);
 
-        JPanel buchungsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 40)); // Erhöhter vertikaler Abstand hier
+        JPanel buchungsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Erhöhter vertikaler Abstand hier
         String[] buchungsButtonLabels = {
                 "Neue Buchung", "Buchung bearbeiten",
                 "Buchung löschen", "Info"
@@ -125,8 +142,12 @@ public class MainGui {
         mainPanel.add(createBottomTablePanel(), BorderLayout.SOUTH); // Hier wird die zweite Tabelle unterhalb der unteren Buttonreihe platziert
 
         this.frame.add(mainPanel);
-        this.frame.setSize(900, 500); // Größe auf 900x500 festlegen
+        this.frame.setSize(1300, 700); // Größe auf 900x500 festlegen
+        this.frame.setResizable(false);
         this.frame.setVisible(true);
+
+        // Daten aus CSV-Datei in Tabelle zwei laden
+        loadCSVDataToTable((DefaultTableModel) buchungsTable.getModel());
     }
 
     private JButton createIdentifiedButton(String label) {
@@ -138,7 +159,7 @@ public class MainGui {
     }
 
     private JPanel createButtonPanel() {
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
 
         String[] buttonLabels = {
                 "Buchungen", "Freie Plätze", "Neuer Platz",
@@ -189,6 +210,37 @@ public class MainGui {
         for (JButton button : buchungsButtonList) {
             button.setEnabled(true);
         }
+    }
+
+    private void loadCSVDataToTable(DefaultTableModel tableModel) {
+        // Pfad zur CSV-Datei ändern, falls erforderlich
+        String csvFilePath = "./BuchungsCSV.csv";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+            String line;
+            boolean firstLine = true;
+            while ((line = br.readLine()) != null) {
+                if (firstLine) {
+                    firstLine = false;
+                    continue; // Überspringe die erste Zeile
+                }
+                String[] data = line.split(",");
+                // Annahme: Ihre CSV-Datei hat dieselbe Spaltenanzahl wie Ihre Tabelle
+                // Wenn nicht, müssen Sie die Daten entsprechend zuordnen.
+                tableModel.addRow(data);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateTable() {
+        // Löschen Sie alle Zeilen aus der Tabelle
+        DefaultTableModel model = (DefaultTableModel) buchungsTable.getModel();
+        model.setRowCount(0);
+
+        // Laden Sie die Daten erneut aus Ihrer CSV-Datei
+        loadCSVDataToTable(model);
     }
 
     public static void main(String[] args) {
