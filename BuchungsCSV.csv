@@ -1,8 +1,2 @@
-Name,Vorname,Anreise,Abreise,Platznummer,E-Mail,Telefon
-Mieser,Knecht,8/31/2023 12:00:00 AM,8/17/2023 12:00:00 AM,23,hallo@gmail.com,420187
-The Destroyer,Gorlock,8/1/2023 12:00:00 AM,8/25/2023 12:00:00 AM,123,eywa@gmail.com,11223344
-Schelle,Rückhand,8/23/2023 12:00:00 AM,8/25/2023,187,fickLutz@gmail.com,187420
-Test,Test,23.08.2023,25.08.2023,11,Test,Test
-Test,Test,23.08.2023,25.08.2023,11,Test,Test
-Test,Test,22.08.2023,24.08.2023,Test,Test,Test
-Test,Test,24.08.2023,26.08.2023,Test,Test,Test
+name,vorname,26.08.2023,27.08.2023,platz,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten
+name,vorname,26.08.2023,27.08.2023,platz,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten

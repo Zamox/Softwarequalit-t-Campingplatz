@@ -271,14 +271,27 @@ public class MainGui {
                     continue; // Überspringe die erste Zeile
                 }
                 String[] data = line.split(",");
-                // Annahme: Ihre CSV-Datei hat dieselbe Spaltenanzahl wie Ihre Tabelle
-                // Wenn nicht, müssen Sie die Daten entsprechend zuordnen.
-                tableModel.addRow(data);
+
+                // Annahme: Die CSV-Datei hat die gewünschte Reihenfolge der Spalten
+                if (data.length >= 7) { // Überprüfen Sie, ob genügend Spalten vorhanden sind
+                    String[] rowData = new String[7]; // Erstellen Sie ein Array für die gewünschten Spalten
+                    rowData[0] = data[0]; // Name
+                    rowData[1] = data[1]; // Vorname
+                    rowData[2] = data[2]; // Anreise
+                    rowData[3] = data[3]; // Abreise
+                    rowData[4] = data[4]; // Platznummer
+                    rowData[5] = data[5]; // E-Mail
+                    rowData[6] = data[6]; // Telefon
+
+                    tableModel.addRow(rowData); // Fügen Sie die Daten in die Tabelle ein
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 
     public static void updateTable() {
         // Löschen Sie alle Zeilen aus der Tabelle

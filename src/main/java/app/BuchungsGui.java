@@ -18,12 +18,12 @@ public class BuchungsGui {
     JFrame frame = new JFrame("Campingplatz Buchung");
     private JTextField anreiseField;
     private JTextField abreiseField;
+    private JTextField platznummerField; // Hinzugefügt: Platznummer-Feld
 
     private JPanel leftPanel;
     private JPanel rightPanel;
 
     private MainGui mainGui;
-
 
     public BuchungsGui(MainGui mainGui) {
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -37,10 +37,8 @@ public class BuchungsGui {
         frame.setVisible(true);
     }
 
-
     private JPanel createLeftPanel() {
-        leftPanel = new JPanel(new GridLayout(9, 2));
-
+        leftPanel = new JPanel(new GridLayout(10, 2)); // Erhöht auf 10 Reihen für Platznummer
 
         leftPanel.add(new JLabel("Anreise:"));
         anreiseField = new JTextField();
@@ -61,7 +59,8 @@ public class BuchungsGui {
         leftPanel.add(unterkunftComboBox);
 
         leftPanel.add(new JLabel("Platzauswahl:"));
-        leftPanel.add(new JTextField());
+        platznummerField = new JTextField();
+        leftPanel.add(platznummerField);
 
         leftPanel.add(new JLabel("Kosten:"));
         leftPanel.add(new JTextField());
@@ -79,7 +78,7 @@ public class BuchungsGui {
     }
 
     private JPanel createRightPanel() {
-        rightPanel = new JPanel(new GridLayout(9, 2));
+        rightPanel = new JPanel(new GridLayout(10, 2)); // Erhöht auf 10 Reihen für Platznummer
 
         rightPanel.add(new JLabel("Name:"));
         rightPanel.add(new JTextField());
@@ -133,6 +132,7 @@ public class BuchungsGui {
     private void bestaetigeBuchung() {
         // Überprüfe, ob alle erforderlichen Felder ausgefüllt sind
         if (anreiseField.getText().isEmpty() || abreiseField.getText().isEmpty() ||
+                platznummerField.getText().isEmpty() ||
                 ((JTextField) rightPanel.getComponent(1)).getText().isEmpty() || // Name
                 ((JTextField) rightPanel.getComponent(3)).getText().isEmpty() || // Vorname
                 ((JTextField) rightPanel.getComponent(7)).getText().isEmpty() || // Email
@@ -146,13 +146,19 @@ public class BuchungsGui {
 
     // Methode zum Speichern der Buchungsdaten in einer CSV-Datei
     private void speichereBuchungsdaten() {
-        String name = ((JTextField) rightPanel.getComponent(1)).getText();
-        String vorname = ((JTextField) rightPanel.getComponent(3)).getText();
         String anreiseDatum = anreiseField.getText();
         String abreiseDatum = abreiseField.getText();
-        String platznummer = ((JTextField) leftPanel.getComponent(9)).getText();
-        String email = ((JTextField) rightPanel.getComponent(15)).getText();
+        String platznummer = platznummerField.getText();
+
+        String name = ((JTextField) rightPanel.getComponent(1)).getText();
+        String vorname = ((JTextField) rightPanel.getComponent(3)).getText();
+        String strasse = ((JTextField) rightPanel.getComponent(5)).getText();
+        String plz = ((JTextField) rightPanel.getComponent(7)).getText();
+        String hausnummer = ((JTextField) rightPanel.getComponent(9)).getText();
+        String rechnungsadresse = ((JTextField) rightPanel.getComponent(11)).getText();
         String telefon = ((JTextField) rightPanel.getComponent(13)).getText();
+        String email = ((JTextField) rightPanel.getComponent(15)).getText();
+        String kreditkartendaten = ((JTextField) rightPanel.getComponent(17)).getText();
 
         String dateiPfad = "./BuchungsCSV.csv";
 
@@ -171,6 +177,23 @@ public class BuchungsGui {
             csvWriter.append(email);
             csvWriter.append(",");
             csvWriter.append(telefon);
+            csvWriter.append(",");
+            // Fügen Sie hier die restlichen Felder in der gewünschten Reihenfolge hinzu
+            csvWriter.append(strasse);
+            csvWriter.append(",");
+            csvWriter.append(plz);
+            csvWriter.append(",");
+            csvWriter.append(hausnummer);
+            csvWriter.append(",");
+            csvWriter.append(rechnungsadresse);
+            csvWriter.append(",");
+            csvWriter.append(kreditkartendaten);
+            csvWriter.append(",");
+            csvWriter.append("AnzahlDerPersonen"); // Beispiel: Platzhalter für Anzahl der Personen
+            csvWriter.append(",");
+            csvWriter.append("Unterkunftstyp"); // Beispiel: Platzhalter für Unterkunftstyp
+            csvWriter.append(",");
+            csvWriter.append("Kosten"); // Beispiel: Platzhalter für Kosten
             csvWriter.append("\n");
             csvWriter.flush();
             csvWriter.close();
@@ -181,8 +204,6 @@ public class BuchungsGui {
         // Erfolgreiche Buchungsbestätigung
         JOptionPane.showMessageDialog(frame, "Buchung erfolgreich bestätigt. Die Daten wurden in einer CSV-Datei gespeichert.");
     }
-
-
 
     // Methode zur Auswahl des Anreise- und Abreisezeitraums
     private void selectZeitraum() {
@@ -238,7 +259,4 @@ public class BuchungsGui {
         calendarFrame.pack();
         calendarFrame.setVisible(true);
     }
-
-
-
 }
