@@ -1,11 +1,14 @@
 package app;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -111,13 +114,37 @@ public class MainGui {
 
         JPanel contentPanel = new JPanel(new BorderLayout());
         JLabel imageLabel = new JLabel();
-        ImageIcon imageIcon = new ImageIcon("./Platzplan.png");
-        Image scaledImage = imageIcon.getImage().getScaledInstance(150, -1, Image.SCALE_SMOOTH);
-        imageLabel.setIcon(imageIcon);
+        try {
+            // Lade das Bild
+            BufferedImage img = ImageIO.read(new File("./Campingplatz.jpg"));
+
+            // Skaliere das Bild auf die gewünschte Größe
+            int imageWidth = 550; // Ändere dies auf die gewünschte Breite
+            int imageHeight = 450; // Ändere dies auf die gewünschte Höhe
+            Image scaledImage = img.getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
+
+            // Setze das skalierte Bild im JLabel
+            imageLabel.setIcon(new ImageIcon(scaledImage));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Fügen Sie einen Seitenabstand für das Bild hinzu (10 Pixel) - Ändern Sie dies nach Bedarf
         imageLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
+        JButton transparentButton = new JButton("Transparent Button");
+        transparentButton.setBounds(100, 100, 200, 50);
+        transparentButton.setOpaque(false);
+        transparentButton.setContentAreaFilled(false);
+        transparentButton.setBorderPainted(false);
+
+        imageLabel.add(transparentButton);
+        transparentButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
+            }
+        });
         contentPanel.add(imageLabel, BorderLayout.WEST);
 
         JPanel buchungsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Erhöhter vertikaler Abstand hier
@@ -144,7 +171,7 @@ public class MainGui {
 
         this.frame.add(mainPanel);
         this.frame.setSize(1300, 700); // Größe auf 900x500 festlegen
-        this.frame.setResizable(false);
+        //this.frame.setResizable(false);
         this.frame.setVisible(true);
 
         // Daten aus CSV-Datei in Tabelle zwei laden
@@ -205,6 +232,19 @@ public class MainGui {
                         }
                     }
                     break;
+                case "Buchung löschen":
+                    if (selectedRowIndex >= 0) {
+                        DefaultTableModel model = (DefaultTableModel) buchungsTable.getModel();
+
+                        // Holen Sie den Index der ausgewählten Zeile
+                        int selectedRow = buchungsTable.getSelectedRow();
+
+                        // Löschen Sie die Zeile aus der Tabelle
+                        model.removeRow(selectedRow);
+                        JOptionPane.showMessageDialog(frame, "Buchung erfolgreich gelöscht.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Bitte wählen Sie eine Buchung zum Löschen aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    }
                 case "Login":
                     new Login(MainGui.this);
                     break;
