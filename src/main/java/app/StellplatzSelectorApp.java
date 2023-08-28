@@ -1,14 +1,9 @@
-package irgendwie.app;
+package app;
 
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.List;
 
 import de.dhbwka.swe.utils.event.GUIEvent;
-import de.dhbwka.swe.utils.event.IGUIEventListener;
-import de.dhbwka.swe.utils.event.IUpdateEventListener;
-import de.dhbwka.swe.utils.event.IUpdateEventSender;
 import de.dhbwka.swe.utils.event.UpdateEvent;
 import de.dhbwka.swe.utils.model.Attribute;
 import de.dhbwka.swe.utils.model.IDepictable;

@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.awt.Color.red;
+
 public class MainGui {
     private JFrame frame;
     private DefaultTableModel infoTableModel;
@@ -120,7 +122,7 @@ public class MainGui {
 
             // Skaliere das Bild auf die gewünschte Größe
             int imageWidth = 550; // Ändere dies auf die gewünschte Breite
-            int imageHeight = 450; // Ändere dies auf die gewünschte Höhe
+            int imageHeight = 400; // Ändere dies auf die gewünschte Höhe
             Image scaledImage = img.getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
 
             // Setze das skalierte Bild im JLabel
@@ -132,14 +134,51 @@ public class MainGui {
         // Fügen Sie einen Seitenabstand für das Bild hinzu (10 Pixel) - Ändern Sie dies nach Bedarf
         imageLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
-        JButton transparentButton = new JButton("Transparent Button");
-        transparentButton.setBounds(100, 100, 200, 50);
-        transparentButton.setOpaque(false);
-        transparentButton.setContentAreaFilled(false);
-        transparentButton.setBorderPainted(false);
+        JButton upperLeftButton = new JButton();
+        upperLeftButton.setBounds(0,0, 275, 200);
+        JButton upperRightButton = new JButton();
+        upperRightButton.setBounds(275, 0, 275, 200);
+        JButton lowerLeftButton = new JButton();
+        lowerLeftButton.setBounds(0, 200, 275, 200);
+        JButton lowerRightButton = new JButton();
+        lowerRightButton.setBounds(275, 200, 275, 200);
+        upperLeftButton.setOpaque(true);
+        //upperLeftButton.setBackground(red);
+        upperLeftButton.setContentAreaFilled(false);
+        upperLeftButton.setBorderPainted(true);
 
-        imageLabel.add(transparentButton);
-        transparentButton.addActionListener(new ActionListener() {
+        upperRightButton.setOpaque(true);
+        upperRightButton.setContentAreaFilled(false);
+
+        lowerLeftButton.setOpaque(true);
+        lowerLeftButton.setContentAreaFilled(false);
+
+        lowerRightButton.setOpaque(true);
+        lowerRightButton.setContentAreaFilled(false);
+
+        imageLabel.add(upperLeftButton);
+        imageLabel.add(upperRightButton);
+        imageLabel.add(lowerLeftButton);
+        imageLabel.add(lowerRightButton);
+        upperLeftButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new StellplatzSelectorApp();
+            }
+        });
+        upperRightButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
+            }
+        });
+        lowerLeftButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
+            }
+        });
+        lowerRightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
