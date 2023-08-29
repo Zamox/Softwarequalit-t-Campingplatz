@@ -1,5 +1,7 @@
 package app;
 
+//import sun.text.resources.ext.JavaTimeSupplementary_ar_LB;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -55,6 +57,24 @@ public class MainGui {
 
         return tablePanel;
     }
+    private ActionListener buttonListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String identifier = e.getActionCommand();
+
+            switch (identifier) {
+                case "Freie Plätze":
+                    new upperLeftPlaetze();
+                    break;
+                case "Neuer Platz":
+                    new PlatzAnlegenGui();
+                    break;
+                case "Login":
+                    new Login(MainGui.this);
+                    break;
+            }
+        }
+    };
 
     private JPanel createBottomTablePanel() {
         JPanel buchungsTablePanel = new JPanel(new GridBagLayout());
@@ -116,6 +136,11 @@ public class MainGui {
         try {
             // Lade das Bild
             BufferedImage img = ImageIO.read(new File("./Campingplatz.jpg"));
+            // mach das Bild transparent
+            imageLabel.setOpaque(false);
+
+
+
 
             // Skaliere das Bild auf die gewünschte Größe
             int imageWidth = 550; // Ändere dies auf die gewünschte Breite
@@ -246,7 +271,7 @@ public class MainGui {
         return buttonPanel;
     }
 
-    private ActionListener buttonListener = new ActionListener() {
+    private ActionListener belegungsButtonListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             String identifier = e.getActionCommand(); // Hole den Identifier des geklickten Buttons
@@ -259,7 +284,7 @@ public class MainGui {
                 case "Buchung bearbeiten":
                     int selectedRowIndex = buchungsTable.getSelectedRow();
                     if (selectedRowIndex != -1) {
-                        datenAuslesen(selectedRowIndex + 2); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
+                        datenAuslesen(selectedRowIndex + 1); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
                     } else {
                         JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     }
