@@ -160,13 +160,13 @@ public class MainGui {
         upperLeftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new StellplatzSelectorApp();
+                new upperLeftPlaetze();
             }
         });
         upperRightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
+                new StellplatzSelectorApp();
             }
         });
         lowerLeftButton.addActionListener(new ActionListener() {
