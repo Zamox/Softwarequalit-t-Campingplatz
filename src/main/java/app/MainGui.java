@@ -257,16 +257,15 @@ public class MainGui {
                     new BuchungsGui(MainGui.this, null);
                     break;
                 case "Buchung bearbeiten":
-                    int selectedRow = buchungsTable.getSelectedRow();
-                    if (selectedRow != -1) {
-                        String[] selectedBookingData = loadSelectedBookingData(selectedRow);
-                        new BuchungsGui(MainGui.this, selectedBookingData);
+                    int selectedRowIndex = buchungsTable.getSelectedRow();
+                    if (selectedRowIndex != -1) {
+                        datenAuslesen(selectedRowIndex + 2); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
                     } else {
                         JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     }
                     break;
                 case "Buchung löschen":
-                        loescheAusgewaehlteBuchung();
+                        getAusgewählteZeile();
                         break;
                 case "Login":
                     new Login(MainGui.this);
@@ -278,20 +277,38 @@ public class MainGui {
         }
     };
 
-    // Neue Methode zum Laden der Daten aus der ausgewählten Zeile der Tabelle
-    private String[] loadSelectedBookingData(int rowIndex) {
-        DefaultTableModel model = (DefaultTableModel) buchungsTable.getModel();
-        if (rowIndex >= 0 && rowIndex < model.getRowCount()) {
-            String[] data = new String[7];
-            for (int i = 0; i < 7; i++) {
-                data[i] = (String) model.getValueAt(rowIndex, i);
-            }
-            return data;
-        }
-        return null;
-    }
+    private void datenAuslesen(int rowIndex) {
+        String csvFile = "./BuchungsCSV.csv"; // Pfad zur CSV-Datei
 
-    private void loescheAusgewaehlteBuchung() {
+        try {
+            // CSV-Datei einlesen
+            BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+            List<String> zeilen = new ArrayList<>();
+            String zeile;
+
+            while ((zeile = reader.readLine()) != null) {
+                zeilen.add(zeile);
+            }
+            reader.close();
+
+            // Überprüfen, ob der ausgewählte Zeilenindex gültig ist
+            if (rowIndex >= 0 && rowIndex < zeilen.size()) {
+                String ausgewaehlteZeile = zeilen.get(rowIndex);
+
+                // Hier kannst du den ausgewählten Datensatz weiter verarbeiten, z.B., in die BuchungsGui übergeben
+                // AusgewaehlteZeile enthält jetzt den ausgewählten Datensatz aus der CSV-Datei
+                // ...
+
+                // Erstelle eine Instanz von BuchungsGui und übergebe die ausgewählten Daten
+                new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","));
+            } else {
+                System.out.println("Ungültiger Zeilenindex.");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    private void getAusgewählteZeile() {
         int selectedRow = buchungsTable.getSelectedRow();
         if (selectedRow != -1) {
             buchungLoeschen(selectedRow + 2); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist

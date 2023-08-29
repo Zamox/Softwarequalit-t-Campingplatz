@@ -35,7 +35,7 @@ public class BuchungsGui {
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
         JPanel mainPanel = createMainPanel(leftPanel, rightPanel);
-        fillFieldsWithSelectedData();
+        fillFieldsWithSelectedData(selectedBookingData);
         frame.add(mainPanel);
         frame.setVisible(true);
     }
@@ -115,16 +115,19 @@ public class BuchungsGui {
         return rightPanel;
     }
 
-    private void fillFieldsWithSelectedData() {
-        if (selectedBookingData != null && selectedBookingData.length == 7) {
+    private void fillFieldsWithSelectedData(String[] selectedBookingData) {
+        if (this.selectedBookingData != null && this.selectedBookingData.length == 15) {
             // Fülle die Felder mit den ausgewählten Daten
-            anreiseField.setText(selectedBookingData[2]);
-            abreiseField.setText(selectedBookingData[3]);
-            platznummerField.setText(selectedBookingData[4]);
-            ((JTextField) rightPanel.getComponent(1)).setText(selectedBookingData[0]); // Name
-            ((JTextField) rightPanel.getComponent(3)).setText(selectedBookingData[1]); // Vorname
-            ((JTextField) rightPanel.getComponent(7)).setText(selectedBookingData[5]); // Email
-            ((JTextField) rightPanel.getComponent(9)).setText(selectedBookingData[6]); // Telefon
+            anreiseField.setText(this.selectedBookingData[2]);
+            abreiseField.setText(this.selectedBookingData[3]);
+            platznummerField.setText(this.selectedBookingData[4]);
+            ((JTextField) rightPanel.getComponent(1)).setText(this.selectedBookingData[0]); // Name
+            ((JTextField) rightPanel.getComponent(3)).setText(this.selectedBookingData[1]); // Vorname
+            ((JTextField) rightPanel.getComponent(7)).setText(this.selectedBookingData[5]); // Email
+            ((JTextField) rightPanel.getComponent(9)).setText(this.selectedBookingData[6]); // Telefon
+        }
+        else{
+            new JOptionPane("Bitte wählen Sie einen Stellplatz aus.");
         }
     }
 
