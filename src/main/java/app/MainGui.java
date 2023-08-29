@@ -57,7 +57,7 @@ public class MainGui {
 
         return tablePanel;
     }
-    private ActionListener buttonListener = new ActionListener() {
+    private ActionListener belegungsButtonListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             String identifier = e.getActionCommand();
@@ -65,6 +65,7 @@ public class MainGui {
             switch (identifier) {
                 case "Freie Plätze":
                     new upperLeftPlaetze();
+
                     break;
                 case "Neuer Platz":
                     new PlatzAnlegenGui();
@@ -251,7 +252,7 @@ public class MainGui {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
 
         String[] buttonLabels = {
-                "Buchungen", "Freie Plätze", "Neuer Platz",
+                "Freie Plätze", "Neuer Platz",
                 "Platz bearbeiten", "Platz löschen", "Platz Buchen",
                 "Export/Import"
         };
@@ -271,7 +272,7 @@ public class MainGui {
         return buttonPanel;
     }
 
-    private ActionListener belegungsButtonListener = new ActionListener() {
+    private ActionListener buttonListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             String identifier = e.getActionCommand(); // Hole den Identifier des geklickten Buttons

@@ -9,7 +9,7 @@ public class upperLeftPlaetze {
     public upperLeftPlaetze() {
         this.frame = new JFrame("Platzregion Nord-West");
         this.frame.setSize(1000, 1000);
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
         renderFrame();
     }
