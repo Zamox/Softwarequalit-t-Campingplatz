@@ -7,10 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -260,30 +257,11 @@ public class MainGui {
                     new BuchungsGui(MainGui.this, null);
                     break;
                 case "Buchung bearbeiten":
-                    selectedRowIndex = buchungsTable.getSelectedRow();
-                    if (selectedRowIndex >= 0) {
-                        // Laden Sie die Daten aus der ausgewählten Zeile
-                        String[] selectedData = loadSelectedBookingData(selectedRowIndex);
 
-                        // Übergeben Sie die Daten an die BuchungsGui
-                        if (selectedData != null) {
-                            new BuchungsGui(MainGui.this, selectedData);
-                        }
-                    }
                     break;
                 case "Buchung löschen":
-                    if (selectedRowIndex >= 0) {
-                        DefaultTableModel model = (DefaultTableModel) buchungsTable.getModel();
-
-                        // Holen Sie den Index der ausgewählten Zeile
-                        int selectedRow = buchungsTable.getSelectedRow();
-
-                        // Löschen Sie die Zeile aus der Tabelle
-                        model.removeRow(selectedRow);
-                        JOptionPane.showMessageDialog(frame, "Buchung erfolgreich gelöscht.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Bitte wählen Sie eine Buchung zum Löschen aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
-                    }
+                        loescheAusgewaehlteBuchung();
+                        break;
                 case "Login":
                     new Login(MainGui.this);
                     break;
@@ -306,6 +284,55 @@ public class MainGui {
         }
         return null;
     }
+
+    private void loescheAusgewaehlteBuchung() {
+        int selectedRow = buchungsTable.getSelectedRow();
+        if (selectedRow != -1) {
+            buchungLoeschen(selectedRow + 2); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
+        } else {
+            JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void buchungLoeschen(int zeileZumLoeschen) {
+
+        String csvFile = "./BuchungsCSV.csv"; // Pfad zur CSV-Datei
+
+        try {
+            // CSV-Datei einlesen
+            BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+            List<String> zeilen = new ArrayList<>();
+            String zeile;
+
+            while ((zeile = reader.readLine()) != null) {
+                zeilen.add(zeile);
+            }
+            reader.close();
+
+            // Prüfen, ob die Zeile existiert
+            if (zeileZumLoeschen >= 1 && zeileZumLoeschen <= zeilen.size()) {
+                // Zeile löschen
+                zeilen.remove(zeileZumLoeschen - 1);
+
+                // Aktualisierte CSV-Datei schreiben
+                FileWriter writer = new FileWriter(csvFile);
+                for (String updatedZeile : zeilen) {
+                    writer.write(updatedZeile + "\n");
+                }
+                writer.close();
+
+                System.out.println("Zeile " + zeileZumLoeschen + " wurde erfolgreich gelöscht.");
+
+                // Aktualisiere die Tabelle nach dem Löschen
+                updateTable();
+            } else {
+                System.out.println("Die angegebene Zeile existiert nicht.");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
     // Methode, um alle Buttons zu aktivieren
     private void enableAllButtons() {

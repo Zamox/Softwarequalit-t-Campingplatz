@@ -31,6 +31,7 @@ public class BuchungsGui {
         this.frame.setSize(1000, 400);
         this.mainGui = mainGui;
         this.selectedBookingData = selectedBookingData;
+
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
         JPanel mainPanel = createMainPanel(leftPanel, rightPanel);
@@ -38,6 +39,8 @@ public class BuchungsGui {
         frame.add(mainPanel);
         frame.setVisible(true);
     }
+
+
 
     private JPanel createLeftPanel() {
         leftPanel = new JPanel(new GridLayout(10, 2)); // Erhöht auf 10 Reihen für Platznummer
