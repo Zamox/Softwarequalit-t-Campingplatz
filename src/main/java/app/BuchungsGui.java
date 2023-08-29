@@ -35,7 +35,7 @@ public class BuchungsGui {
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
         JPanel mainPanel = createMainPanel(leftPanel, rightPanel);
-
+        fillFieldsWithSelectedData();
         frame.add(mainPanel);
         frame.setVisible(true);
     }

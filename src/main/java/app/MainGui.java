@@ -257,7 +257,13 @@ public class MainGui {
                     new BuchungsGui(MainGui.this, null);
                     break;
                 case "Buchung bearbeiten":
-
+                    int selectedRow = buchungsTable.getSelectedRow();
+                    if (selectedRow != -1) {
+                        String[] selectedBookingData = loadSelectedBookingData(selectedRow);
+                        new BuchungsGui(MainGui.this, selectedBookingData);
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    }
                     break;
                 case "Buchung löschen":
                         loescheAusgewaehlteBuchung();
