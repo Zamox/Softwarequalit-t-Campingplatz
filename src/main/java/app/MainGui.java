@@ -166,7 +166,8 @@ public class MainGui {
         upperRightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new StellplatzSelectorApp();
+
+                new upperRightPlaetze();
             }
         });
         lowerLeftButton.addActionListener(new ActionListener() {
@@ -200,6 +201,7 @@ public class MainGui {
             buchungsPanel.add(button);
         }
         contentPanel.add(buchungsPanel, BorderLayout.SOUTH);
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(0, 130, 0, 10));
 
         mainPanel.add(contentPanel, BorderLayout.WEST); // Hier wird das Bild links von der Tabelle platziert
         contentPanel.add(createTablePanel(), BorderLayout.EAST); // Hier wird die erste Tabelle rechts vom Bild platziert
