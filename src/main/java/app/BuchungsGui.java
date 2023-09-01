@@ -123,8 +123,13 @@ public class BuchungsGui {
             platznummerField.setText(this.selectedBookingData[4]);
             ((JTextField) rightPanel.getComponent(1)).setText(this.selectedBookingData[0]); // Name
             ((JTextField) rightPanel.getComponent(3)).setText(this.selectedBookingData[1]); // Vorname
-            ((JTextField) rightPanel.getComponent(7)).setText(this.selectedBookingData[5]); // Email
-            ((JTextField) rightPanel.getComponent(9)).setText(this.selectedBookingData[6]); // Telefon
+            ((JTextField) rightPanel.getComponent(5)).setText(this.selectedBookingData[7]); //Straße
+            ((JTextField) rightPanel.getComponent(7)).setText(this.selectedBookingData[8]); // PLZ
+            ((JTextField) rightPanel.getComponent(9)).setText(this.selectedBookingData[9]); // Nummer
+            ((JTextField) rightPanel.getComponent(11)).setText(this.selectedBookingData[10]); // Rechnungsadresse
+            ((JTextField) rightPanel.getComponent(13)).setText(this.selectedBookingData[6]);// Telefon
+            ((JTextField) rightPanel.getComponent(15)).setText(this.selectedBookingData[5]); // Email
+            ((JTextField) rightPanel.getComponent(17)).setText(this.selectedBookingData[11]); // Kreditkartendaten
         }
         else{
             new JOptionPane("Bitte wählen Sie einen Stellplatz aus.");
