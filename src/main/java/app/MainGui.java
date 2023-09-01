@@ -10,6 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -300,6 +304,30 @@ public class MainGui {
                     break;
                 case "Neuer Platz": // Hinzugefügt: Aktion für "Neuer Platz" Button
                     new PlatzAnlegenGui();
+                    break;
+                case "Export/Import":
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Buchungsdatei speichern");
+
+                    int userSelection = fileChooser.showSaveDialog(frame);
+
+                    if (userSelection == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = fileChooser.getSelectedFile();
+                        String filePath = selectedFile.getAbsolutePath();
+
+                        try {
+                            File sourceFile = new File("./BuchungsCSV.csv");
+                            Path sourcePath = sourceFile.toPath();
+                            Path targetPath = Paths.get(filePath);
+
+                            Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+                            JOptionPane.showMessageDialog(frame, "Buchungsdatei erfolgreich gespeichert.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(frame, "Fehler beim Speichern der Buchungsdatei.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                     break;
             }
         }
