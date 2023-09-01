@@ -286,19 +286,20 @@ public class MainGui {
             // Hier kannst du basierend auf dem Identifier die entsprechende Aktion ausführen
             switch (identifier) {
                 case "Neue Buchung":
-                    new BuchungsGui(MainGui.this, null);
+                    new BuchungsGui(MainGui.this, null, true);
                     break;
                 case "Buchung bearbeiten":
                     int selectedRowIndex = buchungsTable.getSelectedRow();
                     if (selectedRowIndex != -1) {
                         datenAuslesen(selectedRowIndex + 1); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
+
                     } else {
                         JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     }
                     break;
                 case "Buchung löschen":
-                        getAusgewählteZeile();
-                        break;
+                    getAusgewählteZeile();
+                    break;
                 case "Login":
                     new Login(MainGui.this);
                     break;
@@ -329,6 +330,19 @@ public class MainGui {
                         }
                     }
                     break;
+
+                case "Info":
+                    int Index = buchungsTable.getSelectedRow();
+                    if (Index != -1) {
+                        String[] selectedBookingData = new String[buchungsTable.getColumnCount()];
+                        for (int i = 0; i < buchungsTable.getColumnCount(); i++) {
+                            selectedBookingData[i] = buchungsTable.getValueAt(Index, i).toString();
+                        }
+                        new BuchungsGui(MainGui.this, selectedBookingData, false); // "Info"-Funktionalität ohne Bearbeitung
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
             }
         }
     };
@@ -350,13 +364,9 @@ public class MainGui {
             // Überprüfen, ob der ausgewählte Zeilenindex gültig ist
             if (rowIndex >= 0 && rowIndex < zeilen.size()) {
                 String ausgewaehlteZeile = zeilen.get(rowIndex);
+                new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","), true);
 
-                // Hier kannst du den ausgewählten Datensatz weiter verarbeiten, z.B., in die BuchungsGui übergeben
-                // AusgewaehlteZeile enthält jetzt den ausgewählten Datensatz aus der CSV-Datei
-                // ...
 
-                // Erstelle eine Instanz von BuchungsGui und übergebe die ausgewählten Daten
-                new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","));
             } else {
                 System.out.println("Ungültiger Zeilenindex.");
             }
@@ -364,6 +374,8 @@ public class MainGui {
             ex.printStackTrace();
         }
     }
+
+
     private void getAusgewählteZeile() {
         int selectedRow = buchungsTable.getSelectedRow();
         if (selectedRow != -1) {
