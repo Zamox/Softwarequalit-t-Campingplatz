@@ -1,5 +1,7 @@
 package app;
 
+//import sun.text.resources.ext.JavaTimeSupplementary_ar_LB;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -7,12 +9,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.awt.Color.red;
 
 public class MainGui {
     private JFrame frame;
@@ -56,6 +61,25 @@ public class MainGui {
 
         return tablePanel;
     }
+    private ActionListener belegungsButtonListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String identifier = e.getActionCommand();
+
+            switch (identifier) {
+                case "Freie Plätze":
+                    new upperLeftPlaetze();
+
+                    break;
+                case "Neuer Platz":
+                    new PlatzAnlegenGui();
+                    break;
+                case "Login":
+                    new Login(MainGui.this);
+                    break;
+            }
+        }
+    };
 
     private JPanel createBottomTablePanel() {
         JPanel buchungsTablePanel = new JPanel(new GridBagLayout());
@@ -117,10 +141,15 @@ public class MainGui {
         try {
             // Lade das Bild
             BufferedImage img = ImageIO.read(new File("./Campingplatz.jpg"));
+            // mach das Bild transparent
+            imageLabel.setOpaque(false);
+
+
+
 
             // Skaliere das Bild auf die gewünschte Größe
             int imageWidth = 550; // Ändere dies auf die gewünschte Breite
-            int imageHeight = 450; // Ändere dies auf die gewünschte Höhe
+            int imageHeight = 400; // Ändere dies auf die gewünschte Höhe
             Image scaledImage = img.getScaledInstance(imageWidth, imageHeight, Image.SCALE_SMOOTH);
 
             // Setze das skalierte Bild im JLabel
@@ -132,14 +161,52 @@ public class MainGui {
         // Fügen Sie einen Seitenabstand für das Bild hinzu (10 Pixel) - Ändern Sie dies nach Bedarf
         imageLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
-        JButton transparentButton = new JButton("Transparent Button");
-        transparentButton.setBounds(100, 100, 200, 50);
-        transparentButton.setOpaque(false);
-        transparentButton.setContentAreaFilled(false);
-        transparentButton.setBorderPainted(true);
+        JButton upperLeftButton = new JButton();
+        upperLeftButton.setBounds(0,0, 275, 200);
+        JButton upperRightButton = new JButton();
+        upperRightButton.setBounds(275, 0, 275, 200);
+        JButton lowerLeftButton = new JButton();
+        lowerLeftButton.setBounds(0, 200, 275, 200);
+        JButton lowerRightButton = new JButton();
+        lowerRightButton.setBounds(275, 200, 275, 200);
+        upperLeftButton.setOpaque(true);
+        //upperLeftButton.setBackground(red);
+        upperLeftButton.setContentAreaFilled(false);
+        upperLeftButton.setBorderPainted(true);
 
-        imageLabel.add(transparentButton);
-        transparentButton.addActionListener(new ActionListener() {
+        upperRightButton.setOpaque(true);
+        upperRightButton.setContentAreaFilled(false);
+
+        lowerLeftButton.setOpaque(true);
+        lowerLeftButton.setContentAreaFilled(false);
+
+        lowerRightButton.setOpaque(true);
+        lowerRightButton.setContentAreaFilled(false);
+
+        imageLabel.add(upperLeftButton);
+        imageLabel.add(upperRightButton);
+        imageLabel.add(lowerLeftButton);
+        imageLabel.add(lowerRightButton);
+        upperLeftButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new upperLeftPlaetze();
+            }
+        });
+        upperRightButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                new upperRightPlaetze();
+            }
+        });
+        lowerLeftButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
+            }
+        });
+        lowerRightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
@@ -164,6 +231,7 @@ public class MainGui {
             buchungsPanel.add(button);
         }
         contentPanel.add(buchungsPanel, BorderLayout.SOUTH);
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(0, 130, 0, 10));
 
         mainPanel.add(contentPanel, BorderLayout.WEST); // Hier wird das Bild links von der Tabelle platziert
         contentPanel.add(createTablePanel(), BorderLayout.EAST); // Hier wird die erste Tabelle rechts vom Bild platziert
@@ -190,7 +258,7 @@ public class MainGui {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 20));
 
         String[] buttonLabels = {
-                "Buchungen", "Freie Plätze", "Neuer Platz",
+                "Freie Plätze", "Neuer Platz",
                 "Platz bearbeiten", "Platz löschen", "Platz Buchen",
                 "Export/Import"
         };
@@ -218,55 +286,144 @@ public class MainGui {
             // Hier kannst du basierend auf dem Identifier die entsprechende Aktion ausführen
             switch (identifier) {
                 case "Neue Buchung":
-                    new BuchungsGui(MainGui.this, null);
+                    new BuchungsGui(MainGui.this, null, true);
                     break;
                 case "Buchung bearbeiten":
-                    selectedRowIndex = buchungsTable.getSelectedRow();
-                    if (selectedRowIndex >= 0) {
-                        // Laden Sie die Daten aus der ausgewählten Zeile
-                        String[] selectedData = loadSelectedBookingData(selectedRowIndex);
+                    int selectedRowIndex = buchungsTable.getSelectedRow();
+                    if (selectedRowIndex != -1) {
+                        datenAuslesen(selectedRowIndex + 1); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
 
-                        // Übergeben Sie die Daten an die BuchungsGui
-                        if (selectedData != null) {
-                            new BuchungsGui(MainGui.this, selectedData);
-                        }
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     }
                     break;
                 case "Buchung löschen":
-                    if (selectedRowIndex >= 0) {
-                        DefaultTableModel model = (DefaultTableModel) buchungsTable.getModel();
-
-                        // Holen Sie den Index der ausgewählten Zeile
-                        int selectedRow = buchungsTable.getSelectedRow();
-
-                        // Löschen Sie die Zeile aus der Tabelle
-                        model.removeRow(selectedRow);
-                        JOptionPane.showMessageDialog(frame, "Buchung erfolgreich gelöscht.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Bitte wählen Sie eine Buchung zum Löschen aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
-                    }
+                    getAusgewählteZeile();
+                    break;
                 case "Login":
                     new Login(MainGui.this);
                     break;
                 case "Neuer Platz": // Hinzugefügt: Aktion für "Neuer Platz" Button
                     new PlatzAnlegenGui();
                     break;
+                case "Export/Import":
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Buchungsdatei speichern");
+
+                    int userSelection = fileChooser.showSaveDialog(frame);
+
+                    if (userSelection == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = fileChooser.getSelectedFile();
+                        String filePath = selectedFile.getAbsolutePath();
+
+                        try {
+                            File sourceFile = new File("./BuchungsCSV.csv");
+                            Path sourcePath = sourceFile.toPath();
+                            Path targetPath = Paths.get(filePath);
+
+                            Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+                            JOptionPane.showMessageDialog(frame, "Buchungsdatei erfolgreich gespeichert.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(frame, "Fehler beim Speichern der Buchungsdatei.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    break;
+
+                case "Info":
+                    int Index = buchungsTable.getSelectedRow();
+                    if (Index != -1) {
+                        String[] selectedBookingData = new String[buchungsTable.getColumnCount()];
+                        for (int i = 0; i < buchungsTable.getColumnCount(); i++) {
+                            selectedBookingData[i] = buchungsTable.getValueAt(Index, i).toString();
+                        }
+                        new BuchungsGui(MainGui.this, selectedBookingData, false); // "Info"-Funktionalität ohne Bearbeitung
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
             }
         }
     };
 
-    // Neue Methode zum Laden der Daten aus der ausgewählten Zeile der Tabelle
-    private String[] loadSelectedBookingData(int rowIndex) {
-        DefaultTableModel model = (DefaultTableModel) buchungsTable.getModel();
-        if (rowIndex >= 0 && rowIndex < model.getRowCount()) {
-            String[] data = new String[7];
-            for (int i = 0; i < 7; i++) {
-                data[i] = (String) model.getValueAt(rowIndex, i);
+    private void datenAuslesen(int rowIndex) {
+        String csvFile = "./BuchungsCSV.csv"; // Pfad zur CSV-Datei
+
+        try {
+            // CSV-Datei einlesen
+            BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+            List<String> zeilen = new ArrayList<>();
+            String zeile;
+
+            while ((zeile = reader.readLine()) != null) {
+                zeilen.add(zeile);
             }
-            return data;
+            reader.close();
+
+            // Überprüfen, ob der ausgewählte Zeilenindex gültig ist
+            if (rowIndex >= 0 && rowIndex < zeilen.size()) {
+                String ausgewaehlteZeile = zeilen.get(rowIndex);
+                new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","), true);
+
+
+            } else {
+                System.out.println("Ungültiger Zeilenindex.");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-        return null;
     }
+
+
+    private void getAusgewählteZeile() {
+        int selectedRow = buchungsTable.getSelectedRow();
+        if (selectedRow != -1) {
+            buchungLoeschen(selectedRow + 2); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
+        } else {
+            JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void buchungLoeschen(int zeileZumLoeschen) {
+
+        String csvFile = "./BuchungsCSV.csv"; // Pfad zur CSV-Datei
+
+        try {
+            // CSV-Datei einlesen
+            BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+            List<String> zeilen = new ArrayList<>();
+            String zeile;
+
+            while ((zeile = reader.readLine()) != null) {
+                zeilen.add(zeile);
+            }
+            reader.close();
+
+            // Prüfen, ob die Zeile existiert
+            if (zeileZumLoeschen >= 1 && zeileZumLoeschen <= zeilen.size()) {
+                // Zeile löschen
+                zeilen.remove(zeileZumLoeschen - 1);
+
+                // Aktualisierte CSV-Datei schreiben
+                FileWriter writer = new FileWriter(csvFile);
+                for (String updatedZeile : zeilen) {
+                    writer.write(updatedZeile + "\n");
+                }
+                writer.close();
+
+                System.out.println("Zeile " + zeileZumLoeschen + " wurde erfolgreich gelöscht.");
+
+                // Aktualisiere die Tabelle nach dem Löschen
+                updateTable();
+            } else {
+                System.out.println("Die angegebene Zeile existiert nicht.");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
     // Methode, um alle Buttons zu aktivieren
     private void enableAllButtons() {

@@ -26,18 +26,38 @@ public class BuchungsGui {
     private MainGui mainGui;
     private String[] selectedBookingData;
 
-    public BuchungsGui(MainGui mainGui, String[] selectedBookingData) {
+    // Deklaration der Felder für Name, Vorname, PLZ, Hausnummer, usw.
+    private JTextField nameField;
+    private JTextField vornameField;
+    private JTextField strasseField;
+    private JTextField plzField;
+    private JTextField hausnummerField;
+    private JTextField rechnungsadresseField;
+    private JTextField telefonField;
+    private JTextField emailField;
+    private JTextField kreditkartendatenField;
+
+    private boolean isEditable;
+
+    public BuchungsGui(MainGui mainGui, String[] selectedBookingData, boolean isEditable) {
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setSize(1000, 400);
         this.mainGui = mainGui;
         this.selectedBookingData = selectedBookingData;
+        this.isEditable = isEditable;
+        if (!isEditable) {
+            disableFields(true); // Deaktivieren Sie die Felder, wenn die Info-Funktionalität aktiviert ist
+        }
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
         JPanel mainPanel = createMainPanel(leftPanel, rightPanel);
-
+        fillFieldsWithSelectedData(selectedBookingData);
         frame.add(mainPanel);
         frame.setVisible(true);
     }
+
+
+
 
     private JPanel createLeftPanel() {
         leftPanel = new JPanel(new GridLayout(10, 2)); // Erhöht auf 10 Reihen für Platznummer
@@ -82,46 +102,74 @@ public class BuchungsGui {
     private JPanel createRightPanel() {
         rightPanel = new JPanel(new GridLayout(10, 2)); // Erhöht auf 10 Reihen für Platznummer
 
+        // Erstellen Sie die Felder für Name, Vorname, PLZ, Hausnummer, usw.
+        nameField = new JTextField();
+        vornameField = new JTextField();
+        strasseField = new JTextField();
+        plzField = new JTextField();
+        hausnummerField = new JTextField();
+        rechnungsadresseField = new JTextField();
+        telefonField = new JTextField();
+        emailField = new JTextField();
+        kreditkartendatenField = new JTextField();
+
         rightPanel.add(new JLabel("Name:"));
-        rightPanel.add(new JTextField());
+        rightPanel.add(nameField);
 
         rightPanel.add(new JLabel("Vorname:"));
-        rightPanel.add(new JTextField());
+        rightPanel.add(vornameField);
 
         rightPanel.add(new JLabel("Straße:"));
-        rightPanel.add(new JTextField());
+        rightPanel.add(strasseField);
 
         rightPanel.add(new JLabel("PLZ:"));
-        rightPanel.add(new JTextField());
+        rightPanel.add(plzField);
 
         rightPanel.add(new JLabel("Hausnummer:"));
-        rightPanel.add(new JTextField());
+        rightPanel.add(hausnummerField);
 
         rightPanel.add(new JLabel("Rechnungsadresse:"));
-        rightPanel.add(new JTextField());
+        rightPanel.add(rechnungsadresseField);
 
         rightPanel.add(new JLabel("Telefon:"));
-        rightPanel.add(new JTextField());
+        rightPanel.add(telefonField);
 
         rightPanel.add(new JLabel("Email:"));
-        rightPanel.add(new JTextField());
+        rightPanel.add(emailField);
 
         rightPanel.add(new JLabel("Kreditkartendaten:"));
-        rightPanel.add(new JTextField());
+        rightPanel.add(kreditkartendatenField);
 
         return rightPanel;
     }
 
-    private void fillFieldsWithSelectedData() {
-        if (selectedBookingData != null && selectedBookingData.length == 7) {
+    private void disableFields(boolean disable) {
+        platznummerField.setEditable(disable);
+
+        for (Component component : rightPanel.getComponents()) {
+            if (component instanceof JTextField) {
+                ((JTextField) component).setEditable(disable);
+            }
+        }
+    }
+
+    private void fillFieldsWithSelectedData(String[] selectedBookingData) {
+        if (this.selectedBookingData != null && this.selectedBookingData.length == 15) {
             // Fülle die Felder mit den ausgewählten Daten
-            anreiseField.setText(selectedBookingData[2]);
-            abreiseField.setText(selectedBookingData[3]);
-            platznummerField.setText(selectedBookingData[4]);
-            ((JTextField) rightPanel.getComponent(1)).setText(selectedBookingData[0]); // Name
-            ((JTextField) rightPanel.getComponent(3)).setText(selectedBookingData[1]); // Vorname
-            ((JTextField) rightPanel.getComponent(7)).setText(selectedBookingData[5]); // Email
-            ((JTextField) rightPanel.getComponent(9)).setText(selectedBookingData[6]); // Telefon
+            anreiseField.setText(this.selectedBookingData[2]);
+            abreiseField.setText(this.selectedBookingData[3]);
+            platznummerField.setText(this.selectedBookingData[4]);
+            nameField.setText(this.selectedBookingData[0]); // Name
+            vornameField.setText(this.selectedBookingData[1]); // Vorname
+            strasseField.setText(this.selectedBookingData[7]); //Straße
+            plzField.setText(this.selectedBookingData[8]); // PLZ
+            hausnummerField.setText(this.selectedBookingData[9]); // Nummer
+            rechnungsadresseField.setText(this.selectedBookingData[10]); // Rechnungsadresse
+            telefonField.setText(this.selectedBookingData[6]);// Telefon
+            emailField.setText(this.selectedBookingData[5]); // Email
+            kreditkartendatenField.setText(this.selectedBookingData[11]); // Kreditkartendaten
+        } else {
+            new JOptionPane("Bitte wählen Sie einen Stellplatz aus.");
         }
     }
 
@@ -148,10 +196,12 @@ public class BuchungsGui {
         // Überprüfe, ob alle erforderlichen Felder ausgefüllt sind
         if (anreiseField.getText().isEmpty() || abreiseField.getText().isEmpty() ||
                 platznummerField.getText().isEmpty() ||
-                ((JTextField) rightPanel.getComponent(1)).getText().isEmpty() || // Name
-                ((JTextField) rightPanel.getComponent(3)).getText().isEmpty() || // Vorname
-                ((JTextField) rightPanel.getComponent(7)).getText().isEmpty() || // Email
-                ((JTextField) rightPanel.getComponent(9)).getText().isEmpty()) { // Telefon
+                nameField.getText().isEmpty() || // Name
+                vornameField.getText().isEmpty() || // Vorname
+                plzField.getText().isEmpty() || // PLZ
+                hausnummerField.getText().isEmpty() || // Hausnummer
+                emailField.getText().isEmpty() || // Email
+                telefonField.getText().isEmpty()) { // Telefon
             JOptionPane.showMessageDialog(frame, "Bitte füllen Sie alle erforderlichen Felder aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
         } else {
             // Alle erforderlichen Felder sind ausgefüllt, speichere die Daten in der CSV-Datei
