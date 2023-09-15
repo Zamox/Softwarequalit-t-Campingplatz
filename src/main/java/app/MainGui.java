@@ -136,7 +136,7 @@ public class MainGui {
         transparentButton.setBounds(100, 100, 200, 50);
         transparentButton.setOpaque(false);
         transparentButton.setContentAreaFilled(false);
-        transparentButton.setBorderPainted(false);
+        transparentButton.setBorderPainted(true);
 
         imageLabel.add(transparentButton);
         transparentButton.addActionListener(new ActionListener() {
