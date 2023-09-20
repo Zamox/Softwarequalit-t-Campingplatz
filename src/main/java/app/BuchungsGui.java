@@ -45,15 +45,28 @@ public class BuchungsGui {
         this.mainGui = mainGui;
         this.selectedBookingData = selectedBookingData;
         this.isEditable = isEditable;
-        if (!isEditable) {
-            disableFields(true); // Deaktivieren Sie die Felder, wenn die Info-Funktionalität aktiviert ist
-        }
+
+        // Erstellen Sie die Felder für Name, Vorname, PLZ, Hausnummer, usw.
+        nameField = new JTextField();
+        vornameField = new JTextField();
+        strasseField = new JTextField();
+        plzField = new JTextField();
+        hausnummerField = new JTextField();
+        rechnungsadresseField = new JTextField();
+        telefonField = new JTextField();
+        emailField = new JTextField();
+        kreditkartendatenField = new JTextField();
+
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
         JPanel mainPanel = createMainPanel(leftPanel, rightPanel);
         fillFieldsWithSelectedData(selectedBookingData);
+        if (!isEditable) {
+            disableFields(true); // Deaktivieren Sie die Felder, wenn die Info-Funktionalität aktiviert ist
+        }
         frame.add(mainPanel);
         frame.setVisible(true);
+
     }
 
 
@@ -101,18 +114,7 @@ public class BuchungsGui {
 
     private JPanel createRightPanel() {
         rightPanel = new JPanel(new GridLayout(10, 2)); // Erhöht auf 10 Reihen für Platznummer
-
-        // Erstellen Sie die Felder für Name, Vorname, PLZ, Hausnummer, usw.
-        nameField = new JTextField();
-        vornameField = new JTextField();
-        strasseField = new JTextField();
-        plzField = new JTextField();
-        hausnummerField = new JTextField();
-        rechnungsadresseField = new JTextField();
-        telefonField = new JTextField();
-        emailField = new JTextField();
-        kreditkartendatenField = new JTextField();
-
+        
         rightPanel.add(new JLabel("Name:"));
         rightPanel.add(nameField);
 
@@ -144,13 +146,23 @@ public class BuchungsGui {
     }
 
     private void disableFields(boolean disable) {
-        platznummerField.setEditable(disable);
+        fillFieldsWithSelectedData(selectedBookingData);
+        platznummerField.setEditable(false);
 
         for (Component component : rightPanel.getComponents()) {
             if (component instanceof JTextField) {
                 ((JTextField) component).setEditable(disable);
             }
         }
+
+        anreiseField.setEditable(false);
+        abreiseField.setEditable(false);
+        platznummerField.setEditable(disable);
+        nameField.setEditable(disable);
+        vornameField.setEditable(disable);
+        strasseField.setEditable(disable);
+        plzField.setEditable(disable);
+
     }
 
     private void fillFieldsWithSelectedData(String[] selectedBookingData) {

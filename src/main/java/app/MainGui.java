@@ -17,8 +17,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.awt.Color.red;
-
 public class MainGui {
     private JFrame frame;
     private DefaultTableModel infoTableModel;
@@ -28,6 +26,7 @@ public class MainGui {
     private JButton loginBtn;
     private static JTable buchungsTable;
     private int selectedRowIndex = -1;
+    private List<String> zeilen = new ArrayList<>();
 
     public MainGui() {
         this.frame = new JFrame();
@@ -282,19 +281,24 @@ public class MainGui {
         @Override
         public void actionPerformed(ActionEvent e) {
             String identifier = e.getActionCommand(); // Hole den Identifier des geklickten Buttons
-
+            int selectedRowIndex = buchungsTable.getSelectedRow();
             // Hier kannst du basierend auf dem Identifier die entsprechende Aktion ausführen
             switch (identifier) {
                 case "Neue Buchung":
                     new BuchungsGui(MainGui.this, null, true);
                     break;
                 case "Buchung bearbeiten":
-                    int selectedRowIndex = buchungsTable.getSelectedRow();
                     if (selectedRowIndex != -1) {
                         datenAuslesen(selectedRowIndex + 1); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
-
                     } else {
                         JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    }
+                    // Überprüfen, ob der ausgewählte Zeilenindex gültig ist
+                    if (selectedRowIndex >= 0 && selectedRowIndex < zeilen.size()) {
+                        String ausgewaehlteZeile = zeilen.get(selectedRowIndex);
+                        new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","), true);
+                    } else {
+                        System.out.println("Ungültiger Zeilenindex.");
                     }
                     break;
                 case "Buchung löschen":
@@ -332,49 +336,44 @@ public class MainGui {
                     break;
 
                 case "Info":
-                    int Index = buchungsTable.getSelectedRow();
-                    if (Index != -1) {
-                        String[] selectedBookingData = new String[buchungsTable.getColumnCount()];
-                        for (int i = 0; i < buchungsTable.getColumnCount(); i++) {
-                            selectedBookingData[i] = buchungsTable.getValueAt(Index, i).toString();
-                        }
-                        new BuchungsGui(MainGui.this, selectedBookingData, false); // "Info"-Funktionalität ohne Bearbeitung
+
+                    if (selectedRowIndex != -1) {
+                        datenAuslesen(selectedRowIndex + 1); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
+
                     } else {
                         JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    // Überprüfen, ob der ausgewählte Zeilenindex gültig ist
+
+                    if (selectedRowIndex >= 0 && selectedRowIndex < zeilen.size()) {
+                        String ausgewaehlteZeile = zeilen.get(selectedRowIndex);
+                        new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","), false);
+
+
+                    } else {
+                        System.out.println("Ungültiger Zeilenindex.");
                     }
                     break;
             }
         }
     };
 
-    private void datenAuslesen(int rowIndex) {
+    private List<String> datenAuslesen(int selectedRowIndex) {
         String csvFile = "./BuchungsCSV.csv"; // Pfad zur CSV-Datei
-
         try {
             // CSV-Datei einlesen
             BufferedReader reader = new BufferedReader(new FileReader(csvFile));
-            List<String> zeilen = new ArrayList<>();
             String zeile;
-
             while ((zeile = reader.readLine()) != null) {
                 zeilen.add(zeile);
             }
             reader.close();
-
-            // Überprüfen, ob der ausgewählte Zeilenindex gültig ist
-            if (rowIndex >= 0 && rowIndex < zeilen.size()) {
-                String ausgewaehlteZeile = zeilen.get(rowIndex);
-                new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","), true);
-
-
-            } else {
-                System.out.println("Ungültiger Zeilenindex.");
-            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        return zeilen;
     }
-
 
     private void getAusgewählteZeile() {
         int selectedRow = buchungsTable.getSelectedRow();
