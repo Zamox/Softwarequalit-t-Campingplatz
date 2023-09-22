@@ -114,7 +114,7 @@ public class BuchungsGui {
 
     private JPanel createRightPanel() {
         rightPanel = new JPanel(new GridLayout(10, 2)); // Erhöht auf 10 Reihen für Platznummer
-        
+
         rightPanel.add(new JLabel("Name:"));
         rightPanel.add(nameField);
 
