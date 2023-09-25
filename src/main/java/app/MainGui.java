@@ -258,7 +258,7 @@ public class MainGui {
 
         String[] buttonLabels = {
                 "Freie Plätze", "Neuer Platz",
-                "Platz bearbeiten", "Platz löschen", "Platz Buchen",
+                "Platz bearbeiten", "Platz löschen",
                 "Export/Import"
         };
 
@@ -281,7 +281,7 @@ public class MainGui {
         @Override
         public void actionPerformed(ActionEvent e) {
             String identifier = e.getActionCommand(); // Hole den Identifier des geklickten Buttons
-            int selectedRowIndex = buchungsTable.getSelectedRow();
+            int selectedRowIndex = buchungsTable.getSelectedRow() +1;
             // Hier kannst du basierend auf dem Identifier die entsprechende Aktion ausführen
             switch (identifier) {
                 case "Neue Buchung":
@@ -360,6 +360,7 @@ public class MainGui {
     };
 
     private List<String> datenAuslesen(int selectedRowIndex) {
+        selectedRowIndex +=1;
         String csvFile = "./BuchungsCSV.csv"; // Pfad zur CSV-Datei
         try {
             // CSV-Datei einlesen
