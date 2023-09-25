@@ -86,24 +86,19 @@ public class PlatzAnlegenGui {
         wohnoptionPanel.add(zeltRadio);
         styleLeftPanel.add(wohnoptionPanel);
 
-        // Breite
-        styleLeftPanel.add(new JLabel("Breite:"));
-        breiteField = new JTextField(10); // Schmaleres Textfeld
-        styleLeftPanel.add(breiteField);
 
-        // Länge
-        styleLeftPanel.add(new JLabel("Länge:"));
-        längeField = new JTextField(10); // Schmaleres Textfeld
-        styleLeftPanel.add(längeField);
+
 
         // Personenzahl
         styleLeftPanel.add(new JLabel("Personenzahl:"));
         personenzahlField = new JTextField(10); // Schmaleres Textfeld
+        personenzahlField.setSize(50, 10);
         styleLeftPanel.add(personenzahlField);
 
         // Tagessatz
         styleLeftPanel.add(new JLabel("Tagessatz:"));
-        tagessatzField = new JTextField(10); // Schmaleres Textfeld
+        tagessatzField = new JTextField(10); // Schmaleres Textfeldx
+        tagessatzField.setSize(50, 10);
         styleLeftPanel.add(tagessatzField);
 
         // Speichern-Button
