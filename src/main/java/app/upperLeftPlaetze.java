@@ -58,6 +58,7 @@ public class upperLeftPlaetze {
         this.frame.pack();
         this.frame.setVisible(true);
         checkCSVAndColorButtons();
+        addClickListenerToButtons(mainPanel);
     }
 
     private JPanel createButtonPanel(int buttonCount, int startNumber) {
@@ -147,6 +148,52 @@ public class upperLeftPlaetze {
                 colorButtons(subComponent, foundNumbers);
             }
         }
+    }
+
+    private void addClickListenerToButtons(Container container) {
+        if (container instanceof JButton) {
+            JButton button = (JButton) container;
+            String buttonText = button.getText();
+            button.addActionListener(e -> {
+                if (button.getBackground().equals(Color.RED)) {
+                    // Wenn der Button rot ist, bedeutet das, dass der Platz belegt ist
+                    // Hier können Sie die Zeile in der CSV-Datei auslesen
+                    String csvFilePath = "./BuchungsCSV.csv"; // Ändern Sie dies entsprechend
+                    String placeNumber = buttonText.replace("Platz ", "");
+                    String[] selectedBookingData = readBookingDataFromCSV(csvFilePath, placeNumber);
+
+                    // Öffnen Sie die BuchungsGUI und zeigen Sie die ausgewählten Buchungsdaten an
+                    new BuchungsGui(null, selectedBookingData, false); // Der letzte Parameter ist false, da Sie die Daten anzeigen möchten und nicht bearbeiten
+                }
+            });
+        } else if (container instanceof Container) {
+            Container subContainer = (Container) container;
+            Component[] components = subContainer.getComponents();
+            for (Component component : components) {
+                addClickListenerToButtons((Container) component);
+            }
+        }
+    }
+
+    private String[] readBookingDataFromCSV(String csvFilePath, String placeNumber) {
+        // Lesen Sie die Zeile in der CSV-Datei, die zur ausgewählten Platznummer gehört
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(","); // Annahme: CSV ist kommagetrennt
+
+                if (parts.length > 9) { // Annahme: Die 10. Spalte enthält die Zahlen
+                    String csvNumber = parts[4].trim(); // Ändern Sie den Index entsprechend
+                    if (csvNumber.equals(placeNumber)) {
+                        // Gefundene Zeile zurückgeben
+                        return parts;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null; // Platznummer wurde nicht in der CSV-Datei gefunden
     }
 
 
