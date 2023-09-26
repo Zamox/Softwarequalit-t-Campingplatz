@@ -109,6 +109,16 @@ public class BuchungsGui {
         });
         leftPanel.add(zeitraumButton);
 
+        JButton platzButton = new JButton("Platz wählen");
+
+        platzButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlatzGUIBuchungen platzGUIBuchungen = new PlatzGUIBuchungen();
+            }
+        });
+        leftPanel.add(platzButton);
+
         return leftPanel;
     }
 
