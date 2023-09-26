@@ -61,9 +61,7 @@ public class BuchungsGui {
         JPanel rightPanel = createRightPanel();
         JPanel mainPanel = createMainPanel(leftPanel, rightPanel);
         fillFieldsWithSelectedData(selectedBookingData);
-        if (!isEditable) {
-            disableFields(true); // Deaktivieren Sie die Felder, wenn die Info-Funktionalität aktiviert ist
-        }
+        disableFields(isEditable); // Deaktivieren Sie die Felder, wenn die Info-Funktionalität aktiviert ist
         frame.add(mainPanel);
         frame.setVisible(true);
 

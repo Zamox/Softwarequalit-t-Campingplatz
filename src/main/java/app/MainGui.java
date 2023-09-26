@@ -25,7 +25,7 @@ public class MainGui {
     private List<JButton> buchungsButtonList;
     private JButton loginBtn;
     private static JTable buchungsTable;
-    private int selectedRowIndex = -1;
+    private int selectedRowIndex = 1;
     private List<String> zeilen = new ArrayList<>();
 
     public MainGui() {
@@ -258,7 +258,7 @@ public class MainGui {
 
         String[] buttonLabels = {
                 "Freie Plätze", "Neuer Platz",
-                "Platz bearbeiten", "Platz löschen",
+                "Platz bearbeiten", "Platz löschen", "Platz Buchen",
                 "Export/Import"
         };
 
@@ -281,7 +281,7 @@ public class MainGui {
         @Override
         public void actionPerformed(ActionEvent e) {
             String identifier = e.getActionCommand(); // Hole den Identifier des geklickten Buttons
-            int selectedRowIndex = buchungsTable.getSelectedRow() +1;
+            int selectedRowIndex = buchungsTable.getSelectedRow() + 1;
             // Hier kannst du basierend auf dem Identifier die entsprechende Aktion ausführen
             switch (identifier) {
                 case "Neue Buchung":
@@ -289,7 +289,7 @@ public class MainGui {
                     break;
                 case "Buchung bearbeiten":
                     if (selectedRowIndex != -1) {
-                        datenAuslesen(selectedRowIndex + 1); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
+                        datenAuslesen(selectedRowIndex); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
                     } else {
                         JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     }
@@ -338,7 +338,7 @@ public class MainGui {
                 case "Info":
 
                     if (selectedRowIndex != -1) {
-                        datenAuslesen(selectedRowIndex + 1); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
+                        datenAuslesen(selectedRowIndex); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
 
                     } else {
                         JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
@@ -360,7 +360,6 @@ public class MainGui {
     };
 
     private List<String> datenAuslesen(int selectedRowIndex) {
-        selectedRowIndex +=1;
         String csvFile = "./BuchungsCSV.csv"; // Pfad zur CSV-Datei
         try {
             // CSV-Datei einlesen
