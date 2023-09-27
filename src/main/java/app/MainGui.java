@@ -243,6 +243,7 @@ public class MainGui {
 
         // Daten aus CSV-Datei in Tabelle zwei laden
         loadCSVDataToTable((DefaultTableModel) buchungsTable.getModel());
+        loadBuchungTableData((DefaultTableModel) infoTableModel);
     }
 
     private JButton createIdentifiedButton(String label) {
@@ -424,21 +425,6 @@ public class MainGui {
     }
 
 
-    // Methode, um alle Buttons zu aktivieren
-    private void enableAllButtons() {
-        for (JButton button : buchungsButtonList) {
-            button.setEnabled(true);
-        }
-    }
-
-    private void disableButtonsExcept(int indexToExclude) {
-        for (int i = 0; i < buchungsButtonList.size(); i++) {
-            if (i != indexToExclude) {
-                buchungsButtonList.get(i).setEnabled(false);
-            }
-        }
-    }
-
     public void enable() {
         for (JButton button : panelButtonList) {
             button.setEnabled(true);
@@ -503,6 +489,46 @@ public class MainGui {
         }
     }
 
+    private static void loadBuchungTableData(DefaultTableModel tableModel) {
+        // Pfad zur CSV-Datei ändern, falls erforderlich
+        String csvFilePath = "./BuchungsCSV.csv";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+            String line;
+            boolean firstLine = true;
+            while ((line = br.readLine()) != null) {
+                if (firstLine) {
+                    firstLine = false;
+                    continue; // Überspringe die erste Zeile
+                }
+                String[] data = line.split(",");
+
+                // Annahme: Die CSV-Datei hat die gewünschte Reihenfolge der Spalten
+                if (data.length >= 16) { // Überprüfen Sie, ob genügend Spalten vorhanden sind
+                    String buchungsnummer = data[15]; // Buchungsnummer
+                    String name = data[0]; // Name
+                    String anreise = data[2]; // Anreise
+                    String abreise = data[3]; // Abreise
+
+                    String buchungszeitraum = anreise + " - " + abreise;
+
+                    // Überprüfen, ob die Buchung einen Platz hat (Buchungsnummer ist nicht leer)
+                    if (!buchungsnummer.isEmpty()) {
+                        String[] rowData = new String[4]; // Erstellen Sie ein Array für die gewünschten Spalten
+                        rowData[0] = buchungsnummer; // Buchungsnummer
+                        rowData[1] = name; // Name
+                        rowData[2] = buchungszeitraum; // Buchungszeitraum
+                        rowData[3] = "Status hier eintragen"; // Status (hier musst du den tatsächlichen Status festlegen)
+
+                        tableModel.addRow(rowData); // Fügen Sie die Daten in die Tabelle ein
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     public static void updateTable() {
@@ -512,6 +538,8 @@ public class MainGui {
 
         // Laden Sie die Daten erneut aus Ihrer CSV-Datei
         loadCSVDataToTable(model);
+        loadBuchungTableData((DefaultTableModel) buchungsTable.getModel());
+
     }
 
     public static void main(String[] args) {
