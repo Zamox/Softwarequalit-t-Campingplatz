@@ -69,9 +69,6 @@ public class BuchungBearbeitenGui {
         frame.setVisible(true);
     }
 
-
-
-
     private JPanel createLeftPanel() {
         leftPanel = new JPanel(new GridLayout(10, 2)); // Erhöht auf 10 Reihen für Platznummer
 
