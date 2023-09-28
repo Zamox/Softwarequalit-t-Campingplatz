@@ -203,13 +203,13 @@ public class MainGui implements GuiInterface{
         lowerLeftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
+                new downLeftPlaetze();
             }
         });
         lowerRightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
+                new downRightPlaetze();
             }
         });
         contentPanel.add(imageLabel, BorderLayout.WEST);
@@ -304,7 +304,7 @@ public class MainGui implements GuiInterface{
                     }
                     break;
                 case "Buchung löschen":
-                    getAusgewählteZeile();
+                    getAusgewaehlteZeile();
                     break;
                 case "Login":
                     new Login(MainGui.this);
@@ -339,6 +339,7 @@ public class MainGui implements GuiInterface{
 
                 case "Info":
 
+
                     if (selectedRowIndex != -1) {
                         datenAuslesen(selectedRowIndex); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
 
@@ -350,7 +351,7 @@ public class MainGui implements GuiInterface{
 
                     if (selectedRowIndex >= 0 && selectedRowIndex < zeilen.size()) {
                         String ausgewaehlteZeile = zeilen.get(selectedRowIndex);
-                        new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","), false);
+                        new InfoGui(MainGui.this, ausgewaehlteZeile.split(","), false);
 
 
                     } else {
@@ -377,7 +378,7 @@ public class MainGui implements GuiInterface{
         return zeilen;
     }
 
-    private void getAusgewählteZeile() {
+    private void getAusgewaehlteZeile() {
         int selectedRow = buchungsTable.getSelectedRow();
         if (selectedRow != -1) {
             buchungLoeschen(selectedRow + 2); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist

@@ -96,13 +96,13 @@ public class PlatzGUIBuchungen {
             lowerLeftButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
+                    new downLeftPlaetze();
                 }
             });
             lowerRightButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
+                    new downRightPlaetze();
                 }
             });
 

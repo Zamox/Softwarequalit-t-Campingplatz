@@ -25,7 +25,7 @@ public class upperRightPlaetze {
         mainPanel.add(new JPanel());
 
 
-        JPanel column1Panel = createButtonPanel(4, 56);
+        JPanel column1Panel = createButtonPanel(5, 56);
         mainPanel.add(column1Panel);
 
         // Leerzeile für Spalte 5
