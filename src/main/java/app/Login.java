@@ -11,7 +11,7 @@ public class Login{
 
     public Login(MainGui mainGUI) {
         this.frame = new JFrame("Login");
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
         renderFrame(mainGUI);
     }
@@ -85,6 +85,8 @@ public class Login{
                 frame.dispose();
             }
         });
+        cancel.setFocusable(true);
+
 
         buttons.add(submit, BorderLayout.WEST);
         buttons.add(cancel, BorderLayout.EAST);
@@ -94,8 +96,8 @@ public class Login{
         mainPanel.add(buttons);
         this.frame.setContentPane(mainPanel);
         this.frame.pack();
+        cancel.requestFocusInWindow();
         this.frame.setSize(500, 150);
-        this.frame.setFocusableWindowState(false);
         this.frame.setVisible(true);
     }
 }
