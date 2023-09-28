@@ -298,7 +298,7 @@ public class MainGui implements GuiInterface{
                     // Überprüfen, ob der ausgewählte Zeilenindex gültig ist
                     if (selectedRowIndex >= 0 && selectedRowIndex < zeilen.size()) {
                         String ausgewaehlteZeile = zeilen.get(selectedRowIndex);
-                        new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","), true);
+                        new BuchungBearbeitenGui(MainGui.this, ausgewaehlteZeile.split(","), selectedRowIndex, true);
                     } else {
                         System.out.println("Ungültiger Zeilenindex.");
                     }

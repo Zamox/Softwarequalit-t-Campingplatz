@@ -15,7 +15,7 @@ public class PlatzAnlegenGui {
 
     private JRadioButton stellplatzRadio;
     private JRadioButton shopRadio;
-    private JRadioButton sanitäreAnlagenRadio;
+    private JRadioButton sanitaereAnlagenRadio;
     private JRadioButton sonstigeRadio;
     private ButtonGroup platzartGroup;
 
@@ -53,18 +53,18 @@ public class PlatzAnlegenGui {
         platzartPanel.add(new JLabel("Platzart:"));
         stellplatzRadio = new JRadioButton("Stellplatz");
         shopRadio = new JRadioButton("Shop");
-        sanitäreAnlagenRadio = new JRadioButton("Sanitäre Anlagen");
+        sanitaereAnlagenRadio = new JRadioButton("Sanitäre Anlagen");
         sonstigeRadio = new JRadioButton("Sonstige");
 
         platzartGroup = new ButtonGroup();
         platzartGroup.add(stellplatzRadio);
         platzartGroup.add(shopRadio);
-        platzartGroup.add(sanitäreAnlagenRadio);
+        platzartGroup.add(sanitaereAnlagenRadio);
         platzartGroup.add(sonstigeRadio);
 
         platzartPanel.add(stellplatzRadio);
         platzartPanel.add(shopRadio);
-        platzartPanel.add(sanitäreAnlagenRadio);
+        platzartPanel.add(sanitaereAnlagenRadio);
         platzartPanel.add(sonstigeRadio);
         styleLeftPanel.add(platzartPanel);
 
