@@ -303,7 +303,7 @@ public class MainGui {
                     }
                     break;
                 case "Buchung löschen":
-                    getAusgewählteZeile();
+                    getAusgewaehlteZeile();
                     break;
                 case "Login":
                     new Login(MainGui.this);
@@ -376,7 +376,7 @@ public class MainGui {
         return zeilen;
     }
 
-    private void getAusgewählteZeile() {
+    private void getAusgewaehlteZeile() {
         int selectedRow = buchungsTable.getSelectedRow();
         if (selectedRow != -1) {
             buchungLoeschen(selectedRow + 2); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
