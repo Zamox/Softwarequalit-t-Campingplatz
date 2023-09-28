@@ -99,5 +99,6 @@ public class Login{
         cancel.requestFocusInWindow();
         this.frame.setSize(500, 150);
         this.frame.setVisible(true);
+
     }
 }

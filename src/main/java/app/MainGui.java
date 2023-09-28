@@ -338,6 +338,7 @@ public class MainGui {
 
                 case "Info":
 
+
                     if (selectedRowIndex != -1) {
                         datenAuslesen(selectedRowIndex); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
 
