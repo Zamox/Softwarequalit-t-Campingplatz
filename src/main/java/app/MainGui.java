@@ -17,7 +17,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainGui {
+public class MainGui implements GuiInterface{
     private JFrame frame;
     private DefaultTableModel infoTableModel;
     private DefaultTableModel tableModel2;
@@ -27,6 +27,7 @@ public class MainGui {
     private static JTable buchungsTable;
     private int selectedRowIndex = 1;
     private List<String> zeilen = new ArrayList<>();
+
 
     public MainGui() {
         this.frame = new JFrame();

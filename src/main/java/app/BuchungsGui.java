@@ -174,7 +174,7 @@ public class BuchungsGui {
     }
 
     private void fillFieldsWithSelectedData(String[] selectedBookingData) {
-        if (this.selectedBookingData != null && this.selectedBookingData.length == 15) {
+        if (this.selectedBookingData != null && this.selectedBookingData.length == 16) {
             // Fülle die Felder mit den ausgewählten Daten
             anreiseField.setText(this.selectedBookingData[2]);
             abreiseField.setText(this.selectedBookingData[3]);
