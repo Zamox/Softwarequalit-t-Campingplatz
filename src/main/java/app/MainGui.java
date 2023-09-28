@@ -349,7 +349,7 @@ public class MainGui {
 
                     if (selectedRowIndex >= 0 && selectedRowIndex < zeilen.size()) {
                         String ausgewaehlteZeile = zeilen.get(selectedRowIndex);
-                        new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","), false);
+                        new InfoGui(MainGui.this, ausgewaehlteZeile.split(","), false);
 
 
                     } else {
