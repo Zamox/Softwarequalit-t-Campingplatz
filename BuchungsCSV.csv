@@ -1,9 +1,5 @@
 Name,Vorname,Anreisedatum,Abreisedatum,Platznummer,E-mail,Telefon,Straße,Plz,Hausnummer,Rechnungsadresse,CC-Nr.,AnzahlDerPersonen,Unterkunftstyp,Kosten, Buchungsnummer
 2,vorname,26.08.2023,27.08.2023,36,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten, 1
-2,vorname,26.08.2023,27.08.2023,36,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,4
-2,vorname,26.08.2023,27.08.2023,36,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,4
-Name,Vorname,Anreisedatum,Abreisedatum,Platznummer,E-mail,Telefon,Straße,Plz,Hausnummer,Rechnungsadresse,CC-Nr.,AnzahlDerPersonen,Unterkunftstyp,Kosten,4
-2,vorname,26.08.2023,27.08.2023,36,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten
-2,vorname,26.08.2023,27.08.2023,36,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten
-2,vorname,26.08.2023,27.08.2023,36,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten
-Name,Vorname,Anreisedatum,Abreisedatum,Platznummer,E-mail,Telefon,Straße,Plz,Hausnummer,Rechnungsadresse,CC-Nr.,AnzahlDerPersonen,Unterkunftstyp,Kosten
+4,vorname,20.08.2023,25.08.2023,34,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,4
+
+
