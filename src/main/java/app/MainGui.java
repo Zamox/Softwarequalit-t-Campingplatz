@@ -202,13 +202,13 @@ public class MainGui {
         lowerLeftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new downLeftPlaetze();
+                JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
             }
         });
         lowerRightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new downRightPlaetze();
+                JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
             }
         });
         contentPanel.add(imageLabel, BorderLayout.WEST);
@@ -244,6 +244,7 @@ public class MainGui {
         // Daten aus CSV-Datei in Tabelle zwei laden
         loadCSVDataToTable((DefaultTableModel) buchungsTable.getModel());
         loadBuchungTableData((DefaultTableModel) infoTableModel);
+        ;
     }
 
     private JButton createIdentifiedButton(String label) {
@@ -297,13 +298,13 @@ public class MainGui {
                     // Überprüfen, ob der ausgewählte Zeilenindex gültig ist
                     if (selectedRowIndex >= 0 && selectedRowIndex < zeilen.size()) {
                         String ausgewaehlteZeile = zeilen.get(selectedRowIndex);
-                        new BuchungBearbeitenGui(MainGui.this, ausgewaehlteZeile.split(","), selectedRowIndex, true);
+                        new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","), true);
                     } else {
                         System.out.println("Ungültiger Zeilenindex.");
                     }
                     break;
                 case "Buchung löschen":
-                    getAusgewaehlteZeile();
+                    getAusgewählteZeile();
                     break;
                 case "Login":
                     new Login(MainGui.this);
@@ -338,7 +339,6 @@ public class MainGui {
 
                 case "Info":
 
-
                     if (selectedRowIndex != -1) {
                         datenAuslesen(selectedRowIndex); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
 
@@ -350,7 +350,7 @@ public class MainGui {
 
                     if (selectedRowIndex >= 0 && selectedRowIndex < zeilen.size()) {
                         String ausgewaehlteZeile = zeilen.get(selectedRowIndex);
-                        new InfoGui(MainGui.this, ausgewaehlteZeile.split(","), false);
+                        new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","), false);
 
 
                     } else {
@@ -377,7 +377,7 @@ public class MainGui {
         return zeilen;
     }
 
-    private void getAusgewaehlteZeile() {
+    private void getAusgewählteZeile() {
         int selectedRow = buchungsTable.getSelectedRow();
         if (selectedRow != -1) {
             buchungLoeschen(selectedRow + 2); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
@@ -425,6 +425,21 @@ public class MainGui {
         }
     }
 
+
+    // Methode, um alle Buttons zu aktivieren
+    private void enableAllButtons() {
+        for (JButton button : buchungsButtonList) {
+            button.setEnabled(true);
+        }
+    }
+
+    private void disableButtonsExcept(int indexToExclude) {
+        for (int i = 0; i < buchungsButtonList.size(); i++) {
+            if (i != indexToExclude) {
+                buchungsButtonList.get(i).setEnabled(false);
+            }
+        }
+    }
 
     public void enable() {
         for (JButton button : panelButtonList) {
@@ -507,7 +522,7 @@ public class MainGui {
                 // Annahme: Die CSV-Datei hat die gewünschte Reihenfolge der Spalten
                 if (data.length >= 16) { // Überprüfen Sie, ob genügend Spalten vorhanden sind
                     String buchungsnummer = data[15]; // Buchungsnummer
-                    String name = data[0]; // Name
+                    String name = data[1]; // Name
                     String anreise = data[2]; // Anreise
                     String abreise = data[3]; // Abreise
 
@@ -539,8 +554,7 @@ public class MainGui {
 
         // Laden Sie die Daten erneut aus Ihrer CSV-Datei
         loadCSVDataToTable(model);
-        loadBuchungTableData((DefaultTableModel) buchungsTable.getModel());
-
+        //loadBuchungTableData((DefaultTableModel) buchungsTable.getModel());
     }
 
     public static void main(String[] args) {

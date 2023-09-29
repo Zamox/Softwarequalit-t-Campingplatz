@@ -132,6 +132,7 @@ public class upperLeftPlaetze {
             JButton button = (JButton) component;
             String buttonText = button.getText().replace("Platz ", "");
 
+
             if (foundNumbers.contains(buttonText)) {
                 // Die Nummer wurde in der CSV-Datei gefunden, färben Sie den Button rot
                 button.setBackground(Color.RED);
@@ -161,6 +162,7 @@ public class upperLeftPlaetze {
                     String csvFilePath = "./BuchungsCSV.csv"; // Ändern Sie dies entsprechend
                     String placeNumber = buttonText.replace("Platz ", "");
                     String[] selectedBookingData = readBookingDataFromCSV(csvFilePath, placeNumber);
+
 
                     // Öffnen Sie die BuchungsGUI und zeigen Sie die ausgewählten Buchungsdaten an
                     new BuchungsGui(null, selectedBookingData, false); // Der letzte Parameter ist false, da Sie die Daten anzeigen möchten und nicht bearbeiten
