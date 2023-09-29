@@ -10,6 +10,8 @@ import java.util.Set;
 
 public class upperLeftPlaetze {
     private JFrame frame;
+   PlatzVerwaltung platzVerwaltung = new PlatzVerwaltung();
+
 
     public upperLeftPlaetze() {
 
@@ -30,6 +32,11 @@ public class upperLeftPlaetze {
 
         // Erste Spalte mit 4 Buttons (individuelle Nummern von 34 bis 37)
         JPanel column1Panel = createButtonPanel(4, 34);
+        platzVerwaltung.aktualisierePlatzDaten(34);
+        platzVerwaltung.aktualisierePlatzDaten(35);
+        platzVerwaltung.aktualisierePlatzDaten(36);
+        platzVerwaltung.aktualisierePlatzDaten(37);
+
         mainPanel.add(column1Panel);
 
         // Leerzeile für Spalte 5
@@ -37,10 +44,18 @@ public class upperLeftPlaetze {
 
         // Spalte 3 mit 4 Buttons (individuelle Nummern von 38 bis 41)
         JPanel column3Panel = createButtonPanel(4, 38);
+        platzVerwaltung.aktualisierePlatzDaten(38);
+        platzVerwaltung.aktualisierePlatzDaten(39);
+        platzVerwaltung.aktualisierePlatzDaten(40);
+        platzVerwaltung.aktualisierePlatzDaten(41);
         mainPanel.add(column3Panel);
 
         // Spalte 4 mit 4 Buttons (individuelle Nummern von 42 bis 45)
         JPanel column4Panel = createButtonPanel(4, 42);
+        platzVerwaltung.aktualisierePlatzDaten(42);
+        platzVerwaltung.aktualisierePlatzDaten(43);
+        platzVerwaltung.aktualisierePlatzDaten(44);
+        platzVerwaltung.aktualisierePlatzDaten(45);
         mainPanel.add(column4Panel);
 
         // Leerzeile für Spalte 5
