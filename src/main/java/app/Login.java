@@ -85,8 +85,8 @@ public class Login{
                 frame.dispose();
             }
         });
-        cancel.setFocusable(true);
 
+        cancel.setFocusable(true);
 
         buttons.add(submit, BorderLayout.WEST);
         buttons.add(cancel, BorderLayout.EAST);

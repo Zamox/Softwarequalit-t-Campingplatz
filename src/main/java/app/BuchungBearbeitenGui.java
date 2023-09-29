@@ -282,14 +282,12 @@ public class BuchungBearbeitenGui {
             String[] csv_inhalt = temp.split("\n");
 
             csv_inhalt[selectedRowIndex] = csv_bearbeitet;
-            //System.out.print(csv_inhalt.length);
 
             FileWriter csvWriter = new FileWriter(dateiPfad, false);
 
             for (int i=0; i < csv_inhalt.length; i++){
                 csvWriter.write(csv_inhalt[i]);
                 csvWriter.write("\n");
-                System.out.println(csv_inhalt[i]);
             }
             csvWriter.close();
         } catch (IOException e) {
