@@ -8,14 +8,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class InfoGui {
+public class BuchungErstellenGui {
 
-    JFrame frame = new JFrame("Buchungsinfo");
+    JFrame frame = new JFrame("Neue Buchung");
     private JTextField anreiseField;
     private JTextField abreiseField;
     private JTextField platznummerField; // Hinzugefügt: Platznummer-Feld
@@ -39,7 +41,7 @@ public class InfoGui {
 
     private boolean isEditable;
 
-    public InfoGui(MainGui mainGui, String[] selectedBookingData, boolean isEditable) {
+    public BuchungErstellenGui(MainGui mainGui, String[] selectedBookingData, boolean isEditable) {
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setSize(1000, 400);
         this.mainGui = mainGui;
@@ -60,7 +62,6 @@ public class InfoGui {
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
         JPanel mainPanel = createMainPanel(leftPanel, rightPanel);
-        fillFieldsWithSelectedData(selectedBookingData);
         disableFields(isEditable); // Deaktivieren Sie die Felder, wenn die Info-Funktionalität aktiviert ist
         frame.add(mainPanel);
         frame.setVisible(true);
@@ -154,8 +155,6 @@ public class InfoGui {
     }
 
     private void disableFields(boolean disable) {
-        fillFieldsWithSelectedData(selectedBookingData);
-        platznummerField.setEditable(false);
 
         for (Component component : rightPanel.getComponents()) {
             if (component instanceof JTextField) {
@@ -166,38 +165,85 @@ public class InfoGui {
         anreiseField.setEditable(false);
         abreiseField.setEditable(false);
         platznummerField.setEditable(disable);
-        nameField.setEditable(disable);
-        vornameField.setEditable(disable);
-        strasseField.setEditable(disable);
-        plzField.setEditable(disable);
-
-    }
-
-    private void fillFieldsWithSelectedData(String[] selectedBookingData) {
-        if (this.selectedBookingData != null && this.selectedBookingData.length == 16) {
-            // Fülle die Felder mit den ausgewählten Daten
-            anreiseField.setText(this.selectedBookingData[2]);
-            abreiseField.setText(this.selectedBookingData[3]);
-            platznummerField.setText(this.selectedBookingData[4]);
-            nameField.setText(this.selectedBookingData[0]); // Name
-            vornameField.setText(this.selectedBookingData[1]); // Vorname
-            strasseField.setText(this.selectedBookingData[7]); //Straße
-            plzField.setText(this.selectedBookingData[8]); // PLZ
-            hausnummerField.setText(this.selectedBookingData[9]); // Nummer
-            rechnungsadresseField.setText(this.selectedBookingData[10]); // Rechnungsadresse
-            telefonField.setText(this.selectedBookingData[6]);// Telefon
-            emailField.setText(this.selectedBookingData[5]); // Email
-            kreditkartendatenField.setText(this.selectedBookingData[11]); // Kreditkartendaten
-        } else {
-            new JOptionPane("Bitte wählen Sie einen Stellplatz aus.");
-        }
     }
 
     private JPanel createMainPanel(JPanel leftPanel, JPanel rightPanel) {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(leftPanel, BorderLayout.WEST);
         mainPanel.add(rightPanel, BorderLayout.EAST);
+        JButton buchungsButton = new JButton("Buchung erstellen");
+        buchungsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    bestaetigeBuchung();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                MainGui.updateTable();
+            }
+        });
+        mainPanel.add(buchungsButton, BorderLayout.SOUTH);
+
         return mainPanel;
+    }
+
+    private void bestaetigeBuchung() throws IOException {
+        // Überprüfe, ob alle erforderlichen Felder ausgefüllt sind
+        if (anreiseField.getText().isEmpty() || abreiseField.getText().isEmpty() ||
+                platznummerField.getText().isEmpty() ||
+                nameField.getText().isEmpty() || // Name
+                vornameField.getText().isEmpty() || // Vorname
+                plzField.getText().isEmpty() || // PLZ
+                hausnummerField.getText().isEmpty() || // Hausnummer
+                emailField.getText().isEmpty() || // Email
+                telefonField.getText().isEmpty()) { // Telefon
+            JOptionPane.showMessageDialog(frame, "Bitte füllen Sie alle erforderlichen Felder aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+        } else {
+            // Alle erforderlichen Felder sind ausgefüllt, speichere die Daten in der CSV-Datei
+            speichereBuchungsdaten();
+            this.frame.dispose();
+        }
+    }
+
+    private void speichereBuchungsdaten() throws IOException {
+        String anreiseDatum = anreiseField.getText();
+        String abreiseDatum = abreiseField.getText();
+        String platznummer = platznummerField.getText();
+
+        String name = ((JTextField) rightPanel.getComponent(1)).getText();
+        String vorname = ((JTextField) rightPanel.getComponent(3)).getText();
+        String strasse = ((JTextField) rightPanel.getComponent(5)).getText();
+        String plz = ((JTextField) rightPanel.getComponent(7)).getText();
+        String hausnummer = ((JTextField) rightPanel.getComponent(9)).getText();
+        String rechnungsadresse = ((JTextField) rightPanel.getComponent(11)).getText();
+        String telefon = ((JTextField) rightPanel.getComponent(13)).getText();
+        String email = ((JTextField) rightPanel.getComponent(15)).getText();
+        String kreditkartendaten = ((JTextField) rightPanel.getComponent(17)).getText();
+        String buchungsnummer = ((JTextField) leftPanel.getComponent(1)).getText();
+
+        String dateiPfad = "./BuchungsCSV.csv";
+
+        String tz = ",";
+        String csv_eintrag = name +tz+ vorname +tz+ anreiseDatum +tz+ abreiseDatum +tz+ platznummer +tz+
+                email +tz+ telefon +tz+ strasse +tz+ plz +tz+ hausnummer +tz+ rechnungsadresse +tz+
+                kreditkartendaten +tz+ "AnzahlDerPersonen" +tz+ "Unterkunftstyp" +tz+ "Kosten"+tz+buchungsnummer+"\n";
+
+        try{
+        FileWriter csvWriter = new FileWriter(dateiPfad, true);
+        csvWriter.append(csv_eintrag);
+        csvWriter.append("\n");
+        csvWriter.flush();
+        csvWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+        // Erfolgreiche Buchungsbestätigung
+        JOptionPane.showMessageDialog(frame, "Buchung erfolgreich bestätigt. Die Daten wurden in einer CSV-Datei gespeichert.");
     }
 
     // Methode zur Auswahl des Anreise- und Abreisezeitraums

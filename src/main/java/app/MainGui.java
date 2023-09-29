@@ -287,7 +287,7 @@ public class MainGui {
             // Hier kannst du basierend auf dem Identifier die entsprechende Aktion ausführen
             switch (identifier) {
                 case "Neue Buchung":
-                    new BuchungsGui(MainGui.this, null, true);
+                    new BuchungErstellenGui(MainGui.this, null, true);
                     break;
                 case "Buchung bearbeiten":
                     if (selectedRowIndex != -1) {
@@ -350,7 +350,7 @@ public class MainGui {
 
                     if (selectedRowIndex >= 0 && selectedRowIndex < zeilen.size()) {
                         String ausgewaehlteZeile = zeilen.get(selectedRowIndex);
-                        new BuchungsGui(MainGui.this, ausgewaehlteZeile.split(","), false);
+                        new InfoGui(MainGui.this, ausgewaehlteZeile.split(","), false);
 
 
                     } else {
