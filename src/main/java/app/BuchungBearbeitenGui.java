@@ -3,15 +3,22 @@ package app;
 import de.dhbwka.swe.utils.event.GUIEvent;
 import de.dhbwka.swe.utils.event.IGUIEventListener;
 import de.dhbwka.swe.utils.gui.CalendarComponent;
+import de.dhbwka.swe.utils.util.CSVReader;
+import de.dhbwka.swe.utils.util.CSVWriter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class BuchungBearbeitenGui {
 
@@ -38,6 +45,7 @@ public class BuchungBearbeitenGui {
     private JTextField telefonField;
     private JTextField emailField;
     private JTextField kreditkartendatenField;
+    private JTextField buchungsnummerField;
 
     private boolean isEditable;
 
@@ -59,6 +67,7 @@ public class BuchungBearbeitenGui {
         telefonField = new JTextField();
         emailField = new JTextField();
         kreditkartendatenField = new JTextField();
+        buchungsnummerField = new JTextField();
 
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
@@ -71,6 +80,9 @@ public class BuchungBearbeitenGui {
 
     private JPanel createLeftPanel() {
         leftPanel = new JPanel(new GridLayout(10, 2)); // Erhöht auf 10 Reihen für Platznummer
+
+        leftPanel.add(new JLabel("Buchungsnummer:"));
+        leftPanel.add(buchungsnummerField);
 
         leftPanel.add(new JLabel("Anreise:"));
         anreiseField = new JTextField();
@@ -169,6 +181,7 @@ public class BuchungBearbeitenGui {
         vornameField.setEditable(disable);
         strasseField.setEditable(disable);
         plzField.setEditable(disable);
+        buchungsnummerField.setEditable(false);
 
     }
 
@@ -187,6 +200,7 @@ public class BuchungBearbeitenGui {
             telefonField.setText(this.selectedBookingData[6]);// Telefon
             emailField.setText(this.selectedBookingData[5]); // Email
             kreditkartendatenField.setText(this.selectedBookingData[11]); // Kreditkartendaten
+            buchungsnummerField.setText(this.selectedBookingData[15]);
         } else {
             new JOptionPane("Bitte wählen Sie einen Stellplatz aus.");
         }
@@ -202,7 +216,11 @@ public class BuchungBearbeitenGui {
         buchungsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                bestaetigeBuchung();
+                try {
+                    bestaetigeBuchung();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 MainGui.updateTable();
             }
         });
@@ -211,7 +229,7 @@ public class BuchungBearbeitenGui {
         return mainPanel;
     }
 
-    private void bestaetigeBuchung() {
+    private void bestaetigeBuchung() throws IOException {
         // Überprüfe, ob alle erforderlichen Felder ausgefüllt sind
         if (anreiseField.getText().isEmpty() || abreiseField.getText().isEmpty() ||
                 platznummerField.getText().isEmpty() ||
@@ -225,11 +243,12 @@ public class BuchungBearbeitenGui {
         } else {
             // Alle erforderlichen Felder sind ausgefüllt, speichere die Daten in der CSV-Datei
             speichereBuchungsdaten();
+            this.frame.dispose();
         }
     }
 
     // Methode zum Speichern der Buchungsdaten in einer CSV-Datei
-    private void speichereBuchungsdaten() {
+    private void speichereBuchungsdaten() throws IOException {
         String anreiseDatum = anreiseField.getText();
         String abreiseDatum = abreiseField.getText();
         String platznummer = platznummerField.getText();
@@ -243,47 +262,40 @@ public class BuchungBearbeitenGui {
         String telefon = ((JTextField) rightPanel.getComponent(13)).getText();
         String email = ((JTextField) rightPanel.getComponent(15)).getText();
         String kreditkartendaten = ((JTextField) rightPanel.getComponent(17)).getText();
+        String buchungsnummer = ((JTextField) leftPanel.getComponent(1)).getText();
 
         String dateiPfad = "./BuchungsCSV.csv";
 
-        try {
-            FileWriter csvWriter = new FileWriter(dateiPfad, true);
-            csvWriter.write(name);
-            csvWriter.write(",");
-            csvWriter.write(vorname);
-            csvWriter.write(",");
-            csvWriter.write(anreiseDatum);
-            csvWriter.write(",");
-            csvWriter.write(abreiseDatum);
-            csvWriter.write(",");
-            csvWriter.write(platznummer);
-            csvWriter.write(",");
-            csvWriter.write(email);
-            csvWriter.write(",");
-            csvWriter.write(telefon);
-            csvWriter.write(",");
-            // Fügen Sie hier die restlichen Felder in der gewünschten Reihenfolge hinzu
-            csvWriter.write(strasse);
-            csvWriter.write(",");
-            csvWriter.write(plz);
-            csvWriter.write(",");
-            csvWriter.write(hausnummer);
-            csvWriter.write(",");
-            csvWriter.write(rechnungsadresse);
-            csvWriter.write(",");
-            csvWriter.write(kreditkartendaten);
-            csvWriter.write(",");
-            csvWriter.write("AnzahlDerPersonen"); // Beispiel: Platzhalter für Anzahl der Personen
-            csvWriter.write(",");
-            csvWriter.write("Unterkunftstyp"); // Beispiel: Platzhalter für Unterkunftstyp
-            csvWriter.write(",");
-            csvWriter.write("Kosten"); // Beispiel: Platzhalter für Kosten
-            csvWriter.write("\n");
-            csvWriter.flush();
+        String tz = ",";
+        String csv_bearbeitet = name +tz+ vorname +tz+ anreiseDatum +tz+ abreiseDatum +tz+ platznummer +tz+
+                                    email +tz+ telefon +tz+ strasse +tz+ plz +tz+ hausnummer +tz+ rechnungsadresse +tz+
+                                    kreditkartendaten +tz+ "AnzahlDerPersonen" +tz+ "Unterkunftstyp" +tz+ "Kosten"+tz+buchungsnummer+"\n";
+
+        String temp = "";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(dateiPfad))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                temp = temp + line + "\n";
+            }
+
+            String[] csv_inhalt = temp.split("\n");
+
+            csv_inhalt[selectedRowIndex] = csv_bearbeitet;
+            //System.out.print(csv_inhalt.length);
+
+            FileWriter csvWriter = new FileWriter(dateiPfad, false);
+
+            for (int i=0; i < csv_inhalt.length; i++){
+                csvWriter.write(csv_inhalt[i]);
+                csvWriter.write("\n");
+                System.out.println(csv_inhalt[i]);
+            }
             csvWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         // Erfolgreiche Buchungsbestätigung
         JOptionPane.showMessageDialog(frame, "Buchung erfolgreich bestätigt. Die Daten wurden in einer CSV-Datei gespeichert.");

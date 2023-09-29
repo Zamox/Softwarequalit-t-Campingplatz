@@ -36,6 +36,7 @@ public class BuchungsGui {
     private JTextField telefonField;
     private JTextField emailField;
     private JTextField kreditkartendatenField;
+    private JTextField buchungsnummerField;
 
     private boolean isEditable;
 
@@ -56,6 +57,7 @@ public class BuchungsGui {
         telefonField = new JTextField();
         emailField = new JTextField();
         kreditkartendatenField = new JTextField();
+        buchungsnummerField = new JTextField();
 
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
@@ -72,6 +74,9 @@ public class BuchungsGui {
 
     private JPanel createLeftPanel() {
         leftPanel = new JPanel(new GridLayout(10, 2)); // Erhöht auf 10 Reihen für Platznummer
+
+        leftPanel.add(new JLabel("Buchungsnummer:"));
+        leftPanel.add(buchungsnummerField);
 
         leftPanel.add(new JLabel("Anreise:"));
         anreiseField = new JTextField();
@@ -170,6 +175,7 @@ public class BuchungsGui {
         vornameField.setEditable(disable);
         strasseField.setEditable(disable);
         plzField.setEditable(disable);
+        buchungsnummerField.setEditable(false);
 
     }
 
@@ -188,6 +194,7 @@ public class BuchungsGui {
             telefonField.setText(this.selectedBookingData[6]);// Telefon
             emailField.setText(this.selectedBookingData[5]); // Email
             kreditkartendatenField.setText(this.selectedBookingData[11]); // Kreditkartendaten
+            buchungsnummerField.setText(this.selectedBookingData[15]);
         } else {
             new JOptionPane("Bitte wählen Sie einen Stellplatz aus.");
         }
