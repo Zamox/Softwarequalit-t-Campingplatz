@@ -25,7 +25,6 @@ public class downRightPlaetze {
         this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.fall = fall;
         renderFrame();
-        checkCSVAndColorButtons();
     }
 
     public downRightPlaetze(BuchungBearbeitenGui BuchungBearbeitenGui, JFrame parentframe, String fall) {
@@ -111,6 +110,9 @@ public class downRightPlaetze {
         this.frame.setContentPane(mainPanel);
         this.frame.pack();
         this.frame.setVisible(true);
+
+        addClickListenerToButtons(mainPanel);
+        checkCSVAndColorButtons();
     }
 
     private JPanel createButtonPanel(int buttonCount, int startNumber) {
@@ -187,5 +189,68 @@ public class downRightPlaetze {
                 colorButtons(subComponent, foundNumbers);
             }
         }
+    }
+
+    private void addClickListenerToButtons(Container container) {
+        if (container instanceof JButton) {
+            JButton button = (JButton) container;
+            String buttonText = button.getText();
+            button.addActionListener(e -> {
+                if (button.getBackground().equals(Color.RED)) {
+                    String csvFilePath = "./Platzdaten.csv";
+                    String placeNumber = buttonText.replace("Platz ", "");
+                    String[] selectedBookingData = readBookingDataFromCSV(csvFilePath, placeNumber);
+
+                } else if (button.getBackground().equals(Color.GREEN)) {
+                    PlatzTransfer dataSingleton = PlatzTransfer.getInstance();
+                    switch (fall){
+                        case "erstellen":
+                            dataSingleton = PlatzTransfer.getInstance();
+                            dataSingleton.setSharedData(button.getText());
+                            System.out.print(button.getText());
+                            BuchungErstellenGui.updatePlatzNummer();
+                            parentframe.dispose();
+                            this.frame.dispose();
+                            break;
+
+                        case "bearbeiten":
+                            dataSingleton = PlatzTransfer.getInstance();
+                            dataSingleton.setSharedData(button.getText());
+                            BuchungBearbeitenGui.updatePlatzNummer();
+                            parentframe.dispose();
+                            this.frame.dispose();
+                            break;
+                    }
+                }
+            });
+
+        } else if (container instanceof Container) {
+            Container subContainer = (Container) container;
+            Component[] components = subContainer.getComponents();
+            for (Component component : components) {
+                addClickListenerToButtons((Container) component);
+            }
+        }
+    }
+
+    private String[] readBookingDataFromCSV(String csvFilePath, String placeNumber) {
+        // Lesen Sie die Zeile in der CSV-Datei, die zur ausgewählten Platznummer gehört
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(","); // Annahme: CSV ist kommagetrennt
+
+                if (parts.length > 9) { // Annahme: Die 10. Spalte enthält die Zahlen
+                    String csvNumber = parts[4].trim(); // Ändern Sie den Index entsprechend
+                    if (csvNumber.equals(placeNumber)) {
+                        // Gefundene Zeile zurückgeben
+                        return parts;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null; // Platznummer wurde nicht in der CSV-Datei gefunden
     }
 }

@@ -163,7 +163,20 @@ public class PlatzGUIBuchungen {
             lowerRightButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    new downRightPlaetze(fall);
+                    switch (fall) {
+
+                        case "erstellen":
+                            new downRightPlaetze(BuchungErstellenGui, frame, fall);
+                            break;
+
+                        case "bearbeiten":
+                            new downRightPlaetze(BuchungBearbeitenGui, frame, fall);
+                            break;
+
+                        case "info":
+                            new downRightPlaetze(fall);
+                            break;
+                    }
                 }
             });
 
