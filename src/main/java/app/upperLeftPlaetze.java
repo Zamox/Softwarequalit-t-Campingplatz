@@ -1,5 +1,4 @@
 package app;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -10,33 +9,24 @@ import java.util.Set;
 
 public class upperLeftPlaetze {
     private JFrame frame;
-   PlatzVerwaltung platzVerwaltung = new PlatzVerwaltung();
-
+    private PlatzVerwaltung platzVerwaltung = new PlatzVerwaltung();
 
     public upperLeftPlaetze() {
-
         this.frame = new JFrame("Platzregion Nord-West");
         this.frame.setSize(1000, 1000);
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
+        this.frame.setLayout(new GridLayout(1, 7));
         renderFrame();
-        checkCSVAndColorButtons();
-
     }
 
     private void renderFrame() {
-        JPanel mainPanel = new JPanel(new GridLayout(1, 7)); // 7 Spalten insgesamt
+        JPanel mainPanel = new JPanel(new GridLayout(1, 7));
 
         // Leerzeile für Spalte 2
         mainPanel.add(new JPanel());
 
         // Erste Spalte mit 4 Buttons (individuelle Nummern von 34 bis 37)
         JPanel column1Panel = createButtonPanel(4, 34);
-        platzVerwaltung.aktualisierePlatzDaten(34);
-        platzVerwaltung.aktualisierePlatzDaten(35);
-        platzVerwaltung.aktualisierePlatzDaten(36);
-        platzVerwaltung.aktualisierePlatzDaten(37);
-
         mainPanel.add(column1Panel);
 
         // Leerzeile für Spalte 5
@@ -44,18 +34,10 @@ public class upperLeftPlaetze {
 
         // Spalte 3 mit 4 Buttons (individuelle Nummern von 38 bis 41)
         JPanel column3Panel = createButtonPanel(4, 38);
-        platzVerwaltung.aktualisierePlatzDaten(38);
-        platzVerwaltung.aktualisierePlatzDaten(39);
-        platzVerwaltung.aktualisierePlatzDaten(40);
-        platzVerwaltung.aktualisierePlatzDaten(41);
         mainPanel.add(column3Panel);
 
         // Spalte 4 mit 4 Buttons (individuelle Nummern von 42 bis 45)
         JPanel column4Panel = createButtonPanel(4, 42);
-        platzVerwaltung.aktualisierePlatzDaten(42);
-        platzVerwaltung.aktualisierePlatzDaten(43);
-        platzVerwaltung.aktualisierePlatzDaten(44);
-        platzVerwaltung.aktualisierePlatzDaten(45);
         mainPanel.add(column4Panel);
 
         // Leerzeile für Spalte 5
@@ -72,7 +54,9 @@ public class upperLeftPlaetze {
         this.frame.setContentPane(mainPanel);
         this.frame.pack();
         this.frame.setVisible(true);
-        checkCSVAndColorButtons();
+
+        // Color buttons based on CSV data
+        colorButtonsBasedOnCSVStatus();
         addClickListenerToButtons(mainPanel);
     }
 
@@ -87,81 +71,47 @@ public class upperLeftPlaetze {
         return panel;
     }
 
-    private void checkCSVAndColorButtons() {
-        // Definieren Sie den Dateipfad Ihrer CSV-Datei
-        String csvFilePath = "./BuchungsCSV.csv"; // Ändern Sie dies entsprechend
+    private void colorButtonsBasedOnCSVStatus() {
+        String csvFilePath = "./Platzdaten.csv"; // Update with your CSV file path
 
-        // Holen Sie den Hauptpanel
-        Container mainPanel = this.frame.getContentPane();
-
-        // Erstellen Sie eine Menge (Set) für die in der CSV-Datei gefundenen Nummern
-        Set<String> foundNumbers = new HashSet<>();
-
-        // Durchlaufen Sie alle Komponenten im Hauptpanel (einschließlich verschachtelter Panels)
-        findButtonsAndCheckCSV(mainPanel, foundNumbers, csvFilePath);
-
-        // Durchlaufen Sie erneut alle Komponenten und färben Sie die Buttons entsprechend
-        colorButtons(mainPanel, foundNumbers);
-    }
-
-    private void findButtonsAndCheckCSV(Component component, Set<String> foundNumbers, String csvFilePath) {
-        if (component instanceof JButton) {
-            JButton button = (JButton) component;
-            String buttonText = button.getText().replace("Platz ", "");
-
-            if (checkCSVForNumber(buttonText, csvFilePath)) {
-                foundNumbers.add(buttonText);
-            }
-        } else if (component instanceof Container) {
-            // Wenn es sich um ein Container-Objekt handelt, durchlaufen Sie seine Komponenten
-            Container container = (Container) component;
-            Component[] components = container.getComponents();
-            for (Component subComponent : components) {
-                // Rekursiv in verschachtelten Containern nach Buttons suchen
-                findButtonsAndCheckCSV(subComponent, foundNumbers, csvFilePath);
-            }
-        }
-    }
-
-    private boolean checkCSVForNumber(String number, String csvFilePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
             String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(","); // Annahme: CSV ist kommagetrennt
+            Set<String> belegtePlaetze = new HashSet<>();
 
-                if (parts.length > 9) { // Annahme: Die 10. Spalte enthält die Zahlen
-                    String csvNumber = parts[4].trim(); // Ändern Sie den Index entsprechend
-                    if (csvNumber.equals(number)) {
-                        return true;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2) {
+                    String platznummerStr = parts[0].trim();
+                    String status = parts[1].trim();
+
+                    if (status.equalsIgnoreCase("belegt")) {
+                        belegtePlaetze.add(platznummerStr);
                     }
                 }
             }
+
+            Container mainPanel = this.frame.getContentPane();
+            colorButtons(mainPanel, belegtePlaetze);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-        return false;
     }
 
-    private void colorButtons(Component component, Set<String> foundNumbers) {
+    private void colorButtons(Component component, Set<String> belegtePlaetze) {
         if (component instanceof JButton) {
             JButton button = (JButton) component;
             String buttonText = button.getText().replace("Platz ", "");
 
-
-            if (foundNumbers.contains(buttonText)) {
-                // Die Nummer wurde in der CSV-Datei gefunden, färben Sie den Button rot
+            if (belegtePlaetze.contains(buttonText)) {
                 button.setBackground(Color.RED);
             } else {
-                // Die Nummer wurde nicht in der CSV-Datei gefunden, färben Sie den Button grün
                 button.setBackground(Color.GREEN);
             }
         } else if (component instanceof Container) {
-            // Wenn es sich um ein Container-Objekt handelt, durchlaufen Sie seine Komponenten
             Container container = (Container) component;
             Component[] components = container.getComponents();
             for (Component subComponent : components) {
-                // Rekursiv in verschachtelten Containern Buttons einfärben
-                colorButtons(subComponent, foundNumbers);
+                colorButtons(subComponent, belegtePlaetze);
             }
         }
     }
@@ -172,19 +122,16 @@ public class upperLeftPlaetze {
             String buttonText = button.getText();
             button.addActionListener(e -> {
                 if (button.getBackground().equals(Color.RED)) {
-                    // Wenn der Button rot ist, bedeutet das, dass der Platz belegt ist
-                    // Hier können Sie die Zeile in der CSV-Datei auslesen
-                    String csvFilePath = "./BuchungsCSV.csv"; // Ändern Sie dies entsprechend
+                    String csvFilePath = "./Platzdaten.csv";
                     String placeNumber = buttonText.replace("Platz ", "");
                     String[] selectedBookingData = readBookingDataFromCSV(csvFilePath, placeNumber);
 
 
-                    // Öffnen Sie die BuchungsGUI und zeigen Sie die ausgewählten Buchungsdaten an
-                    new BuchungsGui(null, selectedBookingData, false); // Der letzte Parameter ist false, da Sie die Daten anzeigen möchten und nicht bearbeiten
                 }
             });
-        } else if (container != null) {
-            Component[] components = ((Container) container).getComponents();
+        } else if (container instanceof Container) {
+            Container subContainer = (Container) container;
+            Component[] components = subContainer.getComponents();
             for (Component component : components) {
                 addClickListenerToButtons((Container) component);
             }
@@ -192,25 +139,20 @@ public class upperLeftPlaetze {
     }
 
     private String[] readBookingDataFromCSV(String csvFilePath, String placeNumber) {
-        // Lesen Sie die Zeile in der CSV-Datei, die zur ausgewählten Platznummer gehört
         try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] parts = line.split(","); // Annahme: CSV ist kommagetrennt
-
-                if (parts.length > 9) { // Annahme: Die 10. Spalte enthält die Zahlen
-                    String csvNumber = parts[4].trim(); // Ändern Sie den Index entsprechend
+                String[] parts = line.split(",");
+                if (parts.length >= 2) {
+                    String csvNumber = parts[0].trim();
                     if (csvNumber.equals(placeNumber)) {
-                        // Gefundene Zeile zurückgeben
                         return parts;
                     }
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-        return null; // Platznummer wurde nicht in der CSV-Datei gefunden
+        return null;
     }
-
-
 }
