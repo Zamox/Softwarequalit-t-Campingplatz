@@ -1,5 +1,4 @@
 package app;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -87,9 +86,6 @@ public class PlatzAnlegenGui {
         wohnoptionPanel.add(zeltRadio);
         styleLeftPanel.add(wohnoptionPanel);
 
-
-
-
         // Personenzahl
         styleLeftPanel.add(new JLabel("Personenzahl:"));
         personenzahlField = new JTextField(10); // Schmaleres Textfeld
@@ -148,11 +144,11 @@ public class PlatzAnlegenGui {
                 // Überprüfung, ob die Platznummer bereits existiert
                 if (platznummerExistiertBereits(platznummer, "./Platzdaten.csv")) {
 
-                        JOptionPane.showMessageDialog(frame, "Die Platznummer existiert bereits. Es können nur neue Plätze ab Nummer 94 vergeben werden", "Fehler", JOptionPane.ERROR_MESSAGE);
-                        return; // Beende die Methode, da die Platznummer bereits existiert
+                    JOptionPane.showMessageDialog(frame, "Die Platznummer existiert bereits. Es können nur neue Plätze ab Nummer 94 vergeben werden", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    return; // Beende die Methode, da die Platznummer bereits existiert
 
                 }
-                if (Integer.parseInt(platznummer)<=14 && Integer.parseInt(platznummer)>=1){
+                if (Integer.parseInt(platznummer) <= 14 && Integer.parseInt(platznummer) >= 1) {
                     JOptionPane.showMessageDialog(frame, "Die Platznummer existiert bereits oder ist zu klein. Es können nur neue Plätze ab Nummer 94 vergeben werden", "Fehler", JOptionPane.ERROR_MESSAGE);
                     return; // Beende die Methode, da die Platznummer bereits existiert
                 }
@@ -212,7 +208,27 @@ public class PlatzAnlegenGui {
         return false; // Platznummer wurde nicht gefunden
     }
 
+    // Methode, um die ausgewählte Platzart aus der ButtonGroup zu erhalten
+    private String getSelectedPlatzart() {
+        if (stellplatzRadio.isSelected()) {
+            return "Stellplatz";
+        } else if (shopRadio.isSelected()) {
+            return "Shop";
+        } else if (sanitaereAnlagenRadio.isSelected()) {
+            return "Sanitäre Anlagen";
+        } else if (sonstigeRadio.isSelected()) {
+            return "Sonstige";
+        } else {
+            return ""; // Oder einen Standardwert zurückgeben
+        }
+    }
 
-
-    //32, 33, 52, 53
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new PlatzAnlegenGui();
+            }
+        });
+    }
 }
+
