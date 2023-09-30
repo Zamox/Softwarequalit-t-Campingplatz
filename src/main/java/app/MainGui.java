@@ -167,7 +167,7 @@ public class MainGui {
         JLabel imageLabel = new JLabel();
         try {
             // Lade das Bild
-            BufferedImage img = ImageIO.read(new File("./Campingplatz.jpg"));
+            BufferedImage img = ImageIO.read(new File("./src/Campingplatz.jpg"));
             // mach das Bild transparent
             imageLabel.setOpaque(false);
 
@@ -217,20 +217,20 @@ public class MainGui {
         upperLeftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new upperLeftPlaetze();
+                new upperLeftPlaetze("info");
             }
         });
         upperRightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                new upperRightPlaetze();
+                new upperRightPlaetze("info");
             }
         });
         lowerLeftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new downLeftPlaetze();
+                new downLeftPlaetze("info");
             }
         });
         lowerRightButton.addActionListener(new ActionListener() {

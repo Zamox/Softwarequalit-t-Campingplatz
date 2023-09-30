@@ -3,8 +3,6 @@ package app;
 import de.dhbwka.swe.utils.event.GUIEvent;
 import de.dhbwka.swe.utils.event.IGUIEventListener;
 import de.dhbwka.swe.utils.gui.CalendarComponent;
-import de.dhbwka.swe.utils.util.CSVReader;
-import de.dhbwka.swe.utils.util.CSVWriter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,9 +14,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class BuchungBearbeitenGui {
 
@@ -245,6 +240,12 @@ public class BuchungBearbeitenGui {
             speichereBuchungsdaten();
             this.frame.dispose();
         }
+    }
+
+    public void updatePlatzNummer() {
+        PlatzTransfer dataSingleton = PlatzTransfer.getInstance();
+        String sharedData = dataSingleton.getSharedData();
+        platznummerField.setText(sharedData);
     }
 
     // Methode zum Speichern der Buchungsdaten in einer CSV-Datei
