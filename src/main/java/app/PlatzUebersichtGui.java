@@ -1,5 +1,4 @@
 package app;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -39,8 +38,9 @@ public class PlatzUebersichtGui {
                     if (platz.getStatus().equals("belegt")) {
                         JOptionPane.showMessageDialog(frame, "Dieser Platz ist momentan gebucht und kann nicht bearbeitet werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     } else {
-                        // Öffne die PlatzBearbeitenGUI
-                        //new PlatzBearbeitenGUI(platz);
+                        // Öffne die PlatzBearbeitenGUI und übergebe die Platznummer
+                        PlatzBearbeitenGUI platzBearbeitenGUI = new PlatzBearbeitenGUI(platz, false);
+                        platzBearbeitenGUI.setPlatznummer(platz.getPlatznummer());
                     }
                 }
             });
@@ -49,15 +49,13 @@ public class PlatzUebersichtGui {
         }
 
         // Panel für die Anzeige der Regionen
-        // Panel für die Anzeige der Regionen
         JPanel regionenPanel = new JPanel();
         regionenPanel.setLayout(new BoxLayout(regionenPanel, BoxLayout.Y_AXIS));
         regionenPanel.add(new JLabel("Für die genaue Lage des Platzes bitte die Regionen in der Karte anklicken und Platz ausfindig machen:"));
-        regionenPanel.add(new JLabel("34- 41: Platzregion Nord-West"));
+        regionenPanel.add(new JLabel("34-41: Platzregion Nord-West"));
         regionenPanel.add(new JLabel("56 bis max. 64: Platzregion Nord-Ost"));
         regionenPanel.add(new JLabel("61-93 und weitere: Platzregion Süd-Ost"));
         regionenPanel.add(new JLabel("14-31 & 64-76: Platzregion Süd-West"));
-
 
         // Hauptpanel für die Anordnung der Platz- und Regionenpanele
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -84,8 +82,9 @@ public class PlatzUebersichtGui {
                 if (parts.length >= 2) {
                     String platznummer = parts[0].trim();
                     String status = parts[1].trim();
+                    String platzregion = parts[2].trim();
                     // Hier können Sie weitere Informationen wie Platzart, Wohnoption, etc. auslesen, falls benötigt
-                    plaetze.add(new StellplaetzeInfo(platznummer, status));
+                    plaetze.add(new StellplaetzeInfo(platznummer, status,platzregion));
                 }
             }
         } catch (IOException e) {
@@ -94,9 +93,4 @@ public class PlatzUebersichtGui {
 
         return plaetze;
     }
-
-
 }
-
-
-
