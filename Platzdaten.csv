@@ -18,7 +18,7 @@ Platznummer,Status,Platzregion, Platzart, Wohnoption, Personenanzahl, Tagessatz
 30,frei,Süd-West,Stellplatz,Wohnmobil
 31,frei,Süd-West,Stellplatz,Wohnmobil
 34,belegt,Nord-West,Stellplatz,Zelt
-35,frei,Nord-West,Stellplatz,Zelt
+35,belegt,Nord-West,Stellplatz,Zelt
 36,belegt,Nord-West,Stellplatz,Zelt
 37,frei,Nord-West,Stellplatz,Zelt
 38,frei,Nord-West,Stellplatz,Zelt
@@ -27,15 +27,15 @@ Platznummer,Status,Platzregion, Platzart, Wohnoption, Personenanzahl, Tagessatz
 41,frei,Nord-West,Stellplatz,Zelt
 42,frei,Nord-West,Stellplatz,Zelt
 43,belegt,Nord-West,Stellplatz,Zelt
-44,frei,Nord-West,Stellplatz,Zelt
+44,belegt,Nord-West,Stellplatz,Zelt
 45,frei,Nord-West,Stellplatz,Zelt
-46,frei,Nord-West,Stellplatz,Zelt
+46,belegt,Nord-West,Stellplatz,Zelt
 47,frei,Nord-West,Stellplatz,Zelt
 48,frei,Nord-West,Stellplatz,Zelt
 49,frei,Nord-West,Stellplatz,Zelt
 50,frei,Nord-West,Stellplatz,Zelt
-51,frei,Nord-West,Stellplatz,Zelt
-56,frei,Nord-Ost,Stellplatz,Zelt
+51,belegt,Nord-West,Stellplatz,Zelt
+56,belegt,Nord-Ost,Stellplatz,Zelt
 57,frei,Nord-Ost,Stellplatz,Zelt
 58,frei,Nord-Ost,Stellplatz,Zelt
 59,frei,Nord-Ost,Stellplatz,Zelt
@@ -49,7 +49,7 @@ Platznummer,Status,Platzregion, Platzart, Wohnoption, Personenanzahl, Tagessatz
 67,frei,Süd-West,Stellplatz,Wohnmobil
 68,frei,Süd-West,Stellplatz,Wohnmobil
 69,frei,Süd-West,Stellplatz,Wohnmobil
-70,frei,Süd-West,Stellplatz,Wohnmobil
+70,belegt,Süd-West,Stellplatz,Wohnmobil
 71,frei,Süd-West,Stellplatz,Wohnmobil
 72,frei,Süd-West,Stellplatz,Wohnmobil
 73,frei,Süd-West,Stellplatz,Wohnmobil
