@@ -186,8 +186,8 @@ public class downRightPlaetze {
                     String[] selectedBookingData = readBookingDataFromCSV(csvFilePath, placeNumber);
 
                     // Öffnen Sie die BuchungsGUI und zeigen Sie die ausgewählten Buchungsdaten an
-                    new BuchungsGui(null, selectedBookingData, false); // Der letzte Parameter ist false, da Sie die Daten anzeigen möchten und nicht bearbeiten
-                }
+                    new BuchungsGui(null, selectedBookingData, false);
+                    }
             });
         } else if (container instanceof Container) {
             Container subContainer = (Container) container;

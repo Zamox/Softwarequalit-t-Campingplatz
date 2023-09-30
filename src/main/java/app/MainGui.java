@@ -167,7 +167,7 @@ public class MainGui {
         JLabel imageLabel = new JLabel();
         try {
             // Lade das Bild
-            BufferedImage img = ImageIO.read(new File("./src/Campingplatz.jpg"));
+            BufferedImage img = ImageIO.read(new File("./Campingplatz.jpg"));
             // mach das Bild transparent
             imageLabel.setOpaque(false);
 
