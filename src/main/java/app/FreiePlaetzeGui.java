@@ -8,8 +8,8 @@ import java.util.List;
 public class FreiePlaetzeGui extends JFrame {
 
     public FreiePlaetzeGui() {
-        setTitle("Freie Plätze Anzeige");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Freie Plätze");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(400, 300);
         setLocationRelativeTo(null);
 
