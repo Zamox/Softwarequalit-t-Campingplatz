@@ -18,21 +18,13 @@ public class PlatzBearbeitenGUI {
     private JLabel statusLabel;
     private JLabel platzregionLabel;
 
-    private JRadioButton stellplatzRadio;
-    private JRadioButton shopRadio;
-    private JRadioButton sanitaereAnlagenRadio;
-    private JRadioButton sonstigeRadio;
-    private ButtonGroup platzartGroup;
-
-    private JRadioButton wohnmobilRadio;
-    private JRadioButton wohnwagenRadio;
-    private JRadioButton zeltRadio;
-    private ButtonGroup wohnoptionGroup;
+    private JComboBox<String> platzartComboBox;
+    private JComboBox<String> wohnoptionComboBox;
 
     private StellplaetzeInfo platz;
     private boolean isEditable;
 
-    public PlatzBearbeitenGUI(StellplaetzeInfo platz, boolean isEditable, String selectedPlatzart) {
+    public PlatzBearbeitenGUI(StellplaetzeInfo platz, boolean isEditable, String selectedPlatzart, String selectedWohnoption) {
         this.platz = platz;
         this.isEditable = isEditable;
 
@@ -63,36 +55,46 @@ public class PlatzBearbeitenGUI {
         styleLeftPanel.add(platzregionLabel);
         styleLeftPanel.add(new JLabel(platz.getPlatzregion()));
 
+        // Platzart
         JPanel platzartPanel = new JPanel();
         platzartPanel.setLayout(new GridLayout(0, 1));
         platzartPanel.add(new JLabel("Platzart:"));
-        stellplatzRadio = new JRadioButton("Stellplatz");
-        shopRadio = new JRadioButton("Shop");
-        sanitaereAnlagenRadio = new JRadioButton("Sanitäre Anlagen");
-        sonstigeRadio = new JRadioButton("Sonstige");
-
-        platzartGroup = new ButtonGroup();
-        platzartGroup.add(stellplatzRadio);
-        platzartGroup.add(shopRadio);
-        platzartGroup.add(sanitaereAnlagenRadio);
-        platzartGroup.add(sonstigeRadio);
-
-        platzartPanel.add(stellplatzRadio);
-        platzartPanel.add(shopRadio);
-        platzartPanel.add(sanitaereAnlagenRadio);
-        platzartPanel.add(sonstigeRadio);
+        String[] platzarten = {"", "Stellplatz", "Shop", "Sanitäre Anlagen", "Sonstige"};
+        platzartComboBox = new JComboBox<>(platzarten);
+        platzartComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Wenn "Stellplatz" ausgewählt ist, aktiviere die Wohnoption-ComboBox, ansonsten deaktiviere sie.
+                if (platzartComboBox.getSelectedItem().equals("Stellplatz")) {
+                    wohnoptionComboBox.setEnabled(true);
+                } else {
+                    wohnoptionComboBox.setEnabled(false);
+                }
+            }
+        });
+        platzartPanel.add(platzartComboBox);
         styleLeftPanel.add(platzartPanel);
 
-        if (!selectedPlatzart.isEmpty()) {
+        // Wohnoption
+        JPanel wohnoptionPanel = new JPanel();
+        wohnoptionPanel.setLayout(new GridLayout(0, 1));
+        wohnoptionPanel.add(new JLabel("Wohnoption:"));
+        String[] wohnoptionen = {"", "Wohnmobil", "Wohnwagen", "Zelt"};
+        wohnoptionComboBox = new JComboBox<>(wohnoptionen);
+        wohnoptionPanel.add(wohnoptionComboBox);
+        wohnoptionComboBox.setEnabled(false); // Deaktiviere die Wohnoption-ComboBox zu Beginn.
+        styleLeftPanel.add(wohnoptionPanel);
+
+        // Setze die ausgewählten Optionen
+        if (selectedPlatzart != null && !selectedPlatzart.isEmpty()) {
+            platzartComboBox.setSelectedItem(selectedPlatzart);
             if (selectedPlatzart.equals("Stellplatz")) {
-                stellplatzRadio.setSelected(true);
-            } else if (selectedPlatzart.equals("Shop")) {
-                shopRadio.setSelected(true);
-            } else if (selectedPlatzart.equals("Sanitäre Anlagen")) {
-                sanitaereAnlagenRadio.setSelected(true);
-            } else if (selectedPlatzart.equals("Sonstige")) {
-                sonstigeRadio.setSelected(true);
+                wohnoptionComboBox.setEnabled(true);
             }
+        }
+
+        if (selectedWohnoption != null && !selectedWohnoption.isEmpty()) {
+            wohnoptionComboBox.setSelectedItem(selectedWohnoption);
         }
 
         JButton speichernButton = new JButton("Speichern");
@@ -100,10 +102,11 @@ public class PlatzBearbeitenGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String neuePlatznummer = platz.getPlatznummer();
-                String neuePlatzart = getSelectedPlatzart();
+                String neuePlatzart = platzartComboBox.getSelectedItem().toString();
+                String neueWohnoption = wohnoptionComboBox.getSelectedItem().toString();
 
                 if (!neuePlatzart.isEmpty()) {
-                    if (updatePlatzInCSV(platz.getPlatznummer(), neuePlatzart)) {
+                    if (updatePlatzInCSV(platz.getPlatznummer(), neuePlatzart, neueWohnoption)) {
                         JOptionPane.showMessageDialog(frame, "Daten erfolgreich gespeichert.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(frame, "Fehler beim Speichern der Daten.", "Fehler", JOptionPane.ERROR_MESSAGE);
@@ -111,8 +114,6 @@ public class PlatzBearbeitenGUI {
                 } else {
                     JOptionPane.showMessageDialog(frame, "Bitte wählen Sie eine Platzart aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
                 }
-
-                frame.dispose();
             }
         });
 
@@ -128,37 +129,30 @@ public class PlatzBearbeitenGUI {
         frame.setVisible(true);
     }
 
-    private String getSelectedPlatzart() {
-        if (stellplatzRadio.isSelected()) {
-            return "Stellplatz";
-        } else if (shopRadio.isSelected()) {
-            return "Shop";
-        } else if (sanitaereAnlagenRadio.isSelected()) {
-            return "Sanitäre Anlagen";
-        } else if (sonstigeRadio.isSelected()) {
-            return "Sonstige";
-        }
-        return "";
-    }
-
-    private boolean updatePlatzInCSV(String platznummer, String neuePlatzart) {
+    private boolean updatePlatzInCSV(String platznummer, String neuePlatzart, String neueWohnoption) {
         String csvFilePath = "./Platzdaten.csv";
         List<String> updatedLines = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
             String line;
+            boolean firstLine = true; // Um die erste Zeile (Überschriften) zu ignorieren
             while ((line = reader.readLine()) != null) {
+                if (firstLine) {
+                    updatedLines.add(line);
+                    firstLine = false;
+                    continue;
+                }
+
                 String[] parts = line.split(",");
-                if (parts.length >= 3) {
+                if (parts.length >= 5) {
                     String currentPlatznummer = parts[0].trim();
                     String currentStatus = parts[1].trim();
                     String currentPlatzregion = parts[2].trim();
-                    String currentPlatzart = parts[3].trim(); // Hier aktualisieren wir die Platzart
+                    String currentPlatzart = parts[3].trim();
+                    String currentWohnoption = parts[4].trim();
 
                     if (currentPlatznummer.equals(platznummer)) {
-                        // Hier überschreiben wir die Platzart
-                        currentPlatzart = neuePlatzart;
-                        line = platznummer + "," + currentStatus + "," + currentPlatzregion + "," + currentPlatzart;
+                        line = platznummer + "," + currentStatus + "," + currentPlatzregion + "," + neuePlatzart + "," + neueWohnoption;
                     }
 
                     updatedLines.add(line);

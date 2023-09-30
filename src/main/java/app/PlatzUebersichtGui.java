@@ -41,7 +41,7 @@ public class PlatzUebersichtGui {
                         JOptionPane.showMessageDialog(frame, "Dieser Platz ist momentan gebucht und kann nicht bearbeitet werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     } else {
                         // Öffne die PlatzBearbeitenGUI und übergebe die Platzdaten
-                        PlatzBearbeitenGUI platzBearbeitenGUI = new PlatzBearbeitenGUI(platz, false, platz.getPlatzregion());
+                        PlatzBearbeitenGUI PlatzBearbeitenGUI = new PlatzBearbeitenGUI(platz, false, platz.getPlatzregion(), platz.getPlatzart());
                     }
                 }
             });
