@@ -71,8 +71,8 @@ public class upperRightPlaetze {
         this.frame.setVisible(true);
 
         // Add click listener to buttons
-        colorButtonsBasedOnCSVStatus();
         addClickListenerToButtons(mainPanel);
+        checkCSVAndColorButtons();
     }
 
     private JPanel createButtonPanel(int buttonCount, int startNumber) {
@@ -138,32 +138,6 @@ public class upperRightPlaetze {
             e.printStackTrace();
         }
         return false;
-    }
-
-    private void colorButtonsBasedOnCSVStatus() {
-        String csvFilePath = "./Platzdaten.csv"; // Update with your CSV file path
-
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
-            String line;
-            Set<String> belegtePlaetze = new HashSet<>();
-
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length >= 2) {
-                    String platznummerStr = parts[0].trim();
-                    String status = parts[1].trim();
-
-                    if (status.equalsIgnoreCase("belegt")) {
-                        belegtePlaetze.add(platznummerStr);
-                    }
-                }
-            }
-
-            Container mainPanel = this.frame.getContentPane();
-            colorButtons(mainPanel, belegtePlaetze);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void colorButtons(Component component, Set<String> foundNumbers) {
