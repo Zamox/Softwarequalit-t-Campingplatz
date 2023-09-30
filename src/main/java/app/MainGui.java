@@ -217,14 +217,14 @@ public class MainGui {
         upperLeftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new upperLeftPlaetze();
+                new upperLeftPlaetze("info");
             }
         });
         upperRightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                new upperRightPlaetze();
+                new upperRightPlaetze("info");
             }
         });
         lowerLeftButton.addActionListener(new ActionListener() {

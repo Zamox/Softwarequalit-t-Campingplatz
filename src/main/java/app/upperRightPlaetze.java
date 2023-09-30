@@ -10,11 +10,41 @@ public class upperRightPlaetze {
 
     private JFrame frame;
 
-    public upperRightPlaetze() {
+    private JFrame parentframe;
+    private BuchungBearbeitenGui BuchungBearbeitenGui;
+    private BuchungErstellenGui BuchungErstellenGui;
+    private String fall;
+
+    public upperRightPlaetze(String fall) {
         this.frame = new JFrame("Platzregion Nord-Ost");
         this.frame.setSize(1000, 1000);
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
+        this.fall = fall;
+        renderFrame();
+    }
+
+    public upperRightPlaetze(BuchungBearbeitenGui BuchungBearbeitenGui, JFrame parentframe, String fall) {
+        this.frame = new JFrame("Platzregion Nord-Ost");
+        this.frame.setSize(1000, 1000);
+        this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
+        this.frame.setLayout(new GridLayout(1, 7));
+        this.BuchungBearbeitenGui = BuchungBearbeitenGui;
+        this.parentframe = parentframe;
+        this.fall = fall;
+        renderFrame();
+    }
+
+    public upperRightPlaetze(BuchungErstellenGui BuchungErstellenGui, JFrame parentframe, String fall) {
+        this.frame = new JFrame("Platzregion Nord-Ost");
+        this.frame.setSize(1000, 1000);
+        this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
+        this.frame.setLayout(new GridLayout(1, 7));
+        this.BuchungErstellenGui = BuchungErstellenGui;
+        this.parentframe = parentframe;
+        this.fall = fall;
         renderFrame();
     }
 
@@ -70,9 +100,6 @@ public class upperRightPlaetze {
         });
 
         mainPanel.add(column3Panel);
-
-
-
 
         // Spalte 4 mit 4 Buttons (individuelle Nummern von 42 bis 45)
 

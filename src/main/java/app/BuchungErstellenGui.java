@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -113,7 +111,7 @@ public class BuchungErstellenGui {
         platzButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PlatzGUIBuchungen platzGUIBuchungen = new PlatzGUIBuchungen();
+                PlatzGUIBuchungen platzGUIBuchungen = new PlatzGUIBuchungen(BuchungErstellenGui.this);
             }
         });
         leftPanel.add(platzButton);
@@ -204,6 +202,12 @@ public class BuchungErstellenGui {
             speichereBuchungsdaten();
             this.frame.dispose();
         }
+    }
+
+    public void updatePlatzNummer() {
+        PlatzTransfer dataSingleton = PlatzTransfer.getInstance();
+        String sharedData = dataSingleton.getSharedData();
+        platznummerField.setText(sharedData);
     }
 
     private void speichereBuchungsdaten() throws IOException {

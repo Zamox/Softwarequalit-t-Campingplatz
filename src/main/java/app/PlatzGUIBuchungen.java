@@ -19,13 +19,36 @@ public class PlatzGUIBuchungen {
         private JButton upperRightButton;
         private JButton lowerLeftButton;
         private JButton lowerRightButton;
+        private String fall;
+        private BuchungErstellenGui BuchungErstellenGui;
+        private BuchungBearbeitenGui BuchungBearbeitenGui;
+
         private int selectedRowIndex = -1;
 
-        public PlatzGUIBuchungen() {
+        public PlatzGUIBuchungen(BuchungErstellenGui BuchungErstellenGui) {
             this.frame = new JFrame();
             this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             this.frame.setLayout(new BorderLayout());
+            this.fall = "erstellen";
+            this.BuchungErstellenGui = BuchungErstellenGui;
             renderFrame();
+        }
+
+        public PlatzGUIBuchungen(BuchungBearbeitenGui BuchungBearbeitenGui) {
+            this.frame = new JFrame();
+            this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            this.frame.setLayout(new BorderLayout());
+            this.fall = "bearbeiten";
+            this.BuchungBearbeitenGui = BuchungBearbeitenGui;
+            renderFrame();
+        }
+
+        public PlatzGUIBuchungen() {
+        this.frame = new JFrame();
+        this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.frame.setLayout(new BorderLayout());
+        this.fall = "info";
+        renderFrame();
         }
 
         private void renderFrame() {
@@ -83,14 +106,39 @@ public class PlatzGUIBuchungen {
             upperLeftButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    new upperLeftPlaetze();
+                    switch (fall) {
+
+                        case "erstellen":
+                            new upperLeftPlaetze(BuchungErstellenGui, frame, fall);
+                            break;
+
+                        case "bearbeiten":
+                            new upperLeftPlaetze(BuchungBearbeitenGui, frame, fall);
+                            break;
+
+                        case "info":
+                            new upperLeftPlaetze(fall);
+                            break;
+                    }
                 }
             });
             upperRightButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    switch (fall) {
 
-                    new upperRightPlaetze();
+                        case "erstellen":
+                            new upperRightPlaetze(BuchungErstellenGui, frame, fall);
+                            break;
+
+                        case "bearbeiten":
+                            new upperRightPlaetze(BuchungBearbeitenGui, frame, fall);
+                            break;
+
+                        case "info":
+                            new upperRightPlaetze(fall);
+                            break;
+                    }
                 }
             });
             lowerLeftButton.addActionListener(new ActionListener() {
@@ -114,9 +162,5 @@ public class PlatzGUIBuchungen {
             this.frame.setVisible(true);
         }
 
-
-        /*public static void main(String[] args) {
-            SwingUtilities.invokeLater(() -> new PlatzGUIBuchungen());
-        }*/
     }
 

@@ -9,13 +9,41 @@ import java.util.Set;
 
 public class upperLeftPlaetze {
     private JFrame frame;
+
+    private JFrame parentframe;
+    private BuchungBearbeitenGui BuchungBearbeitenGui;
+    private BuchungErstellenGui BuchungErstellenGui;
+    private String fall;
     private PlatzVerwaltung platzVerwaltung = new PlatzVerwaltung();
 
-    public upperLeftPlaetze() {
+    public upperLeftPlaetze(String fall) {
         this.frame = new JFrame("Platzregion Nord-West");
         this.frame.setSize(1000, 1000);
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setLayout(new GridLayout(1, 7));
+        this.fall = fall;
+        renderFrame();
+    }
+
+    public upperLeftPlaetze(BuchungBearbeitenGui BuchungBearbeitenGui, JFrame parentframe, String fall) {
+        this.frame = new JFrame("Platzregion Nord-West");
+        this.frame.setSize(1000, 1000);
+        this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.frame.setLayout(new GridLayout(1, 7));
+        this.BuchungBearbeitenGui = BuchungBearbeitenGui;
+        this.parentframe = parentframe;
+        this.fall = fall;
+        renderFrame();
+    }
+
+    public upperLeftPlaetze(BuchungErstellenGui BuchungErstellenGui, JFrame parentframe, String fall) {
+        this.frame = new JFrame("Platzregion Nord-West");
+        this.frame.setSize(1000, 1000);
+        this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.frame.setLayout(new GridLayout(1, 7));
+        this.BuchungErstellenGui = BuchungErstellenGui;
+        this.parentframe = parentframe;
+        this.fall = fall;
         renderFrame();
     }
 
@@ -130,13 +158,27 @@ public class upperLeftPlaetze {
                     // new InfoGui(selectedBookingData);
 
                 } else if (button.getBackground().equals(Color.GREEN)) {
-                    //DataSingleton dataSingleton = DataSingleton.getInstance();
-                    //dataSingleton.setSharedData(button.getText());
+                    PlatzTransfer dataSingleton = PlatzTransfer.getInstance();
+                    switch (fall){
+                        case "erstellen":
+                            dataSingleton = PlatzTransfer.getInstance();
+                            dataSingleton.setSharedData(button.getText());
+                            BuchungErstellenGui.updatePlatzNummer();
+                            parentframe.dispose();
+                            this.frame.dispose();
+                            break;
 
-                    // Hier wird die BuchungErstellenGui mit der Platznummer geöffnet
-
+                        case "bearbeiten":
+                            dataSingleton = PlatzTransfer.getInstance();
+                            dataSingleton.setSharedData(button.getText());
+                            BuchungBearbeitenGui.updatePlatzNummer();
+                            parentframe.dispose();
+                            this.frame.dispose();
+                            break;
+                    }
                 }
             });
+
         } else if (container instanceof Container) {
             Container subContainer = (Container) container;
             Component[] components = subContainer.getComponents();
