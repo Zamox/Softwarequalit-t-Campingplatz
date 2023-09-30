@@ -260,7 +260,7 @@ public class MainGui {
 
         String[] buttonLabels = {
                 "Freie Plätze", "Neuer Platz",
-                "Platz bearbeiten", "Platz löschen", "Platz Buchen",
+                "Platz bearbeiten", "Platz löschen",
                 "Export/Import"
         };
 

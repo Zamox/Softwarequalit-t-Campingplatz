@@ -1,5 +1,4 @@
-Platznummer,Status,Platzregion
-5,belegt,BaWü
+Platznummer,Status,Platzregion, Platzart, Wohnoption, Personenanzahl, Tagessatz
 34,belegt,Nord-West
 35,frei,Nord-West
 36,belegt,Nord-West
@@ -12,3 +11,4 @@ Platznummer,Status,Platzregion
 43,frei,Nord-West
 44,frei,Nord-West
 45,frei,Nord-West
+

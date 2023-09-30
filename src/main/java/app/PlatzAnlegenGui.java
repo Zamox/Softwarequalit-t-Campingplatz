@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 
 public class PlatzAnlegenGui {
     private JFrame frame;
@@ -97,7 +98,7 @@ public class PlatzAnlegenGui {
 
         // Tagessatz
         styleLeftPanel.add(new JLabel("Tagessatz:"));
-        tagessatzField = new JTextField(10); // Schmaleres Textfeldx
+        tagessatzField = new JTextField(10); // Schmaleres Textfeld
         tagessatzField.setSize(50, 10);
         styleLeftPanel.add(tagessatzField);
 
@@ -106,11 +107,67 @@ public class PlatzAnlegenGui {
         speichernButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Hier können Sie den Code zum Speichern der Daten implementieren
-                // Sie können auf die Eingaben in den Textfeldern zugreifen
+                // Platznummer
+                String platznummer = platznummerField.getText().trim();
+
+                // Platzart
+                String platzart = "";
+                if (stellplatzRadio.isSelected()) {
+                    platzart = "Stellplatz";
+                } else if (shopRadio.isSelected()) {
+                    platzart = "Shop";
+                } else if (sanitaereAnlagenRadio.isSelected()) {
+                    platzart = "Sanitäre Anlagen";
+                } else if (sonstigeRadio.isSelected()) {
+                    platzart = "Sonstige";
+                }
+
+                // Wohnoption
+                String wohnoption = "";
+                if (wohnmobilRadio.isSelected()) {
+                    wohnoption = "Wohnmobil";
+                } else if (wohnwagenRadio.isSelected()) {
+                    wohnoption = "Wohnwagen";
+                } else if (zeltRadio.isSelected()) {
+                    wohnoption = "Zelt";
+                }
+
+                // Personenanzahl
+                String personenanzahl = personenzahlField.getText().trim();
+
+                // Tagessatz
+                String tagessatz = tagessatzField.getText().trim();
+
+                // Überprüfung, ob alle Felder ausgefüllt sind
+                if (platznummer.isEmpty() || platzart.isEmpty() || wohnoption.isEmpty() ||
+                        personenanzahl.isEmpty() || tagessatz.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "Bitte füllen Sie alle Felder aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    return; // Beende die Methode, da nicht alle Felder ausgefüllt sind
+                }
+
+                // Überprüfung, ob die Platznummer bereits existiert
+                if (platznummerExistiertBereits(platznummer, "./Platzdaten.csv")) {
+                    JOptionPane.showMessageDialog(frame, "Die Platznummer existiert bereits.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    return; // Beende die Methode, da die Platznummer bereits existiert
+                }
+
+
+                String csvData = platznummer + ",frei,?," + platzart + "," + wohnoption + "," + personenanzahl + "," + tagessatz;
+                String csvFilePath = "./Platzdaten.csv";
+
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath, true))) {
+                    // true gibt an, dass die Datei im Append-Modus geöffnet wird, um Daten am Ende anzufügen
+                    writer.write(csvData);
+                    writer.newLine();
+                } catch (IOException ex) {
+                    ex.printStackTrace(); // Hier sollte eine ordnungsgemäße Fehlerbehandlung implementiert werden
+                }
+
+                // Erfolgsmeldung
+                JOptionPane.showMessageDialog(frame, "Daten erfolgreich gespeichert.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+                frame.dispose(); // Schließen Sie das Fenster
             }
         });
-
         // Beenden-Button
         JButton beendenButton = new JButton("Beenden");
         beendenButton.addActionListener(new ActionListener() {
@@ -133,6 +190,24 @@ public class PlatzAnlegenGui {
         frame.pack();
         frame.setVisible(true);
     }
+
+    private boolean platznummerExistiertBereits(String platznummer, String csvFilePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Annahme: Platznummer ist in der ersten Spalte der CSV-Datei
+                String[] parts = line.split(",");
+                if (parts.length > 0 && parts[0].equals(platznummer)) {
+                    return true; // Platznummer wurde gefunden
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace(); // Hier sollte eine ordnungsgemäße Fehlerbehandlung implementiert werden
+        }
+        return false; // Platznummer wurde nicht gefunden
+    }
+
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
