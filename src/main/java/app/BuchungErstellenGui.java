@@ -38,6 +38,8 @@ public class BuchungErstellenGui {
     private JTextField telefonField;
     private JTextField emailField;
     private JTextField kreditkartendatenField;
+    private JTextField personenField;
+    private JComboBox unterkunftComboBox;
 
     private boolean isEditable;
 
@@ -58,6 +60,8 @@ public class BuchungErstellenGui {
         telefonField = new JTextField();
         emailField = new JTextField();
         kreditkartendatenField = new JTextField();
+        personenField = new JTextField();
+
 
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
@@ -85,11 +89,11 @@ public class BuchungErstellenGui {
         leftPanel.add(abreiseField);
 
         leftPanel.add(new JLabel("Anzahl der Personen:"));
-        leftPanel.add(new JTextField());
+        leftPanel.add(personenField);
 
         leftPanel.add(new JLabel("Unterkunftstyp:"));
         String[] unterkunftstypen = {"Wohnwagen", "Wohnmobil", "Zelt"};
-        JComboBox<String> unterkunftComboBox = new JComboBox<>(unterkunftstypen);
+        unterkunftComboBox = new JComboBox<>(unterkunftstypen);
         leftPanel.add(unterkunftComboBox);
 
         leftPanel.add(new JLabel("Platzauswahl:"));
@@ -97,7 +101,7 @@ public class BuchungErstellenGui {
         leftPanel.add(platznummerField);
 
         leftPanel.add(new JLabel("Kosten:"));
-        leftPanel.add(new JTextField());
+        leftPanel.add(new JLabel(("20€ pro Person")));
 
         JButton zeitraumButton = new JButton("Zeitraum wählen");
         zeitraumButton.addActionListener(new ActionListener() {
@@ -220,14 +224,18 @@ public class BuchungErstellenGui {
         String telefon = ((JTextField) rightPanel.getComponent(13)).getText();
         String email = ((JTextField) rightPanel.getComponent(15)).getText();
         String kreditkartendaten = ((JTextField) rightPanel.getComponent(17)).getText();
-        String buchungsnummer = ((JTextField) leftPanel.getComponent(1)).getText();
+        String buchungsnummer = //random generated 5 digit number
+                String.valueOf((int) (Math.random() * (99999 - 10000 + 1) + 10000));
+        String personenAnzahl = personenField.getText();
+        String unterkunftstyp = unterkunftComboBox.getSelectedItem().toString();
+        String kosten = Integer.parseInt(personenAnzahl) * 20 + "€";
 
         String dateiPfad = "./BuchungsCSV.csv";
 
         String tz = ",";
         String csv_eintrag = name +tz+ vorname +tz+ anreiseDatum +tz+ abreiseDatum +tz+ platznummer +tz+
                 email +tz+ telefon +tz+ strasse +tz+ plz +tz+ hausnummer +tz+ rechnungsadresse +tz+
-                kreditkartendaten +tz+ "AnzahlDerPersonen" +tz+ "Unterkunftstyp" +tz+ "Kosten"+tz+buchungsnummer+"\n";
+                kreditkartendaten +tz+ personenAnzahl +tz+ unterkunftstyp +tz+ kosten+tz+buchungsnummer+"\n";
 
         try{
         FileWriter csvWriter = new FileWriter(dateiPfad, true);

@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MainGui {
     private JFrame frame;
-    private DefaultTableModel infoTableModel;
+    private static DefaultTableModel infoTableModel;
     private List<JButton> panelButtonList;
     private List<JButton> buchungsButtonList;
     private static JTable buchungsTable;
@@ -554,7 +554,13 @@ public class MainGui {
 
         // Laden Sie die Daten erneut aus Ihrer CSV-Datei
         loadCSVDataToTable(model);
-        //loadBuchungTableData((DefaultTableModel) buchungsTable.getModel());
+        DefaultTableModel infoTableModel = (DefaultTableModel) MainGui.infoTableModel;
+        infoTableModel.setRowCount(0);
+
+        // Laden Sie die Daten erneut aus Ihrer CSV-Datei in die infoTableModel
+        loadBuchungTableData(infoTableModel);
+
+
     }
 
     public static void main(String[] args) {
