@@ -33,7 +33,7 @@ public class StellplatzSelectorApp extends BaseController{   // BaseController b
 			this.stellplaetze.add(new Stellplatz("Platz-8", false));
 			this.stellplaetze.add(new Stellplatz("Platz-9", true));
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
 		
@@ -51,7 +51,7 @@ public class StellplatzSelectorApp extends BaseController{   // BaseController b
 		try {
 			attArray[1].setValue( ! (Boolean)attArray[1].getValue() );
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		IDepictable sPlatz = (IDepictable)ge.getSource();
 		sPlatz.setAttributeValues(attArray);

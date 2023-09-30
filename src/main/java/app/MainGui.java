@@ -20,12 +20,9 @@ import java.util.List;
 public class MainGui {
     private JFrame frame;
     private DefaultTableModel infoTableModel;
-    private DefaultTableModel tableModel2;
     private List<JButton> panelButtonList;
     private List<JButton> buchungsButtonList;
-    private JButton loginBtn;
     private static JTable buchungsTable;
-    private int selectedRowIndex = 1;
     private List<String> zeilen = new ArrayList<>();
 
     public MainGui() {
@@ -76,6 +73,32 @@ public class MainGui {
                 case "Login":
                     new Login(MainGui.this);
                     break;
+
+                case "Export/Import":
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Buchungsdatei speichern");
+
+                    int userSelection = fileChooser.showSaveDialog(frame);
+
+                    if (userSelection == JFileChooser.APPROVE_OPTION) {
+                        File selectedFile = fileChooser.getSelectedFile();
+                        String filePath = selectedFile.getAbsolutePath();
+
+                        try {
+                            File sourceFile = new File("./BuchungsCSV.csv");
+                            Path sourcePath = sourceFile.toPath();
+                            Path targetPath = Paths.get(filePath);
+
+                            Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+                            JOptionPane.showMessageDialog(frame, "Buchungsdatei erfolgreich gespeichert.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(frame, "Fehler beim Speichern der Buchungsdatei.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                    break;
+
             }
         }
     };
@@ -83,7 +106,8 @@ public class MainGui {
     private JPanel createBottomTablePanel() {
         JPanel buchungsTablePanel = new JPanel(new GridBagLayout());
         buchungsTablePanel.setPreferredSize(new Dimension(300, 150));
-        tableModel2 = new DefaultTableModel() {
+        // Override the isCellEditable method to make the cells non-editable
+        DefaultTableModel tableModel2 = new DefaultTableModel() {
             // Override the isCellEditable method to make the cells non-editable
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -202,13 +226,13 @@ public class MainGui {
         lowerLeftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
+                new downLeftPlaetze();
             }
         });
         lowerRightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Button wurde geklickt!");
+                new downRightPlaetze();
             }
         });
         contentPanel.add(imageLabel, BorderLayout.WEST);
@@ -252,6 +276,7 @@ public class MainGui {
         button.setPreferredSize(new Dimension(140, 40)); // Button-Größe anpassen
         button.setActionCommand(label); // Verwende das Label als Identifier
         button.addActionListener(buttonListener); // Füge den ActionListener hinzu
+        button.addActionListener(belegungsButtonListener);
         return button;
     }
 
@@ -273,7 +298,7 @@ public class MainGui {
             buttonPanel.add(button);
         }
 
-        loginBtn = createIdentifiedButton("Login"); // Button mit Identifier erstellen
+        JButton loginBtn = createIdentifiedButton("Login"); // Button mit Identifier erstellen
         buttonPanel.add(loginBtn);
 
         return buttonPanel;
@@ -305,36 +330,6 @@ public class MainGui {
                     break;
                 case "Buchung löschen":
                     getAusgewählteZeile();
-                    break;
-                case "Login":
-                    new Login(MainGui.this);
-                    break;
-                case "Neuer Platz": // Hinzugefügt: Aktion für "Neuer Platz" Button
-                    new PlatzAnlegenGui();
-                    break;
-                case "Export/Import":
-                    JFileChooser fileChooser = new JFileChooser();
-                    fileChooser.setDialogTitle("Buchungsdatei speichern");
-
-                    int userSelection = fileChooser.showSaveDialog(frame);
-
-                    if (userSelection == JFileChooser.APPROVE_OPTION) {
-                        File selectedFile = fileChooser.getSelectedFile();
-                        String filePath = selectedFile.getAbsolutePath();
-
-                        try {
-                            File sourceFile = new File("./BuchungsCSV.csv");
-                            Path sourcePath = sourceFile.toPath();
-                            Path targetPath = Paths.get(filePath);
-
-                            Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
-
-                            JOptionPane.showMessageDialog(frame, "Buchungsdatei erfolgreich gespeichert.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                            JOptionPane.showMessageDialog(frame, "Fehler beim Speichern der Buchungsdatei.", "Fehler", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
                     break;
 
                 case "Info":
@@ -453,6 +448,7 @@ public class MainGui {
 
     private void saveEditedData() {
         DefaultTableModel model = (DefaultTableModel) buchungsTable.getModel();
+        int selectedRowIndex = 1;
         if (selectedRowIndex >= 0 && selectedRowIndex < model.getRowCount()) {
             // Nehmen Sie die Änderungen an den Daten vor
             String name = (String) model.getValueAt(selectedRowIndex, 0);

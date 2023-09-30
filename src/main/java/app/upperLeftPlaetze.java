@@ -137,7 +137,7 @@ public class upperLeftPlaetze {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return false;
     }
@@ -183,9 +183,8 @@ public class upperLeftPlaetze {
                     new BuchungsGui(null, selectedBookingData, false); // Der letzte Parameter ist false, da Sie die Daten anzeigen möchten und nicht bearbeiten
                 }
             });
-        } else if (container instanceof Container) {
-            Container subContainer = (Container) container;
-            Component[] components = subContainer.getComponents();
+        } else if (container != null) {
+            Component[] components = ((Container) container).getComponents();
             for (Component component : components) {
                 addClickListenerToButtons((Container) component);
             }
@@ -208,7 +207,7 @@ public class upperLeftPlaetze {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return null; // Platznummer wurde nicht in der CSV-Datei gefunden
     }
