@@ -58,8 +58,6 @@ public class upperLeftPlaetze {
         // Color buttons based on CSV data
         colorButtonsBasedOnCSVStatus();
         addClickListenerToButtons(mainPanel);
-
-
     }
 
     private JPanel createButtonPanel(int buttonCount, int startNumber) {
@@ -128,11 +126,6 @@ public class upperLeftPlaetze {
                     String placeNumber = buttonText.replace("Platz ", "");
                     String[] selectedBookingData = readBookingDataFromCSV(csvFilePath, placeNumber);
 
-                    // Hier könnte die Logik für die Anzeige der InfoGui stehen
-                    // new InfoGui(selectedBookingData);
-
-                } else if (button.getBackground().equals(Color.GREEN)) {
-                    // Hier wird die BuchungErstellenGui mit der Platznummer geöffnet
 
                 }
             });
@@ -143,13 +136,6 @@ public class upperLeftPlaetze {
                 addClickListenerToButtons((Container) component);
             }
         }
-    }
-
-    private void openBuchungErstellenGui(String placeNumber) {
-        SwingUtilities.invokeLater(() -> {
-            // Hier wird die BuchungErstellenGui mit der Platznummer geöffnet
-            new BuchungErstellenGui(null, new String[]{placeNumber}, false);
-        });
     }
 
     private String[] readBookingDataFromCSV(String csvFilePath, String placeNumber) {
@@ -169,6 +155,4 @@ public class upperLeftPlaetze {
         }
         return null;
     }
-
-
 }
