@@ -30,6 +30,7 @@ public class MainGui {
         this.frame = new JFrame();
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setLayout(new BorderLayout());
+        performUpdate();
         renderFrame();
 
     }
@@ -545,6 +546,12 @@ public class MainGui {
         }
     }
 
+    private void performUpdate() {
+        // Hier können Sie den Aufruf für das Update einfügen
+        updatePlatzStatus();
+        // Anschließend können Sie Ihre Tabelle aktualisieren
+        updateTable();
+    }
 
 
     public static void updateTable() {
@@ -561,6 +568,39 @@ public class MainGui {
         loadBuchungTableData(infoTableModel);
 
 
+    }
+
+    private void updatePlatzStatus() {
+        String buchungsCsvPath = "./BuchungsCSV.csv";
+        String platzCsvPath = "./Platzdaten.csv";
+
+        try {
+            List<String> buchungsZeilen = Files.readAllLines(Paths.get(buchungsCsvPath));
+            List<String> platzZeilen = Files.readAllLines(Paths.get(platzCsvPath));
+
+            for (String buchungsZeile : buchungsZeilen.subList(1, buchungsZeilen.size())) {
+                String[] buchungsTeile = buchungsZeile.split(",");
+                String buchungsPlatznummer = buchungsTeile[4];
+
+                for (int i = 1; i < platzZeilen.size(); i++) {
+                    String[] platzTeile = platzZeilen.get(i).split(",");
+                    String platznummer = platzTeile[0];
+
+                    if (buchungsPlatznummer.equals(platznummer)) {
+                        // Aktualisiere den Platzstatus auf "belegt"
+                        platzTeile[1] = "belegt";
+                        platzZeilen.set(i, String.join(",", platzTeile));
+                        break;  // Stoppe die Schleife, da die Platznummer eindeutig ist
+                    }
+                }
+            }
+
+            // Schreibe die aktualisierten Platzdaten zurück in die Platzdaten.csv-Datei
+            Files.write(Paths.get(platzCsvPath), platzZeilen);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

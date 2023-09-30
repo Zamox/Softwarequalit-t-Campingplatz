@@ -163,7 +163,7 @@ public class PlatzGUIBuchungen {
             lowerRightButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    new downRightPlaetze();
+                    new downRightPlaetze(fall);
                 }
             });
 
