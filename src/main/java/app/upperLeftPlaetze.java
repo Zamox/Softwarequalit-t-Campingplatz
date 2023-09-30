@@ -126,6 +126,14 @@ public class upperLeftPlaetze {
                     String placeNumber = buttonText.replace("Platz ", "");
                     String[] selectedBookingData = readBookingDataFromCSV(csvFilePath, placeNumber);
 
+                    // Hier könnte die Logik für die Anzeige der InfoGui stehen
+                    // new InfoGui(selectedBookingData);
+
+                } else if (button.getBackground().equals(Color.GREEN)) {
+                    //DataSingleton dataSingleton = DataSingleton.getInstance();
+                    //dataSingleton.setSharedData(button.getText());
+
+                    // Hier wird die BuchungErstellenGui mit der Platznummer geöffnet
 
                 }
             });
