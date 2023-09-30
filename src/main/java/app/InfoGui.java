@@ -90,6 +90,7 @@ public class InfoGui {
         String[] unterkunftstypen = {"Wohnwagen", "Wohnmobil", "Zelt"};
         JComboBox<String> unterkunftComboBox = new JComboBox<>(unterkunftstypen);
         leftPanel.add(unterkunftComboBox);
+        unterkunftComboBox.setEnabled(isEditable);
 
         leftPanel.add(new JLabel("Platzauswahl:"));
         platznummerField = new JTextField();
@@ -106,8 +107,10 @@ public class InfoGui {
             }
         });
         leftPanel.add(zeitraumButton);
+        zeitraumButton.setEnabled(isEditable);
 
         JButton platzButton = new JButton("Platz wählen");
+        platzButton.setEnabled(isEditable);
 
         platzButton.addActionListener(new ActionListener() {
             @Override

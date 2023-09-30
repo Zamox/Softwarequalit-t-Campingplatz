@@ -16,9 +16,10 @@ public class PlatzUebersichtGui {
 
     public PlatzUebersichtGui() {
         frame = new JFrame("Platzübersicht");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
+        // Panel für die Platzübersicht
         platzPanel = new JPanel(new GridLayout(0, 5, 10, 10)); // Anzahl der Spalten kann angepasst werden
         platzPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -39,7 +40,7 @@ public class PlatzUebersichtGui {
                         JOptionPane.showMessageDialog(frame, "Dieser Platz ist momentan gebucht und kann nicht bearbeitet werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     } else {
                         // Öffne die PlatzBearbeitenGUI
-                        new PlatzBearbeitenGUI(platz);
+                        //new PlatzBearbeitenGUI(platz);
                     }
                 }
             });
@@ -47,7 +48,23 @@ public class PlatzUebersichtGui {
             platzPanel.add(platzButton);
         }
 
-        frame.add(platzPanel, BorderLayout.CENTER);
+        // Panel für die Anzeige der Regionen
+        // Panel für die Anzeige der Regionen
+        JPanel regionenPanel = new JPanel();
+        regionenPanel.setLayout(new BoxLayout(regionenPanel, BoxLayout.Y_AXIS));
+        regionenPanel.add(new JLabel("Für die genaue Lage des Platzes bitte die Regionen in der Karte anklicken und Platz ausfindig machen:"));
+        regionenPanel.add(new JLabel("34- 41: Platzregion Nord-West"));
+        regionenPanel.add(new JLabel("56 bis max. 64: Platzregion Nord-Ost"));
+        regionenPanel.add(new JLabel("61-93 und weitere: Platzregion Süd-Ost"));
+        regionenPanel.add(new JLabel("14-31 & 64-76: Platzregion Süd-West"));
+
+
+        // Hauptpanel für die Anordnung der Platz- und Regionenpanele
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(platzPanel, BorderLayout.CENTER);
+        mainPanel.add(regionenPanel, BorderLayout.SOUTH);
+
+        frame.add(mainPanel, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
     }
@@ -57,7 +74,12 @@ public class PlatzUebersichtGui {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
             String line;
+            boolean ersteZeileUeberspringen = true;
             while ((line = reader.readLine()) != null) {
+                if (ersteZeileUeberspringen) {
+                    ersteZeileUeberspringen = false;
+                    continue;
+                }
                 String[] parts = line.split(",");
                 if (parts.length >= 2) {
                     String platznummer = parts[0].trim();
@@ -73,39 +95,8 @@ public class PlatzUebersichtGui {
         return plaetze;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new PlatzUebersichtGui();
-            }
-        });
-    }
+
 }
 
-// Annahme: StellplaetzeInfo Klasse mit Platznummer und Status
-class StellplaetzeInfo {
-    private String platznummer;
-    private String status;
 
-    public StellplaetzeInfo(String platznummer, String status) {
-        this.platznummer = platznummer;
-        this.status = status;
-    }
-
-    public String getPlatznummer() {
-        return platznummer;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-}
-
-// Annahme: PlatzBearbeitenGUI Klasse für die Bearbeitung eines Platzes
-class PlatzBearbeitenGUI {
-    public PlatzBearbeitenGUI(StellplaetzeInfo platz) {
-        // Hier implementieren Sie die PlatzBearbeitenGUI
-        System.out.println("Platz bearbeiten: " + platz.getPlatznummer());
-    }
-}
 

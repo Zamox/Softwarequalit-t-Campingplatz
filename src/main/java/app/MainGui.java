@@ -73,6 +73,9 @@ public class MainGui {
                 case "Login":
                     new Login(MainGui.this);
                     break;
+                case "Platz bearbeiten":
+                    new PlatzUebersichtGui();
+                    break;
 
                 case "Export/Import":
                     JFileChooser fileChooser = new JFileChooser();
@@ -315,7 +318,7 @@ public class MainGui {
                     new BuchungErstellenGui(MainGui.this, null, true);
                     break;
                 case "Buchung bearbeiten":
-                    if (selectedRowIndex != -1) {
+                    if (selectedRowIndex != 0) {
                         datenAuslesen(selectedRowIndex); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
                     } else {
                         JOptionPane.showMessageDialog(frame, "Bitte wählen Sie zuerst eine Buchung aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
@@ -334,7 +337,7 @@ public class MainGui {
 
                 case "Info":
 
-                    if (selectedRowIndex != -1) {
+                    if (selectedRowIndex != 0) {
                         datenAuslesen(selectedRowIndex); // +1, da der Index 0-basiert ist, während die Zeilennummer in der CSV 1-basiert ist
 
                     } else {
