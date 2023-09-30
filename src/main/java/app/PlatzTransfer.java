@@ -2,11 +2,12 @@ package app;
 
 public class PlatzTransfer {
         private static PlatzTransfer instance;
-        private String sharedData;
+        private String sharedPlatzNummer;
+        private int ButtonCounter;
 
         private PlatzTransfer() {
             // Private constructor to prevent instantiation from outside
-            sharedData = "";
+            sharedPlatzNummer = "";
         }
 
         public static PlatzTransfer getInstance() {
@@ -17,11 +18,11 @@ public class PlatzTransfer {
         }
 
         public String getSharedData() {
-            return sharedData;
+            return sharedPlatzNummer;
         }
 
         public void setSharedData(String data) {
-            sharedData = data;
+            sharedPlatzNummer = data;
         }
     }
 
