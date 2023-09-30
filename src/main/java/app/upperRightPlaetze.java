@@ -7,8 +7,11 @@ import java.awt.event.ActionListener;
 
 public class upperRightPlaetze {
 
-
     private JFrame frame;
+    private JPanel column3Panel;
+
+    private int nordOstPlatzCounter = 0;
+    private final int MAX_NORD_OST_PLAETZE = 4;
 
     public upperRightPlaetze() {
         this.frame = new JFrame("Platzregion Nord-Ost");
@@ -24,7 +27,6 @@ public class upperRightPlaetze {
         // Leerzeile für Spalte 2
         mainPanel.add(new JPanel());
 
-
         JPanel column1Panel = createButtonPanel(5, 56);
         mainPanel.add(column1Panel);
 
@@ -32,50 +34,8 @@ public class upperRightPlaetze {
         mainPanel.add(new JPanel());
 
         // Spalte 3 mit 4 Buttons (individuelle Nummern von 38 bis 41)
-        JPanel column3Panel = new JPanel(new GridLayout(4, 1));
-        JButton emptyButton1 = new JButton("");
-        column3Panel.add(emptyButton1);
-        JButton emptyButton2 = new JButton("");
-        JButton emptyButton3 = new JButton("");
-        JButton emptyButton4 = new JButton("");
-        column3Panel.add(emptyButton2);
-        column3Panel.add(emptyButton3);
-        column3Panel.add(emptyButton4);
-        emptyButton1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Dieser Platz muss zunächst angelegt werden und kann noch nicht gebucht werden.");
-            }
-        });
-
-        emptyButton2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Dieser Platz muss zunächst angelegt werden und kann noch nicht gebucht werden.");
-            }
-        });
-
-        emptyButton3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Dieser Platz muss zunächst angelegt werden und kann noch nicht gebucht werden.");
-            }
-        });
-
-        emptyButton4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Dieser Platz muss zunächst angelegt werden und kann noch nicht gebucht werden.");
-            }
-        });
-
+        column3Panel = new JPanel(new GridLayout(4, 1));
         mainPanel.add(column3Panel);
-
-
-
-
-        // Spalte 4 mit 4 Buttons (individuelle Nummern von 42 bis 45)
-
 
         // Leerzeile für Spalte 5
         mainPanel.add(new JPanel());
@@ -96,7 +56,25 @@ public class upperRightPlaetze {
         return panel;
     }
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new upperRightPlaetze());
+    }
+
+    public void addPlatz() {
+        if (nordOstPlatzCounter < MAX_NORD_OST_PLAETZE) {
+            JButton button = new JButton("Platz " + (61 + nordOstPlatzCounter));
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Handle button click event if needed
+                }
+            });
+            column3Panel.add(button);
+            nordOstPlatzCounter++;
+            frame.revalidate();
+            frame.repaint();
+        } else {
+            JOptionPane.showMessageDialog(frame, "Es können nicht mehr Plätze hinzugefügt werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
-
-
-

@@ -24,30 +24,38 @@ public class PlatzAnlegenGui {
     private JRadioButton wohnwagenRadio;
     private JRadioButton zeltRadio;
     private ButtonGroup wohnoptionGroup;
-
-    private JTextField breiteField;
-    private JTextField längeField;
     private JTextField personenzahlField;
     private JTextField tagessatzField;
+    private JComboBox platzregionBox;
 
-    public PlatzAnlegenGui() {
+    private JButton buttonToUpdate;
+    private upperRightPlaetze upperRightPlaetze;
+
+    public void setButton(JButton button) {
+        this.buttonToUpdate = button;
+    }
+
+
+    public PlatzAnlegenGui(){
+
+
+
+        platznummerField = new JTextField();
         frame = new JFrame("Platz anlegen");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-        frame.setPreferredSize(new Dimension(600, 600));
+        frame.setPreferredSize(new Dimension(450, 300));
 
         mainPanel = new JPanel(new BorderLayout());
-        styleLeftPanel = new JPanel(new GridLayout(0, 2, 10, 20)); // Erhöhter Abstand zwischen den Komponenten
+        styleLeftPanel = new JPanel(new GridLayout(0, 1, 10, 20)); // Erhöhter Abstand zwischen den Komponenten
         styleLeftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         styleRightPanel = new JPanel(); // Rechtes Panel für zusätzliche Inhalte
         styleRightPanel.setLayout(new BorderLayout());
 
-        // Platznummer
-        styleLeftPanel.add(new JLabel("Platznummer:"));
-        platznummerField = new JTextField();
-        styleLeftPanel.add(platznummerField);
-
+        platzregionBox = new JComboBox("Nord-Ost, Süd-Ost".split(","));
+        platzregionBox.setSelectedIndex(0);
+        styleLeftPanel.add(platzregionBox);
         // Platzart
         JPanel platzartPanel = new JPanel();
         platzartPanel.setLayout(new GridLayout(0, 1));
@@ -88,20 +96,6 @@ public class PlatzAnlegenGui {
         styleLeftPanel.add(wohnoptionPanel);
 
 
-
-
-        // Personenzahl
-        styleLeftPanel.add(new JLabel("Personenzahl:"));
-        personenzahlField = new JTextField(10); // Schmaleres Textfeld
-        personenzahlField.setSize(50, 10);
-        styleLeftPanel.add(personenzahlField);
-
-        // Tagessatz
-        styleLeftPanel.add(new JLabel("Tagessatz:"));
-        tagessatzField = new JTextField(10); // Schmaleres Textfeld
-        tagessatzField.setSize(50, 10);
-        styleLeftPanel.add(tagessatzField);
-
         // Speichern-Button
         JButton speichernButton = new JButton("Speichern");
         speichernButton.addActionListener(new ActionListener() {
@@ -132,41 +126,21 @@ public class PlatzAnlegenGui {
                     wohnoption = "Zelt";
                 }
 
-                // Personenanzahl
-                String personenanzahl = personenzahlField.getText().trim();
 
-                // Tagessatz
-                String tagessatz = tagessatzField.getText().trim();
+
+
 
                 // Überprüfung, ob alle Felder ausgefüllt sind
-                if (platznummer.isEmpty() || platzart.isEmpty() || wohnoption.isEmpty() ||
-                        personenanzahl.isEmpty() || tagessatz.isEmpty()) {
+                if (platzart.isEmpty() || wohnoption.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Bitte füllen Sie alle Felder aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     return; // Beende die Methode, da nicht alle Felder ausgefüllt sind
                 }
 
-                // Überprüfung, ob die Platznummer bereits existiert
-                if (platznummerExistiertBereits(platznummer, "./Platzdaten.csv")) {
 
-                        JOptionPane.showMessageDialog(frame, "Die Platznummer existiert bereits. Es können nur neue Plätze ab Nummer 94 vergeben werden", "Fehler", JOptionPane.ERROR_MESSAGE);
-                        return; // Beende die Methode, da die Platznummer bereits existiert
 
-                }
-                if (Integer.parseInt(platznummer)<=14 && Integer.parseInt(platznummer)>=1){
-                    JOptionPane.showMessageDialog(frame, "Die Platznummer existiert bereits oder ist zu klein. Es können nur neue Plätze ab Nummer 94 vergeben werden", "Fehler", JOptionPane.ERROR_MESSAGE);
-                    return; // Beende die Methode, da die Platznummer bereits existiert
-                }
+                upperRightPlaetze urp= new  upperRightPlaetze();
+                urp.addPlatz();
 
-                String csvData = platznummer + ",frei,?," + platzart + "," + wohnoption + "," + personenanzahl + "," + tagessatz;
-                String csvFilePath = "./Platzdaten.csv";
-
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath, true))) {
-                    // true gibt an, dass die Datei im Append-Modus geöffnet wird, um Daten am Ende anzufügen
-                    writer.write(csvData);
-                    writer.newLine();
-                } catch (IOException ex) {
-                    ex.printStackTrace(); // Hier sollte eine ordnungsgemäße Fehlerbehandlung implementiert werden
-                }
 
                 // Erfolgsmeldung
                 JOptionPane.showMessageDialog(frame, "Daten erfolgreich gespeichert.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
