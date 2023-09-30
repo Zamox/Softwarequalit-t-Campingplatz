@@ -230,7 +230,7 @@ public class MainGui {
         lowerLeftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new downLeftPlaetze();
+                new downLeftPlaetze("info");
             }
         });
         lowerRightButton.addActionListener(new ActionListener() {
