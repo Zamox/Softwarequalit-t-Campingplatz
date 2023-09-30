@@ -147,10 +147,15 @@ public class PlatzAnlegenGui {
 
                 // Überprüfung, ob die Platznummer bereits existiert
                 if (platznummerExistiertBereits(platznummer, "./Platzdaten.csv")) {
-                    JOptionPane.showMessageDialog(frame, "Die Platznummer existiert bereits.", "Fehler", JOptionPane.ERROR_MESSAGE);
+
+                        JOptionPane.showMessageDialog(frame, "Die Platznummer existiert bereits. Es können nur neue Plätze ab Nummer 94 vergeben werden", "Fehler", JOptionPane.ERROR_MESSAGE);
+                        return; // Beende die Methode, da die Platznummer bereits existiert
+
+                }
+                if (Integer.parseInt(platznummer)<=14 && Integer.parseInt(platznummer)>=1){
+                    JOptionPane.showMessageDialog(frame, "Die Platznummer existiert bereits oder ist zu klein. Es können nur neue Plätze ab Nummer 94 vergeben werden", "Fehler", JOptionPane.ERROR_MESSAGE);
                     return; // Beende die Methode, da die Platznummer bereits existiert
                 }
-
 
                 String csvData = platznummer + ",frei,?," + platzart + "," + wohnoption + "," + personenanzahl + "," + tagessatz;
                 String csvFilePath = "./Platzdaten.csv";
@@ -209,11 +214,5 @@ public class PlatzAnlegenGui {
 
 
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new PlatzAnlegenGui();
-            }
-        });
-    }
+    //32, 33, 52, 53
 }

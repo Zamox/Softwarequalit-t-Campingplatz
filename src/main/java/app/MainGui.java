@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,7 +65,7 @@ public class MainGui {
 
             switch (identifier) {
                 case "Freie Plätze":
-                    new upperLeftPlaetze();
+                    new FreiePlaetzeGui();
 
                     break;
                 case "Neuer Platz":
