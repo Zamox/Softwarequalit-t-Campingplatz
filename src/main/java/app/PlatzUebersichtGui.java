@@ -1,4 +1,6 @@
 package app;
+import app.StellplaetzeInfo;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -38,9 +40,8 @@ public class PlatzUebersichtGui {
                     if (platz.getStatus().equals("belegt")) {
                         JOptionPane.showMessageDialog(frame, "Dieser Platz ist momentan gebucht und kann nicht bearbeitet werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     } else {
-                        // Öffne die PlatzBearbeitenGUI und übergebe die Platznummer
-                        PlatzBearbeitenGUI platzBearbeitenGUI = new PlatzBearbeitenGUI(platz, false);
-                        platzBearbeitenGUI.setPlatznummer(platz.getPlatznummer());
+                        // Öffne die PlatzBearbeitenGUI und übergebe die Platzdaten
+                        PlatzBearbeitenGUI platzBearbeitenGUI = new PlatzBearbeitenGUI(platz, false, platz.getPlatzregion());
                     }
                 }
             });
@@ -79,12 +80,13 @@ public class PlatzUebersichtGui {
                     continue;
                 }
                 String[] parts = line.split(",");
-                if (parts.length >= 2) {
+                if (parts.length >= 3) {
                     String platznummer = parts[0].trim();
                     String status = parts[1].trim();
                     String platzregion = parts[2].trim();
+                    String platzart = parts[3].trim();
                     // Hier können Sie weitere Informationen wie Platzart, Wohnoption, etc. auslesen, falls benötigt
-                    plaetze.add(new StellplaetzeInfo(platznummer, status,platzregion));
+                    plaetze.add(new StellplaetzeInfo(platznummer, status, platzregion, platzart));
                 }
             }
         } catch (IOException e) {

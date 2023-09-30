@@ -1,9 +1,12 @@
 package app;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlatzBearbeitenGUI {
     private JFrame frame;
@@ -11,9 +14,9 @@ public class PlatzBearbeitenGUI {
     private JPanel styleLeftPanel;
     private JPanel styleRightPanel;
 
-    private JTextField platznummerField;
-    private JTextField statusField;
-    private JTextField platzregionField;
+    private JLabel platznummerLabel;
+    private JLabel statusLabel;
+    private JLabel platzregionLabel;
 
     private JRadioButton stellplatzRadio;
     private JRadioButton shopRadio;
@@ -26,19 +29,17 @@ public class PlatzBearbeitenGUI {
     private JRadioButton zeltRadio;
     private ButtonGroup wohnoptionGroup;
 
-    private JTextField breiteField;
-    private JTextField längeField;
-    private JTextField personenzahlField;
-    private JTextField tagessatzField;
-
+    private StellplaetzeInfo platz;
     private boolean isEditable;
 
-    public PlatzBearbeitenGUI(StellplaetzeInfo platz, boolean isEditable) {
+    public PlatzBearbeitenGUI(StellplaetzeInfo platz, boolean isEditable, String selectedPlatzart) {
+        this.platz = platz;
+        this.isEditable = isEditable;
+
         frame = new JFrame("Platz bearbeiten");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setPreferredSize(new Dimension(600, 600));
-        this.isEditable = isEditable;
 
         mainPanel = new JPanel(new BorderLayout());
         styleLeftPanel = new JPanel(new GridLayout(0, 2, 10, 20));
@@ -48,48 +49,75 @@ public class PlatzBearbeitenGUI {
         styleRightPanel.setLayout(new BorderLayout());
 
         // Platznummer
-        styleLeftPanel.add(new JLabel("Platznummer:"));
-        platznummerField = new JTextField();
-        platznummerField.setEditable(false); // Das Textfeld ist nicht editierbar
-        styleLeftPanel.add(platznummerField);
+        platznummerLabel = new JLabel("Platznummer:");
+        styleLeftPanel.add(platznummerLabel);
+        styleLeftPanel.add(new JLabel(platz.getPlatznummer()));
 
         // Status
-        styleLeftPanel.add(new JLabel("Status:"));
-        statusField = new JTextField();
-        statusField.setEditable(false); // Das Textfeld ist nicht editierbar
-        styleLeftPanel.add(statusField);
+        statusLabel = new JLabel("Status:");
+        styleLeftPanel.add(statusLabel);
+        styleLeftPanel.add(new JLabel(platz.getStatus()));
 
         // Platzregion
-        styleLeftPanel.add(new JLabel("Platzregion:"));
-        platzregionField = new JTextField();
-        platzregionField.setEditable(false); // Das Textfeld ist nicht editierbar
-        styleLeftPanel.add(platzregionField);
+        platzregionLabel = new JLabel("Platzregion:");
+        styleLeftPanel.add(platzregionLabel);
+        styleLeftPanel.add(new JLabel(platz.getPlatzregion()));
 
-        // Weitere GUI-Komponenten hier hinzufügen (z.B. Platzart, Wohnoption, etc.)
+        JPanel platzartPanel = new JPanel();
+        platzartPanel.setLayout(new GridLayout(0, 1));
+        platzartPanel.add(new JLabel("Platzart:"));
+        stellplatzRadio = new JRadioButton("Stellplatz");
+        shopRadio = new JRadioButton("Shop");
+        sanitaereAnlagenRadio = new JRadioButton("Sanitäre Anlagen");
+        sonstigeRadio = new JRadioButton("Sonstige");
 
-        // Speichern-Button (nur wenn isEditable true ist)
-        if (isEditable) {
-            JButton speichernButton = new JButton("Speichern");
-            speichernButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Hier können Sie den Code für das Speichern der Änderungen einfügen
-                }
-            });
-            styleRightPanel.add(speichernButton, BorderLayout.SOUTH);
+        platzartGroup = new ButtonGroup();
+        platzartGroup.add(stellplatzRadio);
+        platzartGroup.add(shopRadio);
+        platzartGroup.add(sanitaereAnlagenRadio);
+        platzartGroup.add(sonstigeRadio);
+
+        platzartPanel.add(stellplatzRadio);
+        platzartPanel.add(shopRadio);
+        platzartPanel.add(sanitaereAnlagenRadio);
+        platzartPanel.add(sonstigeRadio);
+        styleLeftPanel.add(platzartPanel);
+
+        if (!selectedPlatzart.isEmpty()) {
+            if (selectedPlatzart.equals("Stellplatz")) {
+                stellplatzRadio.setSelected(true);
+            } else if (selectedPlatzart.equals("Shop")) {
+                shopRadio.setSelected(true);
+            } else if (selectedPlatzart.equals("Sanitäre Anlagen")) {
+                sanitaereAnlagenRadio.setSelected(true);
+            } else if (selectedPlatzart.equals("Sonstige")) {
+                sonstigeRadio.setSelected(true);
+            }
         }
 
-        // Beenden-Button
-        JButton beendenButton = new JButton("Beenden");
-        beendenButton.addActionListener(new ActionListener() {
+        JButton speichernButton = new JButton("Speichern");
+        speichernButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.dispose(); // Schließen Sie das Fenster
+                String neuePlatznummer = platz.getPlatznummer();
+                String neuePlatzart = getSelectedPlatzart();
+
+                if (!neuePlatzart.isEmpty()) {
+                    if (updatePlatzInCSV(platz.getPlatznummer(), neuePlatzart)) {
+                        JOptionPane.showMessageDialog(frame, "Daten erfolgreich gespeichert.", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Fehler beim Speichern der Daten.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Bitte wählen Sie eine Platzart aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                }
+
+                frame.dispose();
             }
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.add(beendenButton);
+        buttonPanel.add(speichernButton);
         styleRightPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         mainPanel.add(styleLeftPanel, BorderLayout.WEST);
@@ -98,17 +126,59 @@ public class PlatzBearbeitenGUI {
         frame.add(mainPanel, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
-
-        // Platzdaten setzen
-        platznummerField.setText(platz.getPlatznummer());
-        statusField.setText(platz.getStatus());
-        platzregionField.setText(platz.getPlatzregion());
     }
 
-    // Methode, um die Platznummer in das Textfeld zu setzen
-    public void setPlatznummer(String platznummer) {
-        platznummerField.setText(platznummer);
+    private String getSelectedPlatzart() {
+        if (stellplatzRadio.isSelected()) {
+            return "Stellplatz";
+        } else if (shopRadio.isSelected()) {
+            return "Shop";
+        } else if (sanitaereAnlagenRadio.isSelected()) {
+            return "Sanitäre Anlagen";
+        } else if (sonstigeRadio.isSelected()) {
+            return "Sonstige";
+        }
+        return "";
     }
 
-    // Weitere Setter-Methoden für andere Felder (Status, Platzregion, etc.) können hier hinzugefügt werden
+    private boolean updatePlatzInCSV(String platznummer, String neuePlatzart) {
+        String csvFilePath = "./Platzdaten.csv";
+        List<String> updatedLines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 3) {
+                    String currentPlatznummer = parts[0].trim();
+                    String currentStatus = parts[1].trim();
+                    String currentPlatzregion = parts[2].trim();
+                    String currentPlatzart = parts[3].trim(); // Hier aktualisieren wir die Platzart
+
+                    if (currentPlatznummer.equals(platznummer)) {
+                        // Hier überschreiben wir die Platzart
+                        currentPlatzart = neuePlatzart;
+                        line = platznummer + "," + currentStatus + "," + currentPlatzregion + "," + currentPlatzart;
+                    }
+
+                    updatedLines.add(line);
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath))) {
+            for (String updatedLine : updatedLines) {
+                writer.write(updatedLine);
+                writer.newLine();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
 }
