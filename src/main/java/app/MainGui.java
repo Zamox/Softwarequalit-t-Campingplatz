@@ -236,7 +236,7 @@ public class MainGui {
         lowerRightButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new downRightPlaetze();
+                new downRightPlaetze("info");
             }
         });
         contentPanel.add(imageLabel, BorderLayout.WEST);
