@@ -31,10 +31,9 @@ public class FreiePlaetzeGui extends JFrame {
                 if (splitInfo.length >= 3) { // Stellen Sie sicher, dass mindestens 3 Elemente vorhanden sind
                     String platznummer = splitInfo[0];
                     String status = splitInfo[1];
-                    String platzregion = splitInfo[2];
 
                     if (status.equals("frei")) {
-                        String labelText = "Platznummer: " + platznummer + ", Region: " + platzregion;
+                        String labelText = "Platznummer: " + platznummer;
                         platzdaten.add(labelText);
                     }
                 }
