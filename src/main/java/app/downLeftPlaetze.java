@@ -90,7 +90,7 @@ public class downLeftPlaetze {
         }
         JPanel panel = new JPanel(new GridLayout(5, 5));
 
-        for (int j = 5; j < csv_inhalt.length ; j+=5) {
+        for (int j = 4; j < csv_inhalt.length ; j+=4) {
             if ((startNumber_a <= Integer.parseInt(csv_inhalt[j]) && Integer.parseInt(csv_inhalt[j]) <= endNumber_a) || (startNumber_b <= Integer.parseInt(csv_inhalt[j]) && Integer.parseInt(csv_inhalt[j]) <= endNumber_b)) {
                 JButton button = new JButton("Platz " + csv_inhalt[j]);
                 panel.add(button);

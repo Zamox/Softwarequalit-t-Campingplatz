@@ -81,7 +81,7 @@ public class upperLeftPlaetze {
         }
         JPanel panel = new JPanel(new GridLayout(6, 3));
 
-        for (int j = 5; j < csv_inhalt.length ; j+=5) {
+        for (int j = 4; j < csv_inhalt.length ; j+=4) {
             if (startNumber <= Integer.parseInt(csv_inhalt[j]) && Integer.parseInt(csv_inhalt[j]) <= endNumber) {
                 JButton button = new JButton("Platz " + csv_inhalt[j]);
                 panel.add(button);
