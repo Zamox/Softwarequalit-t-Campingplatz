@@ -153,7 +153,7 @@ public class PlatzAnlegenGui {
                     return; // Beende die Methode, da die Platznummer bereits existiert
                 }
 
-                String csvData = platznummer + ",frei,?," + platzart + "," + wohnoption + "," + personenanzahl + "," + tagessatz;
+                String csvData = "\n"+platznummer + ",frei,?," + platzart + "," + wohnoption + "," + personenanzahl + "," + tagessatz;
                 String csvFilePath = "./Platzdaten.csv";
 
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath, true))) {
@@ -223,11 +223,5 @@ public class PlatzAnlegenGui {
         }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new PlatzAnlegenGui();
-            }
-        });
-    }
+
 }
