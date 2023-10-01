@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainGui {
     private JFrame frame;
@@ -26,7 +27,105 @@ public class MainGui {
     private static JTable buchungsTable;
     private List<String> zeilen = new ArrayList<>();
 
-    public MainGui() {
+    public MainGui() throws IOException {
+
+        File file = new File("BuchungsCSV.csv");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(frame, "Fehler beim Erstellen der Buchungsdatei.", "Fehler", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+        bw.write("Name,Vorname,Anreisedatum,Abreisedatum,Platznummer,E-mail,Telefon,Straße,Plz,Hausnummer,Rechnungsadresse,CC-Nr.,AnzahlDerPersonen,Unterkunftstyp,Kosten, Buchungsnummer\n");
+
+        String initial = " 4,vorname,20.08.2023,25.08.2023,35,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,4\n" +
+                "Nachname,Vorname,30.09.2023,03.10.2024,44,fickmeinleben@gmail.com,0720247238123,Straße,postleit,44,Adresse,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,23467\n" +
+                "NameTest,VorTest,27.09.2023,30.09.2023,56,mail,tel,Straße,plz,hausnummer,rradresse,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,26248\n" +
+                "name,vorname,06.10.2023,08.10.2023,46,email,telefon,straße,plz,hausnummer,rechnungsadresse,cc,2,Zelt,40€,16437";
+        bw.write(initial);
+
+        bw.close();
+
+        file = new File("Platzdaten.csv");
+        bw = new BufferedWriter(new FileWriter(file));
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(frame, "Fehler beim Erstellen der Platzdatei.", "Fehler", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        bw.write("Platznummer,Status,Platzart,Wohnoption\n");
+
+        String initialConditions = "14,belegt,Shop,keine\n" +
+                "15,frei,Stellplatz,Wohnmobil\n" +
+                "16,frei,Stellplatz,Wohnmobil\n" +
+                "17,frei,Stellplatz,Wohnmobil\n" +
+                "18,frei,Stellplatz,Wohnmobil\n" +
+                "19,frei,Stellplatz,Wohnmobil\n" +
+                "20,frei,Stellplatz,Wohnmobil\n" +
+                "21,frei,Stellplatz,Wohnmobil\n" +
+                "22,frei,Stellplatz,Wohnmobil\n" +
+                "23,frei,Stellplatz,Wohnmobil\n" +
+                "24,frei,Stellplatz,Wohnmobil\n" +
+                "25,frei,Stellplatz,Wohnmobil\n" +
+                "26,belegt,Sonstige,keine\n" +
+                "27,frei,Stellplatz,Wohnmobil\n" +
+                "28,frei,Stellplatz,Wohnmobil\n" +
+                "29,frei,Stellplatz,Wohnmobil\n" +
+                "30,frei,Stellplatz,Wohnmobil\n" +
+                "31,frei,Stellplatz,Wohnmobil\n" +
+                "34,frei,Stellplatz,Zelt\n" +
+                "35,belegt,Stellplatz,Zelt\n" +
+                "36,frei,Stellplatz,Zelt\n" +
+                "37,frei,Stellplatz,Zelt\n" +
+                "38,frei,Stellplatz,Zelt\n" +
+                "39,frei,Stellplatz,Zelt\n" +
+                "40,frei,Stellplatz,Zelt\n" +
+                "41,frei,Stellplatz,Zelt\n" +
+                "42,frei,Stellplatz,Zelt\n" +
+                "43,frei,Stellplatz,Zelt\n" +
+                "44,belegt,Stellplatz,Zelt\n" +
+                "45,frei,Stellplatz,Zelt\n" +
+                "46,belegt,Stellplatz,Zelt\n" +
+                "47,frei,Stellplatz,Zelt\n" +
+                "48,frei,Stellplatz,Zelt\n" +
+                "49,frei,Stellplatz,Zelt\n" +
+                "50,frei,Stellplatz,Zelt\n" +
+                "51,belegt,Shop,keine\n" +
+                "56,belegt,Stellplatz,Zelt\n" +
+                "57,frei,Stellplatz,Zelt\n" +
+                "58,belegt,Sonstige,keine\n" +
+                "59,frei,Stellplatz,Zelt\n" +
+                "60,frei,Stellplatz,Zelt\n" +
+                "61,frei,Stellplatz,Wohnwagen\n" +
+                "62,frei,Stellplatz,Wohnwagen\n" +
+                "63,belegt,Shop,keine\n" +
+                "64,frei,Stellplatz,Wohnmobil\n" +
+                "65,belegt,Sanitäre Anlagen,keine\n" +
+                "66,frei,Stellplatz,Wohnmobil\n" +
+                "67,frei,Stellplatz,Wohnmobil\n" +
+                "68,frei,Stellplatz,Wohnmobil\n" +
+                "69,frei,Stellplatz,Wohnmobil\n" +
+                "70,frei,Stellplatz,Wohnmobil\n" +
+                "71,frei,Stellplatz,Wohnmobil\n" +
+                "72,frei,Stellplatz,Wohnmobil\n" +
+                "73,frei,Stellplatz,Wohnmobil\n" +
+                "74,frei,Stellplatz,Wohnmobil\n" +
+                "75,belegt,Sanitäre Anlagen,keine\n" +
+                "76,frei,Stellplatz,Wohnmobil\n" +
+                "91,frei,Stellplatz,Wohnmobil\n" +
+                "92,frei,Stellplatz,Wohnmobil\n" +
+                "99,belegt,Sanitäre Anlagen,keine"
+                ;
+        bw.write(initialConditions);
+        bw.close();
+
+
         this.frame = new JFrame();
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setLayout(new BorderLayout());
@@ -89,7 +188,7 @@ public class MainGui {
                         String filePath = selectedFile.getAbsolutePath();
 
                         try {
-                            File sourceFile = new File("./BuchungsCSV.csv");
+                            File sourceFile = new File("BuchungsCSV.csv");
                             Path sourcePath = sourceFile.toPath();
                             Path targetPath = Paths.get(filePath);
 
@@ -167,7 +266,7 @@ public class MainGui {
         JLabel imageLabel = new JLabel();
         try {
             // Lade das Bild
-            BufferedImage img = ImageIO.read(new File("./Campingplatz.jpg"));
+            BufferedImage img = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Campingplatz.jpg")));
             // mach das Bild transparent
             imageLabel.setOpaque(false);
 
@@ -361,10 +460,9 @@ public class MainGui {
     };
 
     private List<String> datenAuslesen(int selectedRowIndex) {
-        String csvFile = "./BuchungsCSV.csv"; // Pfad zur CSV-Datei
+        String csvFile = "BuchungsCSV.csv"; // Pfad zur CSV-Datei
         try {
-            // CSV-Datei einlesen
-            BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+            BufferedReader reader = new BufferedReader(new FileReader(new File(csvFile)));
             String zeile;
             while ((zeile = reader.readLine()) != null) {
                 zeilen.add(zeile);
@@ -387,11 +485,11 @@ public class MainGui {
 
     private void buchungLoeschen(int zeileZumLoeschen) {
 
-        String csvFile = "./BuchungsCSV.csv"; // Pfad zur CSV-Datei
+        String csvFile = "BuchungsCSV.csv"; // Pfad zur CSV-Datei
 
         try {
             // CSV-Datei einlesen
-            BufferedReader reader = new BufferedReader(new FileReader(csvFile));
+            BufferedReader reader = new BufferedReader(new FileReader(new File(csvFile)));
             List<String> zeilen = new ArrayList<>();
             String zeile;
 
@@ -474,30 +572,32 @@ public class MainGui {
 
     private static void loadCSVDataToTable(DefaultTableModel tableModel) {
         // Pfad zur CSV-Datei ändern, falls erforderlich
-        String csvFilePath = "./BuchungsCSV.csv";
+        String csvFilePath = "BuchungsCSV.csv";
 
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
-            String line;
-            boolean firstLine = true;
-            while ((line = br.readLine()) != null) {
-                if (firstLine) {
-                    firstLine = false;
-                    continue; // Überspringe die erste Zeile
-                }
-                String[] data = line.split(",");
+        try {
+            try (BufferedReader br = new BufferedReader(new FileReader(new File(csvFilePath)))) {
+                String line;
+                boolean firstLine = true;
+                while ((line = br.readLine()) != null) {
+                    if (firstLine) {
+                        firstLine = false;
+                        continue; // Überspringe die erste Zeile
+                    }
+                    String[] data = line.split(",");
 
-                // Annahme: Die CSV-Datei hat die gewünschte Reihenfolge der Spalten
-                if (data.length >= 7) { // Überprüfen Sie, ob genügend Spalten vorhanden sind
-                    String[] rowData = new String[7]; // Erstellen Sie ein Array für die gewünschten Spalten
-                    rowData[0] = data[0]; // Name
-                    rowData[1] = data[1]; // Vorname
-                    rowData[2] = data[2]; // Anreise
-                    rowData[3] = data[3]; // Abreise
-                    rowData[4] = data[4]; // Platznummer
-                    rowData[5] = data[5]; // E-Mail
-                    rowData[6] = data[6]; // Telefon
+                    // Annahme: Die CSV-Datei hat die gewünschte Reihenfolge der Spalten
+                    if (data.length >= 7) { // Überprüfen Sie, ob genügend Spalten vorhanden sind
+                        String[] rowData = new String[7]; // Erstellen Sie ein Array für die gewünschten Spalten
+                        rowData[0] = data[0]; // Name
+                        rowData[1] = data[1]; // Vorname
+                        rowData[2] = data[2]; // Anreise
+                        rowData[3] = data[3]; // Abreise
+                        rowData[4] = data[4]; // Platznummer
+                        rowData[5] = data[5]; // E-Mail
+                        rowData[6] = data[6]; // Telefon
 
-                    tableModel.addRow(rowData); // Fügen Sie die Daten in die Tabelle ein
+                        tableModel.addRow(rowData); // Fügen Sie die Daten in die Tabelle ein
+                    }
                 }
             }
         } catch (IOException e) {
@@ -507,9 +607,8 @@ public class MainGui {
 
     private static void loadBuchungTableData(DefaultTableModel tableModel) {
         // Pfad zur CSV-Datei ändern, falls erforderlich
-        String csvFilePath = "./BuchungsCSV.csv";
-
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+        String csvFilePath = "BuchungsCSV.csv";
+        try (BufferedReader br = new BufferedReader(new FileReader(new File(csvFilePath)))) {
             String line;
             boolean firstLine = true;
             while ((line = br.readLine()) != null) {
@@ -564,6 +663,12 @@ public class MainGui {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainGui());
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new MainGui();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

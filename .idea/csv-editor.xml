@@ -17,6 +17,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\main\resources\BuchungsCSV.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tempBuchungsCSV.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

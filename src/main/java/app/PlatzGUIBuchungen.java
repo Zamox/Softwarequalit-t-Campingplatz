@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class PlatzGUIBuchungen {
 
@@ -58,8 +60,10 @@ public class PlatzGUIBuchungen {
             JLabel imageLabel = new JLabel();
 
             try {
+                InputStream is = getClass().getResourceAsStream("/Campingplatz.jpg");
+                assert is != null;
                 // Lade das Bild
-                BufferedImage img = ImageIO.read(new File("./Campingplatz.jpg"));
+                BufferedImage img = ImageIO.read(is);
                 // mach das Bild transparent
                 imageLabel.setOpaque(false);
 

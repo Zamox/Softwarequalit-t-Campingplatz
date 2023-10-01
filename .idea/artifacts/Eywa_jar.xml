@@ -7,7 +7,7 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-cli/commons-cli/1.4/commons-cli-1.4.jar" path-in-jar="/" />
       <element id="file-copy" path="$PROJECT_DIR$/Campingplatz.jpg" />
       <element id="file-copy" path="$PROJECT_DIR$/BuchungsCSV.csv" />
-      <element id="file-copy" path="$PROJECT_DIR$/Platzdaten.csv" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/Platzdaten.csv" />
     </root>
   </artifact>
 </component>
