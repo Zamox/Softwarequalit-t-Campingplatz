@@ -294,11 +294,9 @@ public class BuchungErstellenGui {
                 kreditkartendaten +tz+ personenAnzahl +tz+ unterkunftstyp +tz+ kosten+tz+buchungsnummer+"\n";
 
         try{
-        FileWriter csvWriter = new FileWriter(dateiPfad, true);
-        csvWriter.append(csv_eintrag);
-        csvWriter.append("\n");
-        csvWriter.flush();
-        csvWriter.close();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(dateiPfad, true));
+            writer.append(csv_eintrag).append("\n");
+            writer.close();
 
         } catch (IOException e) {
             e.printStackTrace();
