@@ -8,10 +8,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BuchungErstellenGui {
 
@@ -169,6 +173,8 @@ public class BuchungErstellenGui {
         platznummerField.setEditable(disable);
     }
 
+
+
     private JPanel createMainPanel(JPanel leftPanel, JPanel rightPanel) {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(leftPanel, BorderLayout.WEST);
@@ -194,18 +200,63 @@ public class BuchungErstellenGui {
         // Überprüfe, ob alle erforderlichen Felder ausgefüllt sind
         if (anreiseField.getText().isEmpty() || abreiseField.getText().isEmpty() ||
                 platznummerField.getText().isEmpty() ||
-                nameField.getText().isEmpty() || // Name
-                vornameField.getText().isEmpty() || // Vorname
-                plzField.getText().isEmpty() || // PLZ
-                hausnummerField.getText().isEmpty() || // Hausnummer
-                emailField.getText().isEmpty() || // Email
-                telefonField.getText().isEmpty()) { // Telefon
+                nameField.getText().isEmpty() ||
+                vornameField.getText().isEmpty() ||
+                plzField.getText().isEmpty() ||
+                hausnummerField.getText().isEmpty() ||
+                emailField.getText().isEmpty() ||
+                telefonField.getText().isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Bitte füllen Sie alle erforderlichen Felder aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
         } else {
-            // Alle erforderlichen Felder sind ausgefüllt, speichere die Daten in der CSV-Datei
-            speichereBuchungsdaten();
-            this.frame.dispose();
+            // Alle erforderlichen Felder sind ausgefüllt, überprüfe auf Überschneidungen
+            if (checkBuchungszeiten()) {
+                // Buchung speichern
+                speichereBuchungsdaten();
+                this.frame.dispose();
+                MainGui.updateTable();
+            } else {
+                // Buchungszeiten überschneiden sich
+                JOptionPane.showMessageDialog(frame, "Die Buchungszeiten überschneiden sich mit einer vorhandenen Buchung.", "Fehler", JOptionPane.ERROR_MESSAGE);
+            }
         }
+    }
+
+    private boolean checkBuchungszeiten() {
+        // Lese bestehende Buchungen aus der CSV-Datei
+        String dateiPfad = "./BuchungsCSV.csv";
+        List<String> existingBookings = new ArrayList<>();
+        try {
+            BufferedReader csvReader = new BufferedReader(new FileReader(dateiPfad));
+            String row;
+            while ((row = csvReader.readLine()) != null) {
+                existingBookings.add(row);
+            }
+            csvReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        // Extrahiere Anreise- und Abreisezeiten der neuen Buchung
+        LocalDate anreiseNeu = LocalDate.parse(anreiseField.getText(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        LocalDate abreiseNeu = LocalDate.parse(abreiseField.getText(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+        // Iteriere über vorhandene Buchungen und überprüfe auf Überschneidungen
+        for (String booking : existingBookings) {
+            String[] bookingData = booking.split(",");
+            LocalDate anreiseAlt = LocalDate.parse(bookingData[2], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            LocalDate abreiseAlt = LocalDate.parse(bookingData[3], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+            // Überprüfe auf Überschneidung
+            if (anreiseNeu.isBefore(abreiseAlt) && abreiseNeu.isAfter(anreiseAlt)) {
+                return false; // Überschneidung gefunden
+            }
+            if (anreiseNeu.isEqual(abreiseAlt) || abreiseNeu.isEqual(anreiseAlt)) {
+                return false; // Buchungen dürfen nicht direkt aufeinander folgen
+            }
+        }
+
+        return true; // Keine Überschneidung gefunden
     }
 
     public void updatePlatzNummer() {
