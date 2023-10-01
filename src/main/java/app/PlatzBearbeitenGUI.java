@@ -23,10 +23,14 @@ public class PlatzBearbeitenGUI {
 
     private StellplaetzeInfo platz;
     private boolean isEditable;
+    private String selectedPlatzart;
+    private String selectedWohnoption;
 
     public PlatzBearbeitenGUI(StellplaetzeInfo platz, boolean isEditable, String selectedPlatzart, String selectedWohnoption) {
         this.platz = platz;
         this.isEditable = isEditable;
+        this.selectedPlatzart = selectedPlatzart;
+        this.selectedWohnoption = selectedWohnoption;
 
         frame = new JFrame("Platz bearbeiten");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -69,6 +73,7 @@ public class PlatzBearbeitenGUI {
                     wohnoptionComboBox.setEnabled(true);
                 } else {
                     wohnoptionComboBox.setEnabled(false);
+                    wohnoptionComboBox.setSelectedItem(""); // Wohnoption zurücksetzen, wenn nicht Stellplatz ausgewählt ist.
                 }
             }
         });
@@ -82,7 +87,6 @@ public class PlatzBearbeitenGUI {
         String[] wohnoptionen = {"", "Wohnmobil", "Wohnwagen", "Zelt"};
         wohnoptionComboBox = new JComboBox<>(wohnoptionen);
         wohnoptionPanel.add(wohnoptionComboBox);
-        wohnoptionComboBox.setEnabled(false); // Deaktiviere die Wohnoption-ComboBox zu Beginn.
         styleLeftPanel.add(wohnoptionPanel);
 
         // Setze die ausgewählten Optionen
@@ -103,7 +107,12 @@ public class PlatzBearbeitenGUI {
             public void actionPerformed(ActionEvent e) {
                 String neuePlatznummer = platz.getPlatznummer();
                 String neuePlatzart = platzartComboBox.getSelectedItem().toString();
-                String neueWohnoption = wohnoptionComboBox.getSelectedItem().toString();
+
+                // Prüfe, ob die ausgewählte Platzart "Stellplatz" ist, bevor die Wohnoption übernommen wird.
+                String neueWohnoption = "";
+                if (neuePlatzart.equals("Stellplatz")) {
+                    neueWohnoption = wohnoptionComboBox.getSelectedItem().toString();
+                }
 
                 if (!neuePlatzart.isEmpty()) {
                     if (updatePlatzInCSV(platz.getPlatznummer(), neuePlatzart, neueWohnoption)) {
