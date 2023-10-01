@@ -12,23 +12,11 @@ public class PlatzAnlegenGui {
     private JPanel styleRightPanel;
 
     private JTextField platznummerField;
-
-
-    private StellplaetzeInfo platz;
-    private boolean isEditable;
     private String selectedPlatzart;
     private String selectedWohnoption;
     private JComboBox<String> platzartComboBox;
-    private JComboBox<String> platzregionComboBox;
-    private JComboBox<String> wohnoptionComboBox;
-
-
-    private JTextField breiteField;
-    private JTextField längeField;
-    private JTextField personenzahlField;
-    private JTextField tagessatzField;
-
     private String status;
+    private JComboBox<String> wohnoptionComboBox;
 
     public PlatzAnlegenGui() {
         frame = new JFrame("Platz anlegen");
