@@ -16,7 +16,7 @@ public class PlatzBearbeitenGUI {
 
     private JLabel platznummerLabel;
     private JLabel statusLabel;
-    private JLabel platzregionLabel;
+    //private JLabel platzregionLabel;
 
     private JComboBox<String> platzartComboBox;
     private JComboBox<String> wohnoptionComboBox;
@@ -53,11 +53,6 @@ public class PlatzBearbeitenGUI {
         statusLabel = new JLabel("Status:");
         styleLeftPanel.add(statusLabel);
         styleLeftPanel.add(new JLabel(platz.getStatus()));
-
-        // Platzregion
-        platzregionLabel = new JLabel("Platzregion:");
-        styleLeftPanel.add(platzregionLabel);
-        styleLeftPanel.add(new JLabel(platz.getPlatzregion()));
 
         // Platzart
         JPanel platzartPanel = new JPanel();
@@ -123,6 +118,7 @@ public class PlatzBearbeitenGUI {
                 } else {
                     JOptionPane.showMessageDialog(frame, "Bitte wählen Sie eine Platzart aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
                 }
+                frame.dispose();
             }
         });
 
@@ -153,15 +149,15 @@ public class PlatzBearbeitenGUI {
                 }
 
                 String[] parts = line.split(",");
-                if (parts.length >= 5) {
+                if (parts.length >= 4) {
                     String currentPlatznummer = parts[0].trim();
                     String currentStatus = parts[1].trim();
-                    String currentPlatzregion = parts[2].trim();
-                    String currentPlatzart = parts[3].trim();
-                    String currentWohnoption = parts[4].trim();
+                    //String currentPlatzregion = parts[2].trim();
+                    String currentPlatzart = parts[2].trim();
+                    String currentWohnoption = parts[3].trim();
 
                     if (currentPlatznummer.equals(platznummer)) {
-                        line = platznummer + "," + currentStatus + "," + currentPlatzregion + "," + neuePlatzart + "," + neueWohnoption;
+                        line = platznummer + "," + currentStatus + "," + neuePlatzart + "," + neueWohnoption;
                     }
 
                     updatedLines.add(line);

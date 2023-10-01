@@ -31,7 +31,12 @@ public class PlatzUebersichtGui {
             if (platz.getStatus().equals("frei")) {
                 platzButton.setBackground(Color.GREEN);
             } else if (platz.getStatus().equals("belegt")) {
-                platzButton.setBackground(Color.RED);
+                if (platz.getPlatzart().equals("keine")){
+                    platzButton.setBackground(Color.BLUE);
+                }else {
+                    platzButton.setBackground(Color.RED);
+                }
+
             }
 
             platzButton.addActionListener(new ActionListener() {
