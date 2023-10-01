@@ -113,6 +113,8 @@ public class PlatzAnlegenGui {
                 String wohnoption = "";
                 if (platzart.equals("Stellplatz")) {
                     wohnoption = wohnoptionComboBox.getSelectedItem().toString();
+                }else {
+                    wohnoption = "keine";
                 }
 
 
