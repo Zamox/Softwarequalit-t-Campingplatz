@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
@@ -20,7 +21,6 @@ public class downRightPlaetze {
 
     public downRightPlaetze(String fall) {
         this.frame = new JFrame("Platzregion Süd-Ost");
-        this.frame.setSize(1000, 1000);
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.fall = fall;
@@ -29,7 +29,6 @@ public class downRightPlaetze {
 
     public downRightPlaetze(BuchungBearbeitenGui BuchungBearbeitenGui, JFrame parentframe, String fall) {
         this.frame = new JFrame("Platzregion Süd-Ost");
-        this.frame.setSize(1000, 1000);
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.BuchungBearbeitenGui = BuchungBearbeitenGui;
@@ -40,7 +39,6 @@ public class downRightPlaetze {
 
     public downRightPlaetze(BuchungErstellenGui BuchungErstellenGui, JFrame parentframe, String fall) {
         this.frame = new JFrame("Platzregion Süd-Ost");
-        this.frame.setSize(1000, 1000);
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.BuchungErstellenGui = BuchungErstellenGui;
@@ -50,77 +48,47 @@ public class downRightPlaetze {
     }
 
     private void renderFrame() {
-        JPanel mainPanel = new JPanel(new GridLayout(1, 7));
+        JPanel mainPanel = new JPanel(); // 7 Spalten insgesamt
 
+        // Leerzeile für Spalte 2
         mainPanel.add(new JPanel());
 
-        JPanel column1Panel = createButtonPanel(3, 61);
+        JPanel column1Panel = createButtonPanel(61, 63, 91);
         mainPanel.add(column1Panel);
-
-        mainPanel.add(new JPanel());
-
-        JPanel column2Panel = createButtonPanel(3, 91);
-        mainPanel.add(column2Panel);
-
-        mainPanel.add(new JPanel());
-
-        JPanel column3Panel = new JPanel(new GridLayout(5, 1));
-        JButton emptyButton1 = new JButton("");
-        JButton emptyButton2 = new JButton("");
-        JButton emptyButton3 = new JButton("");
-        JButton emptyButton4 = new JButton("");
-        JButton emptyButton5 = new JButton("");
-        column3Panel.add(emptyButton1);
-        column3Panel.add(emptyButton2);
-        column3Panel.add(emptyButton3);
-        column3Panel.add(emptyButton4);
-        column3Panel.add(emptyButton5);
-        emptyButton1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Dieser Platz muss zunächst angelegt werden und kann noch nicht gebucht werden.");
-            }
-        });
-        emptyButton2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Dieser Platz muss zunächst angelegt werden und kann noch nicht gebucht werden.");
-            }
-        });
-        emptyButton3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Dieser Platz muss zunächst angelegt werden und kann noch nicht gebucht werden.");
-            }
-        });
-        emptyButton4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Dieser Platz muss zunächst angelegt werden und kann noch nicht gebucht werden.");
-            }
-        });
-        emptyButton5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Dieser Platz muss zunächst angelegt werden und kann noch nicht gebucht werden.");
-            }
-        });
-        mainPanel.add(column3Panel);
-
         this.frame.setContentPane(mainPanel);
         this.frame.pack();
+        this.frame.setSize(700, 250);
         this.frame.setVisible(true);
 
+        // Add click listener to buttons
         addClickListenerToButtons(mainPanel);
         checkCSVAndColorButtons();
     }
 
-    private JPanel createButtonPanel(int buttonCount, int startNumber) {
-        JPanel panel = new JPanel(new GridLayout(buttonCount, 1));
+    private JPanel createButtonPanel(int startNumber_a, int endNumber_a, int startNumber_b) {
+        String dateiPfad = "./Platzdaten.csv";
+        String temp = "";
+        String[] csv_inhalt;
+        try(BufferedReader br = new BufferedReader(new FileReader(dateiPfad))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                temp = temp + line + ",";
+            }
 
-        for (int i = 0; i < buttonCount; i++) {
-            JButton button = new JButton("Platz " + (startNumber + i));
-            panel.add(button);
+            csv_inhalt = temp.split(",");
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        JPanel panel = new JPanel(new GridLayout(5, 3));
+
+        for (int j = 7; j < csv_inhalt.length ; j+=5) {
+            if ((startNumber_a <= Integer.parseInt(csv_inhalt[j]) && Integer.parseInt(csv_inhalt[j]) <= endNumber_a) || (startNumber_b <= Integer.parseInt(csv_inhalt[j]))) {
+                JButton button = new JButton("Platz " + csv_inhalt[j]);
+                panel.add(button);
+            }
         }
 
         return panel;

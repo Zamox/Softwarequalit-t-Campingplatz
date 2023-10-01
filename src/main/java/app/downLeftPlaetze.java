@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
@@ -31,7 +32,6 @@ public class downLeftPlaetze {
 
     public  downLeftPlaetze(BuchungBearbeitenGui BuchungBearbeitenGui, JFrame parentframe, String fall) {
         this.frame = new JFrame("Platzregion Süd-West");
-        this.frame.setSize(1000, 1000);
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.BuchungBearbeitenGui = BuchungBearbeitenGui;
@@ -42,7 +42,6 @@ public class downLeftPlaetze {
 
     public  downLeftPlaetze(BuchungErstellenGui BuchungErstellenGui, JFrame parentframe, String fall) {
         this.frame = new JFrame("Platzregion Süd-West");
-        this.frame.setSize(1000, 1000);
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.BuchungErstellenGui = BuchungErstellenGui;
@@ -52,60 +51,47 @@ public class downLeftPlaetze {
     }
 
     private void renderFrame() {
-        JPanel mainPanel = new JPanel(new GridLayout(1, 7));
+        JPanel mainPanel = new JPanel(); // 7 Spalten insgesamt
 
+        // Leerzeile für Spalte 2
         mainPanel.add(new JPanel());
 
-        JPanel column1Panel = createButtonPanel(6, 14);
+        JPanel column1Panel = createButtonPanel(14, 31, 64, 70);
         mainPanel.add(column1Panel);
-
-        mainPanel.add(new JPanel());
-
-        JPanel column2Panel = createButtonPanel(5, 20);
-        mainPanel.add(column2Panel);
-
-        mainPanel.add(new JPanel());
-
-        JPanel column3Panel = createButtonPanel(5, 25);
-        mainPanel.add(column3Panel);
-
-        mainPanel.add(new JPanel());
-
-        JPanel column4Panel = createButtonPanel(2, 30);
-        mainPanel.add(column4Panel);
-
-        mainPanel.add(new JPanel());
-
-        JPanel column5Panel = createButtonPanel(6, 71);
-        mainPanel.add(column5Panel);
-
-        mainPanel.add(new JPanel());
-
-        JPanel column6Panel = createButtonPanel(4, 64);
-        mainPanel.add(column6Panel);
-
-        mainPanel.add(new JPanel());
-
-        JPanel column7Panel = createButtonPanel(3, 68);
-        mainPanel.add(column7Panel);
-
-        mainPanel.add(new JPanel());
-
-        mainPanel.add(new JPanel());
-
         this.frame.setContentPane(mainPanel);
         this.frame.pack();
+        this.frame.setSize(700, 250);
         this.frame.setVisible(true);
 
+        // Add click listener to buttons
         addClickListenerToButtons(mainPanel);
         checkCSVAndColorButtons();
     }
-    private JPanel createButtonPanel(int buttonCount, int startNumber) {
-        JPanel panel = new JPanel(new GridLayout(buttonCount, 1));
 
-        for (int i = 0; i < buttonCount; i++) {
-            JButton button = new JButton("Platz " + (startNumber + i));
-            panel.add(button);
+    private JPanel createButtonPanel(int startNumber_a, int endNumber_a, int startNumber_b, int endNumber_b) {
+        String dateiPfad = "./Platzdaten.csv";
+        String temp = "";
+        String[] csv_inhalt;
+        try(BufferedReader br = new BufferedReader(new FileReader(dateiPfad))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                temp = temp + line + ",";
+            }
+
+            csv_inhalt = temp.split(",");
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        JPanel panel = new JPanel(new GridLayout(5, 5));
+
+        for (int j = 7; j < csv_inhalt.length ; j+=5) {
+            if ((startNumber_a <= Integer.parseInt(csv_inhalt[j]) && Integer.parseInt(csv_inhalt[j]) <= endNumber_a) || (startNumber_b <= Integer.parseInt(csv_inhalt[j]) && Integer.parseInt(csv_inhalt[j]) <= endNumber_b)) {
+                JButton button = new JButton("Platz " + csv_inhalt[j]);
+                panel.add(button);
+            }
         }
 
         return panel;
