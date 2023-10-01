@@ -38,6 +38,10 @@ public class InfoGui {
     private JTextField kreditkartendatenField;
 
     private boolean isEditable;
+    private JTextField buchungsnummerField;
+    private JTextField personenField;
+    private JComboBox unterkunftComboBox;
+    private JTextField kostenField;
 
     public InfoGui(MainGui mainGui, String[] selectedBookingData, boolean isEditable) {
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -56,6 +60,10 @@ public class InfoGui {
         telefonField = new JTextField();
         emailField = new JTextField();
         kreditkartendatenField = new JTextField();
+        buchungsnummerField = new JTextField();
+        personenField = new JTextField();
+        unterkunftComboBox = new JComboBox();
+        kostenField = new JTextField();
 
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
@@ -84,11 +92,11 @@ public class InfoGui {
         leftPanel.add(abreiseField);
 
         leftPanel.add(new JLabel("Anzahl der Personen:"));
-        leftPanel.add(new JTextField());
+        leftPanel.add(personenField);
 
         leftPanel.add(new JLabel("Unterkunftstyp:"));
         String[] unterkunftstypen = {"Wohnwagen", "Wohnmobil", "Zelt"};
-        JComboBox<String> unterkunftComboBox = new JComboBox<>(unterkunftstypen);
+        unterkunftComboBox = new JComboBox<>(unterkunftstypen);
         leftPanel.add(unterkunftComboBox);
         unterkunftComboBox.setEnabled(isEditable);
 
@@ -97,7 +105,7 @@ public class InfoGui {
         leftPanel.add(platznummerField);
 
         leftPanel.add(new JLabel("Kosten:"));
-        leftPanel.add(new JTextField());
+        leftPanel.add(kostenField);
 
         JButton zeitraumButton = new JButton("Zeitraum wählen");
         zeitraumButton.addActionListener(new ActionListener() {
@@ -191,6 +199,10 @@ public class InfoGui {
             telefonField.setText(this.selectedBookingData[6]);// Telefon
             emailField.setText(this.selectedBookingData[5]); // Email
             kreditkartendatenField.setText(this.selectedBookingData[11]); // Kreditkartendaten
+            buchungsnummerField.setText(this.selectedBookingData[15]);
+            personenField.setText(this.selectedBookingData[12]);
+            unterkunftComboBox.setSelectedItem(this.selectedBookingData[13]);
+            kostenField.setText(this.selectedBookingData[14]);
         } else {
             new JOptionPane("Bitte wählen Sie einen Stellplatz aus.");
         }

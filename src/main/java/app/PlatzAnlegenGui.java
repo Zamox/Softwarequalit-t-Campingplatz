@@ -125,6 +125,7 @@ public class PlatzAnlegenGui {
 
                 if (!platzart.equals("Stellplatz")){
                     status = "belegt";
+                    wohnoption = "keine";
                 }else {
                     status = "frei";
                 }

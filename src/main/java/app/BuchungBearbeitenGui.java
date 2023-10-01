@@ -41,6 +41,9 @@ public class BuchungBearbeitenGui {
     private JTextField emailField;
     private JTextField kreditkartendatenField;
     private JTextField buchungsnummerField;
+    private JTextField personenField;
+    private JComboBox unterkunftComboBox;
+    private JTextField kostenField;
 
     private boolean isEditable;
 
@@ -63,6 +66,9 @@ public class BuchungBearbeitenGui {
         emailField = new JTextField();
         kreditkartendatenField = new JTextField();
         buchungsnummerField = new JTextField();
+        personenField = new JTextField();
+        unterkunftComboBox = new JComboBox();
+        kostenField = new JTextField();
 
         JPanel leftPanel = createLeftPanel();
         JPanel rightPanel = createRightPanel();
@@ -90,11 +96,11 @@ public class BuchungBearbeitenGui {
         leftPanel.add(abreiseField);
 
         leftPanel.add(new JLabel("Anzahl der Personen:"));
-        leftPanel.add(new JTextField());
+        leftPanel.add(personenField);
 
         leftPanel.add(new JLabel("Unterkunftstyp:"));
         String[] unterkunftstypen = {"Wohnwagen", "Wohnmobil", "Zelt"};
-        JComboBox<String> unterkunftComboBox = new JComboBox<>(unterkunftstypen);
+        unterkunftComboBox = new JComboBox<>(unterkunftstypen);
         leftPanel.add(unterkunftComboBox);
 
         leftPanel.add(new JLabel("Platzauswahl:"));
@@ -102,7 +108,7 @@ public class BuchungBearbeitenGui {
         leftPanel.add(platznummerField);
 
         leftPanel.add(new JLabel("Kosten:"));
-        leftPanel.add(new JTextField());
+        leftPanel.add(kostenField);
 
         JButton zeitraumButton = new JButton("Zeitraum wählen");
         zeitraumButton.addActionListener(new ActionListener() {
@@ -196,6 +202,10 @@ public class BuchungBearbeitenGui {
             emailField.setText(this.selectedBookingData[5]); // Email
             kreditkartendatenField.setText(this.selectedBookingData[11]); // Kreditkartendaten
             buchungsnummerField.setText(this.selectedBookingData[15]);
+            personenField.setText(this.selectedBookingData[12]);
+            unterkunftComboBox.setSelectedItem(this.selectedBookingData[13]);
+            kostenField.setText(this.selectedBookingData[14]);
+
         } else {
             new JOptionPane("Bitte wählen Sie einen Stellplatz aus.");
         }
@@ -264,13 +274,16 @@ public class BuchungBearbeitenGui {
         String email = ((JTextField) rightPanel.getComponent(15)).getText();
         String kreditkartendaten = ((JTextField) rightPanel.getComponent(17)).getText();
         String buchungsnummer = ((JTextField) leftPanel.getComponent(1)).getText();
+        String personenAnzahl = personenField.getText();
+        String unterkunftstyp = unterkunftComboBox.getSelectedItem().toString();
+        String kosten = Integer.parseInt(personenAnzahl) * 20 + "€";
 
         String dateiPfad = "./BuchungsCSV.csv";
 
         String tz = ",";
         String csv_bearbeitet = name +tz+ vorname +tz+ anreiseDatum +tz+ abreiseDatum +tz+ platznummer +tz+
                                     email +tz+ telefon +tz+ strasse +tz+ plz +tz+ hausnummer +tz+ rechnungsadresse +tz+
-                                    kreditkartendaten +tz+ "AnzahlDerPersonen" +tz+ "Unterkunftstyp" +tz+ "Kosten"+tz+buchungsnummer+"\n";
+                                    kreditkartendaten +tz+ personenAnzahl +tz+ unterkunftstyp +tz+ kosten+tz+buchungsnummer+"\n";
 
         String temp = "";
 
