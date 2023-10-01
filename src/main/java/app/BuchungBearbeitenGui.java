@@ -118,7 +118,7 @@ public class BuchungBearbeitenGui {
         platzButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PlatzGUIBuchungen platzGUIBuchungen = new PlatzGUIBuchungen();
+                PlatzGUIBuchungen platzGUIBuchungen = new PlatzGUIBuchungen(BuchungBearbeitenGui.this);
             }
         });
         leftPanel.add(platzButton);
@@ -171,7 +171,7 @@ public class BuchungBearbeitenGui {
 
         anreiseField.setEditable(false);
         abreiseField.setEditable(false);
-        platznummerField.setEditable(disable);
+        platznummerField.setEditable(false);
         nameField.setEditable(disable);
         vornameField.setEditable(disable);
         strasseField.setEditable(disable);
