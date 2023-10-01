@@ -33,98 +33,100 @@ public class MainGui {
         if (!file.exists()) {
             try {
                 file.createNewFile();
+
+                BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+                bw.write("Name,Vorname,Anreisedatum,Abreisedatum,Platznummer,E-mail,Telefon,Straße,Plz,Hausnummer,Rechnungsadresse,CC-Nr.,AnzahlDerPersonen,Unterkunftstyp,Kosten, Buchungsnummer\n");
+
+                String initial = "Schmidt,Anna,05.11.2023,10.11.2023,25,anna.schmidt@email.com,123456789,Schulstraße,12345,12,Rechnungsadresse1,1234-5678-9012-3456,2,Wohnwagen,120€,123456\n" +
+                        "Meier,Julia,05.11.2023,10.11.2023,26,julia.meier@email.com,987654321,Hauptweg,54321,34,Rechnungsadresse2,2345-6789-0123-4567,3,Zelt,80€,234567\n" +
+                        "Müller,Tom,05.11.2023,10.11.2023,27,tom.mueller@email.com,456789012,Bachgasse,67890,56,Rechnungsadresse3,3456-7890-1234-5678,1,Wohnmobil,150€,345678\n" +
+                        "Schneider,Lisa,05.11.2023,10.11.2023,28,lisa.schneider@email.com,321098765,Feldweg,10987,78,Rechnungsadresse4,4567-8901-2345-6789,4,Stellplatz,60€,456789\n" +
+                        "Becker,Markus,05.11.2023,10.11.2023,29,markus.becker@email.com,210987654,Neustraße,21098,90,Rechnungsadresse5,5678-9012-3456-7890,2,Wohnmobil,100€,567890\n";
+                bw.write(initial);
+
+                bw.close();
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(frame, "Fehler beim Erstellen der Buchungsdatei.", "Fehler", JOptionPane.ERROR_MESSAGE);
             }
         }
-        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-        bw.write("Name,Vorname,Anreisedatum,Abreisedatum,Platznummer,E-mail,Telefon,Straße,Plz,Hausnummer,Rechnungsadresse,CC-Nr.,AnzahlDerPersonen,Unterkunftstyp,Kosten, Buchungsnummer\n");
-
-        String initial = " Schmidt,Anna,05.11.2023,10.11.2023,25,anna.schmidt@email.com,123456789,Schulstraße,12345,12,Rechnungsadresse1,1234-5678-9012-3456,2,Wohnwagen,120€,123456\n" +
-                "Meier,Julia,05.11.2023,10.11.2023,26,julia.meier@email.com,987654321,Hauptweg,54321,34,Rechnungsadresse2,2345-6789-0123-4567,3,Zelt,80€,234567\n" +
-                "Müller,Tom,05.11.2023,10.11.2023,27,tom.mueller@email.com,456789012,Bachgasse,67890,56,Rechnungsadresse3,3456-7890-1234-5678,1,Wohnmobil,150€,345678\n" +
-                "Schneider,Lisa,05.11.2023,10.11.2023,28,lisa.schneider@email.com,321098765,Feldweg,10987,78,Rechnungsadresse4,4567-8901-2345-6789,4,Stellplatz,60€,456789\n" +
-                "Becker,Markus,05.11.2023,10.11.2023,29,markus.becker@email.com,210987654,Neustraße,21098,90,Rechnungsadresse5,5678-9012-3456-7890,2,Wohnmobil,100€,567890\n" ;
-        bw.write(initial);
-
-        bw.close();
 
         file = new File("Platzdaten.csv");
-        bw = new BufferedWriter(new FileWriter(file));
         if (!file.exists()) {
             try {
                 file.createNewFile();
+
+                BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+
+                bw.write("Platznummer,Status,Platzart,Wohnoption\n");
+
+                String initialConditions = "14,belegt,Shop,keine\n" +
+                        "15,frei,Stellplatz,Wohnmobil\n" +
+                        "16,frei,Stellplatz,Wohnmobil\n" +
+                        "17,frei,Stellplatz,Wohnmobil\n" +
+                        "18,frei,Stellplatz,Wohnmobil\n" +
+                        "19,frei,Stellplatz,Wohnmobil\n" +
+                        "20,frei,Stellplatz,Wohnmobil\n" +
+                        "21,frei,Stellplatz,Wohnmobil\n" +
+                        "22,frei,Stellplatz,Wohnmobil\n" +
+                        "23,frei,Stellplatz,Wohnmobil\n" +
+                        "24,frei,Stellplatz,Wohnmobil\n" +
+                        "25,frei,Stellplatz,Wohnmobil\n" +
+                        "26,belegt,Sonstige,keine\n" +
+                        "27,frei,Stellplatz,Wohnmobil\n" +
+                        "28,frei,Stellplatz,Wohnmobil\n" +
+                        "29,frei,Stellplatz,Wohnmobil\n" +
+                        "30,frei,Stellplatz,Wohnmobil\n" +
+                        "31,frei,Stellplatz,Wohnmobil\n" +
+                        "34,frei,Stellplatz,Zelt\n" +
+                        "35,belegt,Stellplatz,Zelt\n" +
+                        "36,frei,Stellplatz,Zelt\n" +
+                        "37,frei,Stellplatz,Zelt\n" +
+                        "38,frei,Stellplatz,Zelt\n" +
+                        "39,frei,Stellplatz,Zelt\n" +
+                        "40,frei,Stellplatz,Zelt\n" +
+                        "41,frei,Stellplatz,Zelt\n" +
+                        "42,frei,Stellplatz,Zelt\n" +
+                        "43,frei,Stellplatz,Zelt\n" +
+                        "44,belegt,Stellplatz,Zelt\n" +
+                        "45,frei,Stellplatz,Zelt\n" +
+                        "46,belegt,Stellplatz,Zelt\n" +
+                        "47,frei,Stellplatz,Zelt\n" +
+                        "48,frei,Stellplatz,Zelt\n" +
+                        "49,frei,Stellplatz,Zelt\n" +
+                        "50,frei,Stellplatz,Zelt\n" +
+                        "51,belegt,Shop,keine\n" +
+                        "56,belegt,Stellplatz,Zelt\n" +
+                        "57,frei,Stellplatz,Zelt\n" +
+                        "58,belegt,Sonstige,keine\n" +
+                        "59,frei,Stellplatz,Zelt\n" +
+                        "60,frei,Stellplatz,Zelt\n" +
+                        "61,frei,Stellplatz,Wohnwagen\n" +
+                        "62,frei,Stellplatz,Wohnwagen\n" +
+                        "63,belegt,Shop,keine\n" +
+                        "64,frei,Stellplatz,Wohnmobil\n" +
+                        "65,belegt,Sanitäre Anlagen,keine\n" +
+                        "66,frei,Stellplatz,Wohnmobil\n" +
+                        "67,frei,Stellplatz,Wohnmobil\n" +
+                        "68,frei,Stellplatz,Wohnmobil\n" +
+                        "69,frei,Stellplatz,Wohnmobil\n" +
+                        "70,frei,Stellplatz,Wohnmobil\n" +
+                        "71,frei,Stellplatz,Wohnmobil\n" +
+                        "72,frei,Stellplatz,Wohnmobil\n" +
+                        "73,frei,Stellplatz,Wohnmobil\n" +
+                        "74,frei,Stellplatz,Wohnmobil\n" +
+                        "75,belegt,Sanitäre Anlagen,keine\n" +
+                        "76,frei,Stellplatz,Wohnmobil\n" +
+                        "91,frei,Stellplatz,Wohnmobil\n" +
+                        "92,frei,Stellplatz,Wohnmobil\n" +
+                        "99,belegt,Sanitäre Anlagen,keine\n";
+                bw.write(initialConditions);
+                bw.close();
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(frame, "Fehler beim Erstellen der Platzdatei.", "Fehler", JOptionPane.ERROR_MESSAGE);
             }
         }
-        bw.write("Platznummer,Status,Platzart,Wohnoption\n");
-
-        String initialConditions = "14,belegt,Shop,keine\n" +
-                "15,frei,Stellplatz,Wohnmobil\n" +
-                "16,frei,Stellplatz,Wohnmobil\n" +
-                "17,frei,Stellplatz,Wohnmobil\n" +
-                "18,frei,Stellplatz,Wohnmobil\n" +
-                "19,frei,Stellplatz,Wohnmobil\n" +
-                "20,frei,Stellplatz,Wohnmobil\n" +
-                "21,frei,Stellplatz,Wohnmobil\n" +
-                "22,frei,Stellplatz,Wohnmobil\n" +
-                "23,frei,Stellplatz,Wohnmobil\n" +
-                "24,frei,Stellplatz,Wohnmobil\n" +
-                "25,frei,Stellplatz,Wohnmobil\n" +
-                "26,belegt,Sonstige,keine\n" +
-                "27,frei,Stellplatz,Wohnmobil\n" +
-                "28,frei,Stellplatz,Wohnmobil\n" +
-                "29,frei,Stellplatz,Wohnmobil\n" +
-                "30,frei,Stellplatz,Wohnmobil\n" +
-                "31,frei,Stellplatz,Wohnmobil\n" +
-                "34,frei,Stellplatz,Zelt\n" +
-                "35,belegt,Stellplatz,Zelt\n" +
-                "36,frei,Stellplatz,Zelt\n" +
-                "37,frei,Stellplatz,Zelt\n" +
-                "38,frei,Stellplatz,Zelt\n" +
-                "39,frei,Stellplatz,Zelt\n" +
-                "40,frei,Stellplatz,Zelt\n" +
-                "41,frei,Stellplatz,Zelt\n" +
-                "42,frei,Stellplatz,Zelt\n" +
-                "43,frei,Stellplatz,Zelt\n" +
-                "44,belegt,Stellplatz,Zelt\n" +
-                "45,frei,Stellplatz,Zelt\n" +
-                "46,belegt,Stellplatz,Zelt\n" +
-                "47,frei,Stellplatz,Zelt\n" +
-                "48,frei,Stellplatz,Zelt\n" +
-                "49,frei,Stellplatz,Zelt\n" +
-                "50,frei,Stellplatz,Zelt\n" +
-                "51,belegt,Shop,keine\n" +
-                "56,belegt,Stellplatz,Zelt\n" +
-                "57,frei,Stellplatz,Zelt\n" +
-                "58,belegt,Sonstige,keine\n" +
-                "59,frei,Stellplatz,Zelt\n" +
-                "60,frei,Stellplatz,Zelt\n" +
-                "61,frei,Stellplatz,Wohnwagen\n" +
-                "62,frei,Stellplatz,Wohnwagen\n" +
-                "63,belegt,Shop,keine\n" +
-                "64,frei,Stellplatz,Wohnmobil\n" +
-                "65,belegt,Sanitäre Anlagen,keine\n" +
-                "66,frei,Stellplatz,Wohnmobil\n" +
-                "67,frei,Stellplatz,Wohnmobil\n" +
-                "68,frei,Stellplatz,Wohnmobil\n" +
-                "69,frei,Stellplatz,Wohnmobil\n" +
-                "70,frei,Stellplatz,Wohnmobil\n" +
-                "71,frei,Stellplatz,Wohnmobil\n" +
-                "72,frei,Stellplatz,Wohnmobil\n" +
-                "73,frei,Stellplatz,Wohnmobil\n" +
-                "74,frei,Stellplatz,Wohnmobil\n" +
-                "75,belegt,Sanitäre Anlagen,keine\n" +
-                "76,frei,Stellplatz,Wohnmobil\n" +
-                "91,frei,Stellplatz,Wohnmobil\n" +
-                "92,frei,Stellplatz,Wohnmobil\n" +
-                "99,belegt,Sanitäre Anlagen,keine\n"
-                ;
-        bw.write(initialConditions);
-        bw.close();
 
 
         this.frame = new JFrame();
