@@ -28,6 +28,8 @@ public class PlatzAnlegenGui {
     private JTextField personenzahlField;
     private JTextField tagessatzField;
 
+    private String status;
+
     public PlatzAnlegenGui() {
         frame = new JFrame("Platz anlegen");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -133,7 +135,13 @@ public class PlatzAnlegenGui {
                     return; // Beende die Methode, da die Platznummer bereits existiert
                 }
 
-                String csvData = "\n"+platznummer + ",frei," + platzart + "," + wohnoption;
+                if (!platzart.equals("Stellplatz")){
+                    status = "belegt";
+                }else {
+                    status = "frei";
+                }
+
+                String csvData = "\n"+platznummer + ","+status+"," + platzart + "," + wohnoption;
                 String csvFilePath = "./Platzdaten.csv";
 
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath, true))) {
