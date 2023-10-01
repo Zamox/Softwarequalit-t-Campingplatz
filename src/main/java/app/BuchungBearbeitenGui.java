@@ -74,7 +74,7 @@ public class BuchungBearbeitenGui {
         JPanel rightPanel = createRightPanel();
         JPanel mainPanel = createMainPanel(leftPanel, rightPanel);
         fillFieldsWithSelectedData(selectedBookingData);
-        disableFields(isEditable); // Deaktivieren Sie die Felder, wenn die Info-Funktionalität aktiviert ist
+
         frame.add(mainPanel);
         frame.setVisible(true);
     }
@@ -163,27 +163,6 @@ public class BuchungBearbeitenGui {
         rightPanel.add(kreditkartendatenField);
 
         return rightPanel;
-    }
-
-    private void disableFields(boolean disable) {
-        fillFieldsWithSelectedData(selectedBookingData);
-        platznummerField.setEditable(false);
-
-        for (Component component : rightPanel.getComponents()) {
-            if (component instanceof JTextField) {
-                ((JTextField) component).setEditable(disable);
-            }
-        }
-
-        anreiseField.setEditable(false);
-        abreiseField.setEditable(false);
-        platznummerField.setEditable(false);
-        nameField.setEditable(disable);
-        vornameField.setEditable(disable);
-        strasseField.setEditable(disable);
-        plzField.setEditable(disable);
-        buchungsnummerField.setEditable(false);
-
     }
 
     private void fillFieldsWithSelectedData(String[] selectedBookingData) {

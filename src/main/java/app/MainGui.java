@@ -41,10 +41,11 @@ public class MainGui {
         BufferedWriter bw = new BufferedWriter(new FileWriter(file));
         bw.write("Name,Vorname,Anreisedatum,Abreisedatum,Platznummer,E-mail,Telefon,Straße,Plz,Hausnummer,Rechnungsadresse,CC-Nr.,AnzahlDerPersonen,Unterkunftstyp,Kosten, Buchungsnummer\n");
 
-        String initial = " 4,vorname,20.08.2023,25.08.2023,35,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,4\n" +
-                "Nachname,Vorname,30.09.2023,03.10.2024,44,fickmeinleben@gmail.com,0720247238123,Straße,postleit,44,Adresse,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,23467\n" +
-                "NameTest,VorTest,27.09.2023,30.09.2023,56,mail,tel,Straße,plz,hausnummer,rradresse,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,26248\n" +
-                "name,vorname,06.10.2023,08.10.2023,46,email,telefon,straße,plz,hausnummer,rechnungsadresse,cc,2,Zelt,40€,16437";
+        String initial = " Schmidt,Anna,05.11.2023,10.11.2023,25,anna.schmidt@email.com,123456789,Schulstraße,12345,12,Rechnungsadresse1,1234-5678-9012-3456,2,Wohnwagen,120€,123456\n" +
+                "Meier,Julia,05.11.2023,10.11.2023,26,julia.meier@email.com,987654321,Hauptweg,54321,34,Rechnungsadresse2,2345-6789-0123-4567,3,Zelt,80€,234567\n" +
+                "Müller,Tom,05.11.2023,10.11.2023,27,tom.mueller@email.com,456789012,Bachgasse,67890,56,Rechnungsadresse3,3456-7890-1234-5678,1,Wohnmobil,150€,345678\n" +
+                "Schneider,Lisa,05.11.2023,10.11.2023,28,lisa.schneider@email.com,321098765,Feldweg,10987,78,Rechnungsadresse4,4567-8901-2345-6789,4,Stellplatz,60€,456789\n" +
+                "Becker,Markus,05.11.2023,10.11.2023,29,markus.becker@email.com,210987654,Neustraße,21098,90,Rechnungsadresse5,5678-9012-3456-7890,2,Wohnmobil,100€,567890\n" ;
         bw.write(initial);
 
         bw.close();
@@ -250,12 +251,12 @@ public class MainGui {
     }
 
     private void renderFrame() {
-        try {
+        /*try {
             // Set Nimbus Look and Feel
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
-        }
+        }*/
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
