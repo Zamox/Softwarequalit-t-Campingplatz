@@ -12,21 +12,11 @@ public class PlatzAnlegenGui {
     private JPanel styleRightPanel;
 
     private JTextField platznummerField;
-
-
-    private StellplaetzeInfo platz;
-    private boolean isEditable;
     private String selectedPlatzart;
     private String selectedWohnoption;
     private JComboBox<String> platzartComboBox;
-    private JComboBox<String> platzregionComboBox;
+    private String status;
     private JComboBox<String> wohnoptionComboBox;
-
-
-    private JTextField breiteField;
-    private JTextField längeField;
-    private JTextField personenzahlField;
-    private JTextField tagessatzField;
 
     public PlatzAnlegenGui() {
         frame = new JFrame("Platz anlegen");
@@ -133,7 +123,13 @@ public class PlatzAnlegenGui {
                     return; // Beende die Methode, da die Platznummer bereits existiert
                 }
 
-                String csvData = "\n"+platznummer + ",frei," + platzart + "," + wohnoption;
+                if (!platzart.equals("Stellplatz")){
+                    status = "belegt";
+                }else {
+                    status = "frei";
+                }
+
+                String csvData = "\n"+platznummer + ","+status+"," + platzart + "," + wohnoption;
                 String csvFilePath = "./Platzdaten.csv";
 
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath, true))) {
