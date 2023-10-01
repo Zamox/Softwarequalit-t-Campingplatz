@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
@@ -21,18 +22,14 @@ public class upperRightPlaetze {
 
     public upperRightPlaetze(String fall) {
         this.frame = new JFrame("Platzregion Nord-Ost");
-        this.frame.setSize(1000, 1000);
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.frame.setLayout(new GridLayout(1, 7));
         this.fall = fall;
         renderFrame();
     }
 
     public upperRightPlaetze(BuchungBearbeitenGui BuchungBearbeitenGui, JFrame parentframe, String fall) {
         this.frame = new JFrame("Platzregion Nord-Ost");
-        this.frame.setSize(1000, 1000);
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.frame.setLayout(new GridLayout(1, 7));
         this.BuchungBearbeitenGui = BuchungBearbeitenGui;
         this.parentframe = parentframe;
         this.fall = fall;
@@ -41,9 +38,7 @@ public class upperRightPlaetze {
 
     public upperRightPlaetze(BuchungErstellenGui BuchungErstellenGui, JFrame parentframe, String fall) {
         this.frame = new JFrame("Platzregion Nord-Ost");
-        this.frame.setSize(1000, 1000);
         this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.frame.setLayout(new GridLayout(1, 7));
         this.BuchungErstellenGui = BuchungErstellenGui;
         this.parentframe = parentframe;
         this.fall = fall;
@@ -51,23 +46,16 @@ public class upperRightPlaetze {
     }
 
     private void renderFrame() {
-        JPanel mainPanel = new JPanel(new GridLayout(1, 7)); // 7 Spalten insgesamt
+        JPanel mainPanel = new JPanel(); // 7 Spalten insgesamt
 
         // Leerzeile für Spalte 2
         mainPanel.add(new JPanel());
 
-        JPanel column1Panel = createButtonPanel(5, 56);
+        JPanel column1Panel = createButtonPanel(52, 60);
         mainPanel.add(column1Panel);
-
-        // Leerzeile für Spalte 5
-        mainPanel.add(new JPanel());
-
-
-        // Leerzeile für Spalte 5
-        mainPanel.add(new JPanel());
-
         this.frame.setContentPane(mainPanel);
         this.frame.pack();
+        this.frame.setSize(700, 250);
         this.frame.setVisible(true);
 
         // Add click listener to buttons
@@ -75,12 +63,30 @@ public class upperRightPlaetze {
         checkCSVAndColorButtons();
     }
 
-    private JPanel createButtonPanel(int buttonCount, int startNumber) {
-        JPanel panel = new JPanel(new GridLayout(buttonCount, 1));
+    private JPanel createButtonPanel(int startNumber, int endNumber) {
+        String dateiPfad = "./Platzdaten.csv";
+        String temp = "";
+        String[] csv_inhalt;
+        try(BufferedReader br = new BufferedReader(new FileReader(dateiPfad))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                temp = temp + line + ",";
+            }
 
-        for (int i = 0; i < buttonCount; i++) {
-            JButton button = new JButton("Platz " + (startNumber + i));
-            panel.add(button);
+            csv_inhalt = temp.split(",");
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        JPanel panel = new JPanel(new GridLayout(6, 3));
+
+        for (int j = 7; j < csv_inhalt.length ; j+=5) {
+            if (startNumber <= Integer.parseInt(csv_inhalt[j]) && Integer.parseInt(csv_inhalt[j]) <= endNumber) {
+                JButton button = new JButton("Platz " + csv_inhalt[j]);
+                panel.add(button);
+            }
         }
 
         return panel;
