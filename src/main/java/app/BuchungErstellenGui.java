@@ -14,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -223,7 +224,7 @@ public class BuchungErstellenGui {
 
     private boolean checkBuchungszeiten() {
         // Lese bestehende Buchungen aus der CSV-Datei
-        String dateiPfad = "./BuchungsCSV.csv";
+        String dateiPfad = "BuchungsCSV.csv";
         List<String> existingBookings = new ArrayList<>();
         try {
             BufferedReader csvReader = new BufferedReader(new FileReader(dateiPfad));
@@ -237,13 +238,15 @@ public class BuchungErstellenGui {
             return false;
         }
 
-        // Extrahiere Anreise- und Abreisezeiten der neuen Buchung
         LocalDate anreiseNeu = LocalDate.parse(anreiseField.getText(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         LocalDate abreiseNeu = LocalDate.parse(abreiseField.getText(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
         // Iteriere über vorhandene Buchungen und überprüfe auf Überschneidungen
-        for (String booking : existingBookings) {
+        for(int i = 1; i < existingBookings.size(); i++) {
+            String booking = existingBookings.get(i);
+            System.out.println(booking);
             String[] bookingData = booking.split(",");
+            System.out.println(bookingData[3]);
             LocalDate anreiseAlt = LocalDate.parse(bookingData[2], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             LocalDate abreiseAlt = LocalDate.parse(bookingData[3], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
@@ -255,6 +258,7 @@ public class BuchungErstellenGui {
                 return false; // Buchungen dürfen nicht direkt aufeinander folgen
             }
         }
+
 
         return true; // Keine Überschneidung gefunden
     }
@@ -286,7 +290,7 @@ public class BuchungErstellenGui {
 
         String kosten = Integer.parseInt(personenAnzahl) * 20 + "€";
 
-        String dateiPfad = "./BuchungsCSV.csv";
+        String dateiPfad = "BuchungsCSV.csv";
 
         String tz = ",";
         String csv_eintrag = name +tz+ vorname +tz+ anreiseDatum +tz+ abreiseDatum +tz+ platznummer +tz+
