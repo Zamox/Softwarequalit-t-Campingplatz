@@ -130,7 +130,7 @@ public class PlatzAnlegenGui {
                     status = "frei";
                 }
 
-                String csvData = "\n"+platznummer + ","+status+"," + platzart + "," + wohnoption;
+                String csvData = platznummer + ","+status+"," + platzart + "," + wohnoption;
                 String csvFilePath = "./Platzdaten.csv";
 
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath, true))) {
@@ -184,8 +184,6 @@ public class PlatzAnlegenGui {
         }
         return false; // Platznummer wurde nicht gefunden
     }
-
-
 
 
 }
