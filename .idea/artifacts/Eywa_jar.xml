@@ -3,8 +3,11 @@
     <output-path>$PROJECT_DIR$/out/artifacts/Eywa_jar</output-path>
     <root id="archive" name="Eywa.jar">
       <element id="module-output" name="Eywa" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-cli/commons-cli/1.4/commons-cli-1.4.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/de/dhbwka/swe/utils/swe-utils/4.7.5/swe-utils-4.7.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-cli/commons-cli/1.4/commons-cli-1.4.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/Campingplatz.jpg" />
+      <element id="file-copy" path="$PROJECT_DIR$/BuchungsCSV.csv" />
+      <element id="file-copy" path="$PROJECT_DIR$/Platzdaten.csv" />
     </root>
   </artifact>
 </component>

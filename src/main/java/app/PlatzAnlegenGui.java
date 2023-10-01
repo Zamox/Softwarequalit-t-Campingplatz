@@ -13,16 +13,15 @@ public class PlatzAnlegenGui {
 
     private JTextField platznummerField;
 
-    private JRadioButton stellplatzRadio;
-    private JRadioButton shopRadio;
-    private JRadioButton sanitaereAnlagenRadio;
-    private JRadioButton sonstigeRadio;
-    private ButtonGroup platzartGroup;
 
-    private JRadioButton wohnmobilRadio;
-    private JRadioButton wohnwagenRadio;
-    private JRadioButton zeltRadio;
-    private ButtonGroup wohnoptionGroup;
+    private StellplaetzeInfo platz;
+    private boolean isEditable;
+    private String selectedPlatzart;
+    private String selectedWohnoption;
+    private JComboBox<String> platzartComboBox;
+    private JComboBox<String> platzregionComboBox;
+    private JComboBox<String> wohnoptionComboBox;
+
 
     private JTextField breiteField;
     private JTextField längeField;
@@ -47,56 +46,58 @@ public class PlatzAnlegenGui {
         platznummerField = new JTextField();
         styleLeftPanel.add(platznummerField);
 
+
+
         // Platzart
         JPanel platzartPanel = new JPanel();
         platzartPanel.setLayout(new GridLayout(0, 1));
         platzartPanel.add(new JLabel("Platzart:"));
-        stellplatzRadio = new JRadioButton("Stellplatz");
-        shopRadio = new JRadioButton("Shop");
-        sanitaereAnlagenRadio = new JRadioButton("Sanitäre Anlagen");
-        sonstigeRadio = new JRadioButton("Sonstige");
-
-        platzartGroup = new ButtonGroup();
-        platzartGroup.add(stellplatzRadio);
-        platzartGroup.add(shopRadio);
-        platzartGroup.add(sanitaereAnlagenRadio);
-        platzartGroup.add(sonstigeRadio);
-
-        platzartPanel.add(stellplatzRadio);
-        platzartPanel.add(shopRadio);
-        platzartPanel.add(sanitaereAnlagenRadio);
-        platzartPanel.add(sonstigeRadio);
+        String[] platzarten = {"", "Stellplatz", "Shop", "Sanitäre Anlagen", "Sonstige"};
+        platzartComboBox = new JComboBox<>(platzarten);
+        platzartComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Wenn "Stellplatz" ausgewählt ist, aktiviere die Wohnoption-ComboBox, ansonsten deaktiviere sie.
+                if (platzartComboBox.getSelectedItem().equals("Stellplatz")) {
+                    wohnoptionComboBox.setEnabled(true);
+                } else {
+                    wohnoptionComboBox.setEnabled(false);
+                    wohnoptionComboBox.setSelectedItem(""); // Wohnoption zurücksetzen, wenn nicht Stellplatz ausgewählt ist.
+                }
+            }
+        });
+        platzartPanel.add(platzartComboBox);
         styleLeftPanel.add(platzartPanel);
 
         // Wohnoption
         JPanel wohnoptionPanel = new JPanel();
         wohnoptionPanel.setLayout(new GridLayout(0, 1));
         wohnoptionPanel.add(new JLabel("Wohnoption:"));
-        wohnmobilRadio = new JRadioButton("Wohnmobil");
-        wohnwagenRadio = new JRadioButton("Wohnwagen");
-        zeltRadio = new JRadioButton("Zelt");
-
-        wohnoptionGroup = new ButtonGroup();
-        wohnoptionGroup.add(wohnmobilRadio);
-        wohnoptionGroup.add(wohnwagenRadio);
-        wohnoptionGroup.add(zeltRadio);
-
-        wohnoptionPanel.add(wohnmobilRadio);
-        wohnoptionPanel.add(wohnwagenRadio);
-        wohnoptionPanel.add(zeltRadio);
+        String[] wohnoptionen = {"", "Wohnmobil", "Wohnwagen", "Zelt"};
+        wohnoptionComboBox = new JComboBox<>(wohnoptionen);
+        wohnoptionPanel.add(wohnoptionComboBox);
         styleLeftPanel.add(wohnoptionPanel);
 
-        // Personenzahl
-        styleLeftPanel.add(new JLabel("Personenzahl:"));
-        personenzahlField = new JTextField(10); // Schmaleres Textfeld
-        personenzahlField.setSize(50, 10);
-        styleLeftPanel.add(personenzahlField);
+        // Setze die ausgewählten Optionen
+        if (selectedPlatzart != null && !selectedPlatzart.isEmpty()) {
+            platzartComboBox.setSelectedItem(selectedPlatzart);
+            if (selectedPlatzart.equals("Stellplatz")) {
+                wohnoptionComboBox.setEnabled(true);
+            }
+        }
 
-        // Tagessatz
-        styleLeftPanel.add(new JLabel("Tagessatz:"));
-        tagessatzField = new JTextField(10); // Schmaleres Textfeld
-        tagessatzField.setSize(50, 10);
-        styleLeftPanel.add(tagessatzField);
+        if (selectedWohnoption != null && !selectedWohnoption.isEmpty()) {
+            wohnoptionComboBox.setSelectedItem(selectedWohnoption);
+        }
+
+        //Platzregion
+
+        JLabel PlatzregionLabel = new JLabel("Platzregion:");
+        styleLeftPanel.add(PlatzregionLabel);
+        String [] platzregionen = {"Nord-Ost", "Süd-Ost", "Nord-West", "Süd-West"};
+        platzregionComboBox = new JComboBox<>(platzregionen);
+        styleLeftPanel.add(platzregionComboBox);
+
 
         // Speichern-Button
         JButton speichernButton = new JButton("Speichern");
@@ -105,38 +106,19 @@ public class PlatzAnlegenGui {
             public void actionPerformed(ActionEvent e) {
                 // Platznummer
                 String platznummer = platznummerField.getText().trim();
+                String platzart = platzartComboBox.getSelectedItem().toString();
+                String platzregion = platzregionComboBox.getSelectedItem().toString();
 
-                // Platzart
-                String platzart = "";
-                if (stellplatzRadio.isSelected()) {
-                    platzart = "Stellplatz";
-                } else if (shopRadio.isSelected()) {
-                    platzart = "Shop";
-                } else if (sanitaereAnlagenRadio.isSelected()) {
-                    platzart = "Sanitäre Anlagen";
-                } else if (sonstigeRadio.isSelected()) {
-                    platzart = "Sonstige";
-                }
-
-                // Wohnoption
+                // Prüfe, ob die ausgewählte Platzart "Stellplatz" ist, bevor die Wohnoption übernommen wird.
                 String wohnoption = "";
-                if (wohnmobilRadio.isSelected()) {
-                    wohnoption = "Wohnmobil";
-                } else if (wohnwagenRadio.isSelected()) {
-                    wohnoption = "Wohnwagen";
-                } else if (zeltRadio.isSelected()) {
-                    wohnoption = "Zelt";
+                if (platzart.equals("Stellplatz")) {
+                    wohnoption = wohnoptionComboBox.getSelectedItem().toString();
                 }
 
-                // Personenanzahl
-                String personenanzahl = personenzahlField.getText().trim();
 
-                // Tagessatz
-                String tagessatz = tagessatzField.getText().trim();
 
                 // Überprüfung, ob alle Felder ausgefüllt sind
-                if (platznummer.isEmpty() || platzart.isEmpty() || wohnoption.isEmpty() ||
-                        personenanzahl.isEmpty() || tagessatz.isEmpty()) {
+                if (platznummer.isEmpty() || platzart.isEmpty() || wohnoption.isEmpty() || platzregion.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Bitte füllen Sie alle Felder aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     return; // Beende die Methode, da nicht alle Felder ausgefüllt sind
                 }
@@ -153,7 +135,7 @@ public class PlatzAnlegenGui {
                     return; // Beende die Methode, da die Platznummer bereits existiert
                 }
 
-                String csvData = "\n"+platznummer + ",frei,?," + platzart + "," + wohnoption + "," + personenanzahl + "," + tagessatz;
+                String csvData = "\n"+platznummer + ",frei," +platzregion+","+ platzart + "," + wohnoption;
                 String csvFilePath = "./Platzdaten.csv";
 
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath, true))) {
@@ -208,20 +190,7 @@ public class PlatzAnlegenGui {
         return false; // Platznummer wurde nicht gefunden
     }
 
-    // Methode, um die ausgewählte Platzart aus der ButtonGroup zu erhalten
-    private String getSelectedPlatzart() {
-        if (stellplatzRadio.isSelected()) {
-            return "Stellplatz";
-        } else if (shopRadio.isSelected()) {
-            return "Shop";
-        } else if (sanitaereAnlagenRadio.isSelected()) {
-            return "Sanitäre Anlagen";
-        } else if (sonstigeRadio.isSelected()) {
-            return "Sonstige";
-        } else {
-            return ""; // Oder einen Standardwert zurückgeben
-        }
-    }
+
 
 
 }
