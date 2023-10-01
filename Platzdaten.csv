@@ -59,3 +59,6 @@ Platznummer,Status,Platzart,Wohnoption
 91,frei,Stellplatz,Wohnmobil
 92,frei,Stellplatz,Wohnmobil
 99,belegt,Sanitäre Anlagen,keine
+98,frei,Stellplatz,Wohnmobil
+100,belegt,Shop,keine
+101,belegt,Sanitäre Anlagen,keine

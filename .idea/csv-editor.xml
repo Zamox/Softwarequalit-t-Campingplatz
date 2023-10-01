@@ -24,6 +24,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\target\BuchungsCSV.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\target\Platzdaten.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\tempBuchungsCSV.csv">
           <value>
             <Attribute>

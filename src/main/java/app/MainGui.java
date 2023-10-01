@@ -120,7 +120,7 @@ public class MainGui {
                 "76,frei,Stellplatz,Wohnmobil\n" +
                 "91,frei,Stellplatz,Wohnmobil\n" +
                 "92,frei,Stellplatz,Wohnmobil\n" +
-                "99,belegt,Sanitäre Anlagen,keine"
+                "99,belegt,Sanitäre Anlagen,keine\n"
                 ;
         bw.write(initialConditions);
         bw.close();
