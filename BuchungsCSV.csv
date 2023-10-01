@@ -2,5 +2,4 @@ Name,Vorname,Anreisedatum,Abreisedatum,Platznummer,E-mail,Telefon,Straße,Plz,Ha
  4,vorname,20.08.2023,25.08.2023,35,email,tel,Straße,plz,haus,rech,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,4
 Nachname,Vorname,30.09.2023,03.10.2024,44,fickmeinleben@gmail.com,0720247238123,Straße,postleit,44,Adresse,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,23467
 NameTest,VorTest,27.09.2023,30.09.2023,56,mail,tel,Straße,plz,hausnummer,rradresse,cc,AnzahlDerPersonen,Unterkunftstyp,Kosten,26248
-name,vor,02.10.2024,04.10.2024,51,mail,tel,str,plz,hnr,rnr,cc,5,Zelt,100€,13231
 name,vorname,06.10.2023,08.10.2023,46,email,telefon,straße,plz,hausnummer,rechnungsadresse,cc,2,Wohnmobil,40€,16437

@@ -15,6 +15,7 @@ public class upperLeftPlaetze {
     private BuchungBearbeitenGui BuchungBearbeitenGui;
     private BuchungErstellenGui BuchungErstellenGui;
     private String fall;
+    private String[] csv_inhalt;
     private PlatzVerwaltung platzVerwaltung = new PlatzVerwaltung();
 
     public upperLeftPlaetze(String fall) {
@@ -65,7 +66,6 @@ public class upperLeftPlaetze {
     private JPanel createButtonPanel(int startNumber, int endNumber) {
         String dateiPfad = "./Platzdaten.csv";
         String temp = "";
-        String[] csv_inhalt;
         try(BufferedReader br = new BufferedReader(new FileReader(dateiPfad))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -122,7 +122,7 @@ public class upperLeftPlaetze {
             JButton button = (JButton) component;
             String buttonText = button.getText().replace("Platz ", "");
 
-            if (checkCSVForNumber(buttonText, csvFilePath)) {
+            if (checkCSVForNumber_Buchungen(buttonText, csvFilePath) || checkCSVForNumber_Plaetze(buttonText)) {
                 foundNumbers.add(buttonText);
             }
         } else if (component instanceof Container) {
@@ -136,7 +136,7 @@ public class upperLeftPlaetze {
         }
     }
 
-    private boolean checkCSVForNumber(String number, String csvFilePath) {
+    private boolean checkCSVForNumber_Buchungen(String number, String csvFilePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -154,6 +154,26 @@ public class upperLeftPlaetze {
         }
         return false;
     }
+
+    private boolean checkCSVForNumber_Plaetze(String number) {
+        try (BufferedReader br = new BufferedReader(new FileReader("Platzdaten.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(","); // Annahme: CSV ist kommagetrennt
+
+                if (parts.length > 2) { // Annahme: Die 10. Spalte enthält die Zahlen
+                    String csvNumber = parts[0]; // Ändern Sie den Index entsprechend
+                    if (csvNumber.equals(number) && parts[1].equals("belegt")) {
+                        return true;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     private void checkCSVAndColorButtons() {
         // Definieren Sie den Dateipfad Ihrer CSV-Datei
@@ -178,7 +198,22 @@ public class upperLeftPlaetze {
             String buttonText = button.getText().replace("Platz ", "");
 
             if (belegtePlaetze.contains(buttonText)) {
-                button.setBackground(Color.RED);
+
+                int index = -1;
+                for (int i = 4; i < csv_inhalt.length; i+=4) {
+                    if (csv_inhalt[i].equals(buttonText)) {
+                        index = i;
+                        break;
+                    }
+                }
+                if(index != -1 && csv_inhalt[index+3].equals("keine")){
+                    button.setBackground(Color.BLUE);
+                }
+                else {
+
+                    button.setBackground(Color.RED);
+                }
+
             } else {
                 button.setBackground(Color.GREEN);
             }
@@ -196,13 +231,11 @@ public class upperLeftPlaetze {
             JButton button = (JButton) container;
             String buttonText = button.getText();
             button.addActionListener(e -> {
-                if (button.getBackground().equals(Color.RED)) {
+                if (button.getBackground().equals(Color.RED) || button.getBackground().equals(Color.BLUE)) {
                     String csvFilePath = "./Platzdaten.csv";
                     String placeNumber = buttonText.replace("Platz ", "");
                     String[] selectedBookingData = readBookingDataFromCSV(csvFilePath, placeNumber);
 
-                    // Hier könnte die Logik für die Anzeige der InfoGui stehen
-                    // new InfoGui(selectedBookingData);
 
                 } else if (button.getBackground().equals(Color.GREEN)) {
                     PlatzTransfer dataSingleton = PlatzTransfer.getInstance();

@@ -19,6 +19,7 @@ public class downLeftPlaetze {
     private JFrame parentframe;
     private BuchungBearbeitenGui BuchungBearbeitenGui;
     private BuchungErstellenGui BuchungErstellenGui;
+    private String[] csv_inhalt;
     private String fall;
 
     public  downLeftPlaetze(String fall) {
@@ -74,7 +75,6 @@ public class downLeftPlaetze {
     private JPanel createButtonPanel(int startNumber_a, int endNumber_a, int startNumber_b, int endNumber_b) {
         String dateiPfad = "./Platzdaten.csv";
         String temp = "";
-        String[] csv_inhalt;
         try(BufferedReader br = new BufferedReader(new FileReader(dateiPfad))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -149,7 +149,7 @@ public class downLeftPlaetze {
             JButton button = (JButton) component;
             String buttonText = button.getText().replace("Platz ", "");
 
-            if (checkCSVForNumber(buttonText, csvFilePath)) {
+            if (checkCSVForNumber_Buchungen(buttonText, csvFilePath) || checkCSVForNumber_Plaetze(buttonText)) {
                 foundNumbers.add(buttonText);
             }
         } else if (component instanceof Container) {
@@ -163,7 +163,7 @@ public class downLeftPlaetze {
         }
     }
 
-    private boolean checkCSVForNumber(String number, String csvFilePath) {
+    private boolean checkCSVForNumber_Buchungen(String number, String csvFilePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -182,25 +182,55 @@ public class downLeftPlaetze {
         return false;
     }
 
-    private void colorButtons(Component component, Set<String> foundNumbers) {
+    private boolean checkCSVForNumber_Plaetze(String number) {
+        try (BufferedReader br = new BufferedReader(new FileReader("Platzdaten.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(","); // Annahme: CSV ist kommagetrennt
+
+                if (parts.length > 2) { // Annahme: Die 10. Spalte enthält die Zahlen
+                    String csvNumber = parts[0]; // Ändern Sie den Index entsprechend
+                    if (csvNumber.equals(number) && parts[1].equals("belegt")) {
+                        return true;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void colorButtons(Component component, Set<String> belegtePlaetze) {
         if (component instanceof JButton) {
             JButton button = (JButton) component;
             String buttonText = button.getText().replace("Platz ", "");
 
-            if (foundNumbers.contains(buttonText)) {
-                // Die Nummer wurde in der CSV-Datei gefunden, färben Sie den Button rot
-                button.setBackground(Color.RED);
+            if (belegtePlaetze.contains(buttonText)) {
+
+                int index = -1;
+                for (int i = 4; i < csv_inhalt.length; i+=4) {
+                    if (csv_inhalt[i].equals(buttonText)) {
+                        index = i;
+                        break;
+                    }
+                }
+                if(index != -1 && csv_inhalt[index+3].equals("keine")){
+                    button.setBackground(Color.BLUE);
+                }
+                else {
+
+                    button.setBackground(Color.RED);
+                }
+
             } else {
-                // Die Nummer wurde nicht in der CSV-Datei gefunden, färben Sie den Button grün
                 button.setBackground(Color.GREEN);
             }
         } else if (component instanceof Container) {
-            // Wenn es sich um ein Container-Objekt handelt, durchlaufen Sie seine Komponenten
             Container container = (Container) component;
             Component[] components = container.getComponents();
             for (Component subComponent : components) {
-                // Rekursiv in verschachtelten Containern Buttons einfärben
-                colorButtons(subComponent, foundNumbers);
+                colorButtons(subComponent, belegtePlaetze);
             }
         }
     }
@@ -210,7 +240,7 @@ public class downLeftPlaetze {
             JButton button = (JButton) container;
             String buttonText = button.getText();
             button.addActionListener(e -> {
-                if (button.getBackground().equals(Color.RED)) {
+                if (button.getBackground().equals(Color.RED) || button.getBackground().equals(Color.BLUE)) {
                     String csvFilePath = "./Platzdaten.csv";
                     String placeNumber = buttonText.replace("Platz ", "");
                     String[] selectedBookingData = readBookingDataFromCSV(csvFilePath, placeNumber);
