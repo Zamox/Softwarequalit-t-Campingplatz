@@ -90,13 +90,9 @@ public class PlatzAnlegenGui {
             wohnoptionComboBox.setSelectedItem(selectedWohnoption);
         }
 
-        //Platzregion
 
-        JLabel PlatzregionLabel = new JLabel("Platzregion:");
-        styleLeftPanel.add(PlatzregionLabel);
-        String [] platzregionen = {"Nord-Ost", "Süd-Ost", "Nord-West", "Süd-West"};
-        platzregionComboBox = new JComboBox<>(platzregionen);
-        styleLeftPanel.add(platzregionComboBox);
+
+
 
 
         // Speichern-Button
@@ -107,7 +103,7 @@ public class PlatzAnlegenGui {
                 // Platznummer
                 String platznummer = platznummerField.getText().trim();
                 String platzart = platzartComboBox.getSelectedItem().toString();
-                String platzregion = platzregionComboBox.getSelectedItem().toString();
+
 
                 // Prüfe, ob die ausgewählte Platzart "Stellplatz" ist, bevor die Wohnoption übernommen wird.
                 String wohnoption = "";
@@ -120,7 +116,7 @@ public class PlatzAnlegenGui {
 
 
                 // Überprüfung, ob alle Felder ausgefüllt sind
-                if (platznummer.isEmpty() || platzart.isEmpty() || wohnoption.isEmpty() || platzregion.isEmpty()) {
+                if (platznummer.isEmpty() || platzart.isEmpty() || wohnoption.isEmpty()) {
                     JOptionPane.showMessageDialog(frame, "Bitte füllen Sie alle Felder aus.", "Fehler", JOptionPane.ERROR_MESSAGE);
                     return; // Beende die Methode, da nicht alle Felder ausgefüllt sind
                 }
@@ -137,7 +133,7 @@ public class PlatzAnlegenGui {
                     return; // Beende die Methode, da die Platznummer bereits existiert
                 }
 
-                String csvData = "\n"+platznummer + ",frei," +platzregion+","+ platzart + "," + wohnoption;
+                String csvData = "\n"+platznummer + ",frei," + platzart + "," + wohnoption;
                 String csvFilePath = "./Platzdaten.csv";
 
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath, true))) {
