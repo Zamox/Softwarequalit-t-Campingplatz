@@ -52,11 +52,14 @@ public class downLeftPlaetze {
 
     private void renderFrame() {
         JPanel mainPanel = new JPanel(); // 7 Spalten insgesamt
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS)); // Ändern Sie das Layout auf BoxLayout für die vertikale Anordnung
+
 
         // Leerzeile für Spalte 2
         mainPanel.add(new JPanel());
 
         JPanel column1Panel = createButtonPanel(14, 31, 64, 70);
+        addButtonsToPanels(column1Panel, mainPanel);
         mainPanel.add(column1Panel);
         this.frame.setContentPane(mainPanel);
         this.frame.pack();
@@ -96,6 +99,34 @@ public class downLeftPlaetze {
 
         return panel;
     }
+
+    private void addButtonsToPanels(JPanel sourcePanel, JPanel mainPanel) {
+        // Aufteilen der Buttons in Panels mit jeweils 5 Buttons
+        JPanel currentPanel = new JPanel();
+        currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));
+
+        Component[] components = sourcePanel.getComponents();
+        for (int i = 0; i < components.length; i++) {
+            currentPanel.add(components[i]);
+            if ((i + 1) % 5 == 0 || i == components.length - 1) {
+                mainPanel.add(currentPanel);
+                currentPanel = new JPanel();
+                currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));
+
+                // Fügen Sie einen leeren Border hinzu, um den Abstand zwischen den Panels zu erhöhen
+                if ((i + 1) % 10 == 0) {
+                    // Größerer Abstand nach jedem ersten Panel
+                    currentPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 40));
+                } else {
+                    // Standardabstand
+                    currentPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+                }
+            }
+        }
+
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS)); // Ändern Sie die Achse auf X_AXIS
+    }
+
 
     private void checkCSVAndColorButtons() {
         // Definieren Sie den Dateipfad Ihrer CSV-Datei

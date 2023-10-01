@@ -49,6 +49,8 @@ public class upperLeftPlaetze {
         mainPanel.add(new JPanel());
 
         JPanel column1Panel = createButtonPanel(34, 51);
+        addButtonsToPanels(column1Panel, mainPanel);
+
         mainPanel.add(column1Panel);
         this.frame.setContentPane(mainPanel);
         this.frame.pack();
@@ -87,6 +89,32 @@ public class upperLeftPlaetze {
         }
 
         return panel;
+    }
+
+    private void addButtonsToPanels(JPanel sourcePanel, JPanel mainPanel) {
+        // Aufteilen der Buttons in Panels mit jeweils 5 Buttons
+        JPanel currentPanel = new JPanel();
+        currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));
+
+        Component[] components = sourcePanel.getComponents();
+        for (int i = 0; i < components.length; i++) {
+            currentPanel.add(components[i]);
+
+            // Fügen Sie einen leeren Border hinzu, um den Abstand zwischen den Panels zu erhöhen
+            if ((i + 1) % 6 == 0 || i == components.length - 1) {
+                // Größerer Abstand nach jedem fünften Panel oder dem letzten Panel
+                currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+            } else {
+                // Standardabstand
+                currentPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+            }
+
+            if ((i + 1) % 5 == 0 || i == components.length - 1) {
+                mainPanel.add(currentPanel);
+                currentPanel = new JPanel();
+                currentPanel.setLayout(new BoxLayout(currentPanel, BoxLayout.Y_AXIS));
+            }
+        }
     }
 
     private void findButtonsAndCheckCSV(Component component, Set<String> foundNumbers, String csvFilePath) {
