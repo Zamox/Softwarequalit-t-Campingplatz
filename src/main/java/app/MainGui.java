@@ -177,6 +177,9 @@ public class MainGui {
                 case "Platz bearbeiten":
                     new PlatzUebersichtGui();
                     break;
+                case "Help":
+                    new Help();
+                    break;
 
                 case "Export/Import":
                     JFileChooser fileChooser = new JFileChooser();
@@ -391,7 +394,7 @@ public class MainGui {
         String[] buttonLabels = {
                 "Freie Plätze", "Neuer Platz",
                 "Platz bearbeiten",
-                "Export/Import"
+                "Export/Import", "Help"
         };
 
         panelButtonList = new ArrayList<JButton>();

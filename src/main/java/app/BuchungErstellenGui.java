@@ -270,19 +270,20 @@ public class BuchungErstellenGui {
         String abreiseDatum = abreiseField.getText();
         String platznummer = platznummerField.getText();
 
-        String name = ((JTextField) rightPanel.getComponent(1)).getText();
-        String vorname = ((JTextField) rightPanel.getComponent(3)).getText();
-        String strasse = ((JTextField) rightPanel.getComponent(5)).getText();
-        String plz = ((JTextField) rightPanel.getComponent(7)).getText();
-        String hausnummer = ((JTextField) rightPanel.getComponent(9)).getText();
-        String rechnungsadresse = ((JTextField) rightPanel.getComponent(11)).getText();
-        String telefon = ((JTextField) rightPanel.getComponent(13)).getText();
-        String email = ((JTextField) rightPanel.getComponent(15)).getText();
-        String kreditkartendaten = ((JTextField) rightPanel.getComponent(17)).getText();
-        String buchungsnummer = //random generated 5 digit number
-                String.valueOf((int) (Math.random() * (99999 - 10000 + 1) + 10000));
+        String name = nameField.getText();
+        String vorname = vornameField.getText();
+        String strasse = strasseField.getText();
+        String plz = plzField.getText();
+        String hausnummer = hausnummerField.getText();
+        String rechnungsadresse = rechnungsadresseField.getText();
+        String telefon = telefonField.getText();
+        String email = emailField.getText();
+        String kreditkartendaten = kreditkartendatenField.getText();
         String personenAnzahl = personenField.getText();
         String unterkunftstyp = unterkunftComboBox.getSelectedItem().toString();
+        String buchungsnummer = //random generated 5 digit number
+                String.valueOf((int) (Math.random() * (99999 - 10000 + 1) + 10000));
+
         String kosten = Integer.parseInt(personenAnzahl) * 20 + "€";
 
         String dateiPfad = "./BuchungsCSV.csv";

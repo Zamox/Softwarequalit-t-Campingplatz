@@ -2,15 +2,13 @@ package app;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class Info {
+public class Help {
         private JFrame frame;
 
 
-        public Info() {
-            this.frame = new JFrame("Info");
+        public Help() {
+            this.frame = new JFrame("HELP");
             this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             this.frame.setLayout(new FlowLayout(FlowLayout.CENTER));
             renderFrame();
@@ -22,7 +20,12 @@ public class Info {
             JLabel Stellplatz_b = new JLabel("Gebuchter Stellplatz");
             Stellplatz_b.setForeground(Color.RED);
             JLabel Stellplatz_s = new JLabel("Logistische Einrichtung");
-            Stellplatz_s.setForeground(Color.BLUE);
+
+
+            mainPanel.add(Stellplatz_f);
+            mainPanel.add(Stellplatz_b);
+            mainPanel.add(Stellplatz_s);
+
 
             this.frame.setContentPane(mainPanel);
             this.frame.pack();
