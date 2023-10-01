@@ -207,7 +207,6 @@ public class downRightPlaetze {
                         case "erstellen":
                             dataSingleton = PlatzTransfer.getInstance();
                             dataSingleton.setSharedData(button.getText());
-                            System.out.print(button.getText());
                             BuchungErstellenGui.updatePlatzNummer();
                             parentframe.dispose();
                             this.frame.dispose();
