@@ -1,0 +1,7 @@
+Name,Vorname,Anreisedatum,Abreisedatum,Platznummer,E-mail,Telefon,Straße,Plz,Hausnummer,Rechnungsadresse,CC-Nr.,AnzahlDerPersonen,Unterkunftstyp,Kosten, Buchungsnummer
+Schmidt,Anna,05.11.2023,10.11.2023,25,anna.schmidt@email.com,123456789,Schulstraße,12345,12,Rechnungsadresse1,1234-5678-9012-3456,2,Wohnwagen,120€,123456
+Meier,Julia,05.11.2023,10.11.2023,26,julia.meier@email.com,987654321,Hauptweg,54321,34,Rechnungsadresse2,2345-6789-0123-4567,3,Zelt,80€,234567
+Müller,Tom,05.11.2023,10.11.2023,27,tom.mueller@email.com,456789012,Bachgasse,67890,56,Rechnungsadresse3,3456-7890-1234-5678,1,Wohnmobil,150€,345678
+Schneider,Lisa,05.11.2023,10.11.2023,28,lisa.schneider@email.com,321098765,Feldweg,10987,78,Rechnungsadresse4,4567-8901-2345-6789,4,Stellplatz,60€,456789
+Barius,Markus,05.11.2023,10.11.2023,30,markus.becker@email.com,210987654,Neustraße,21098,90,Rechnungsadresse5,5678-9012-3456-7890,2,Wohnmobil,40€,567890
+

@@ -1,0 +1,9 @@
+﻿<columns units="px">
+  <column name="Name" type="Text" />
+  <column name="Vorname" type="Text" />
+  <column name="Anreise" type="Text" format="h:mm:ss tt" nulltext="-:--:-- --" alignment="Right" />
+  <column name="Abreise" type="Text" format="M/d/yyyy" nulltext="-/-/----" alignment="Right" />
+  <column name="Platznummer" type="Text" />
+  <column name="E-Mail" type="Text" format="M/d/yyyy" alignment="Right" />
+  <column name="Telefon" type="Text" />
+</columns>
